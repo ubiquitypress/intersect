@@ -1,7 +1,3 @@
-from __future__ import unicode_literals
-from django.db import models
-
-# Create your models here.
 # This is an auto-generated Django model module.
 # You'll have to do the following manually to clean this up:
 #   * Rearrange models' order
@@ -11,15 +7,16 @@ from django.db import models
 #
 # Also note: You'll have to insert the output of 'django-admin sqlcustom [app_label]'
 # into your database.
+from __future__ import unicode_literals
 
 from django.db import models
 
 
 class AccessKeys(models.Model):
-    access_key_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'access_key_id' )
     context = models.CharField(max_length=40)
     key_hash = models.CharField(max_length=40)
-    user_id = models.BigIntegerField()
+    user = models.ForeignKey('Users', db_column = 'user_id' )
     assoc_id = models.BigIntegerField(blank=True, null=True)
     expiry_date = models.DateTimeField()
 
@@ -29,7 +26,7 @@ class AccessKeys(models.Model):
 
 
 class AnnouncementSettings(models.Model):
-    announcement_id = models.BigIntegerField()
+    announcement = models.ForeignKey('Announcements', db_column='announcement_id')
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
@@ -38,11 +35,11 @@ class AnnouncementSettings(models.Model):
     class Meta:
         managed = False
         db_table = 'announcement_settings'
-        unique_together = (('announcement_id', 'locale', 'setting_name'),)
+        unique_together = (('announcement', 'locale', 'setting_name'),)
 
 
 class AnnouncementTypeSettings(models.Model):
-    type_id = models.BigIntegerField()
+    type = models.ForeignKey('AnnouncementTypes', db_column='type_id')
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
@@ -51,11 +48,11 @@ class AnnouncementTypeSettings(models.Model):
     class Meta:
         managed = False
         db_table = 'announcement_type_settings'
-        unique_together = (('type_id', 'locale', 'setting_name'),)
+        unique_together = (('type', 'locale', 'setting_name'),)
 
 
 class AnnouncementTypes(models.Model):
-    type_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'type_id' )
     assoc_type = models.SmallIntegerField(blank=True, null=True)
     assoc_id = models.BigIntegerField()
 
@@ -65,10 +62,10 @@ class AnnouncementTypes(models.Model):
 
 
 class Announcements(models.Model):
-    announcement_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'announcement_id' )
     assoc_type = models.SmallIntegerField(blank=True, null=True)
     assoc_id = models.BigIntegerField()
-    type_id = models.BigIntegerField(blank=True, null=True)
+    type = models.ForeignKey('AnnouncementTypes', db_column='type_id')
     date_expire = models.DateTimeField(blank=True, null=True)
     date_posted = models.DateTimeField()
 
@@ -78,12 +75,12 @@ class Announcements(models.Model):
 
 
 class ArticleComments(models.Model):
-    comment_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'comment_id' )
     comment_type = models.BigIntegerField(blank=True, null=True)
-    role_id = models.BigIntegerField()
-    article_id = models.BigIntegerField()
+    role = models.ForeignKey('Roles', db_column='role_id')
+    article = models.ForeignKey('Articles', db_column='article_id')
     assoc_id = models.BigIntegerField()
-    author_id = models.BigIntegerField()
+    author = models.ForeignKey('Authors', db_column = 'author_id')
     comment_title = models.CharField(max_length=255)
     comments = models.TextField(blank=True, null=True)
     date_posted = models.DateTimeField(blank=True, null=True)
@@ -96,9 +93,9 @@ class ArticleComments(models.Model):
 
 
 class ArticleEventLog(models.Model):
-    log_id = models.BigIntegerField(primary_key=True)
-    article_id = models.BigIntegerField()
-    user_id = models.BigIntegerField()
+    id = models.IntegerField(primary_key = True, db_column = 'log_id' )
+    article = models.ForeignKey('Articles', db_column='article_id')
+    user = models.ForeignKey('Users', db_column = 'user_id' )
     date_logged = models.DateTimeField()
     ip_address = models.CharField(max_length=15)
     log_level = models.CharField(max_length=1, blank=True, null=True)
@@ -113,11 +110,11 @@ class ArticleEventLog(models.Model):
 
 
 class ArticleFiles(models.Model):
-    file_id = models.BigIntegerField()
+    id = models.IntegerField(primary_key = True, db_column = 'file_id' )
     revision = models.BigIntegerField()
-    source_file_id = models.BigIntegerField(blank=True, null=True)
+    source_file = models.ForeignKey('ArticleFiles', blank=True, null=True, db_column='source_file_id')
     source_revision = models.BigIntegerField(blank=True, null=True)
-    article_id = models.BigIntegerField()
+    article = models.ForeignKey('Articles', db_column='article_id')
     file_name = models.CharField(max_length=90)
     file_type = models.CharField(max_length=255)
     file_size = models.BigIntegerField()
@@ -132,11 +129,11 @@ class ArticleFiles(models.Model):
     class Meta:
         managed = False
         db_table = 'article_files'
-        unique_together = (('file_id', 'revision'),)
+        unique_together = (('id', 'revision'),)
 
 
 class ArticleGalleySettings(models.Model):
-    galley_id = models.BigIntegerField()
+    id = models.ForeignKey('ArticleGalleys', db_column='galley_id')
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
@@ -145,17 +142,17 @@ class ArticleGalleySettings(models.Model):
     class Meta:
         managed = False
         db_table = 'article_galley_settings'
-        unique_together = (('galley_id', 'locale', 'setting_name'),)
+        unique_together = (('id', 'locale', 'setting_name'),)
 
 
 class ArticleGalleys(models.Model):
-    galley_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'galley_id' )
     locale = models.CharField(max_length=5, blank=True, null=True)
-    article_id = models.ForeignKey('Articles', related_name="article_galleys")
-    file_id = models.BigIntegerField()
+    article = models.ForeignKey('Articles', db_column='article_id')
+    file = models.ForeignKey('ArticleFiles', db_column='file_id')
     label = models.CharField(max_length=32, blank=True, null=True)
     html_galley = models.IntegerField()
-    style_file_id = models.BigIntegerField(blank=True, null=True)
+    style_file = models.ForeignKey('ArticleFiles', blank=True, null=True,db_column='style_file_id')
     seq = models.FloatField()
     remote_url = models.CharField(max_length=255, blank=True, null=True)
 
@@ -165,24 +162,24 @@ class ArticleGalleys(models.Model):
 
 
 class ArticleHtmlGalleyImages(models.Model):
-    galley_id = models.BigIntegerField()
-    file_id = models.BigIntegerField()
+    galley =  models.ForeignKey('ArticleGalleys', db_column='galley_id')
+    file = models.ForeignKey('ArticleFiles', db_column='file_id')
 
     class Meta:
         managed = False
         db_table = 'article_html_galley_images'
-        unique_together = (('galley_id', 'file_id'),)
+        unique_together = (('galley', 'file'),)
 
 
 class ArticleNotes(models.Model):
-    note_id = models.BigIntegerField(primary_key=True)
-    article_id = models.BigIntegerField()
-    user_id = models.BigIntegerField()
+    id = models.IntegerField(primary_key = True, db_column = 'note_id' )
+    article = models.ForeignKey('Articles', db_column='article_id')
+    user = models.ForeignKey('Users', db_column = 'user_id' )
     date_created = models.DateTimeField()
     date_modified = models.DateTimeField()
     title = models.CharField(max_length=255)
     note = models.TextField(blank=True, null=True)
-    file_id = models.BigIntegerField()
+    file = models.ForeignKey('ArticleFiles', db_column='file_id')
 
     class Meta:
         managed = False
@@ -190,7 +187,7 @@ class ArticleNotes(models.Model):
 
 
 class ArticleSearchKeywordList(models.Model):
-    keyword_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'keyword_id' )
     keyword_text = models.CharField(unique=True, max_length=60)
 
     class Meta:
@@ -199,19 +196,19 @@ class ArticleSearchKeywordList(models.Model):
 
 
 class ArticleSearchObjectKeywords(models.Model):
-    object_id = models.BigIntegerField()
+    object = models.ForeignKey('ArticleSearchObjects', db_column='object_id')
     keyword_id = models.BigIntegerField()
     pos = models.IntegerField()
 
     class Meta:
         managed = False
         db_table = 'article_search_object_keywords'
-        unique_together = (('object_id', 'pos'),)
+        unique_together = (('object', 'pos'),)
 
 
 class ArticleSearchObjects(models.Model):
-    object_id = models.BigIntegerField(primary_key=True)
-    article_id = models.BigIntegerField()
+    id = models.IntegerField(primary_key = True, db_column = 'object_id' )
+    article = models.ForeignKey('Articles', db_column='article_id')
     type = models.IntegerField()
     assoc_id = models.BigIntegerField(blank=True, null=True)
 
@@ -221,7 +218,7 @@ class ArticleSearchObjects(models.Model):
 
 
 class ArticleSettings(models.Model):
-    article_id = models.ForeignKey('Articles', related_name="article_settings")
+    article = models.ForeignKey('Articles', db_column='article_id')
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
@@ -230,7 +227,7 @@ class ArticleSettings(models.Model):
     class Meta:
         managed = False
         db_table = 'article_settings'
-        unique_together = (('article_id', 'locale', 'setting_name'),)
+        unique_together = (('article', 'locale', 'setting_name'),)
 
 
 class ArticleStages(models.Model):
@@ -243,8 +240,8 @@ class ArticleStages(models.Model):
 
 
 class ArticleStatus(models.Model):
-    article_id = models.IntegerField(unique=True, blank=True, null=True)
-    status_id = models.IntegerField(blank=True, null=True)
+    article = models.ForeignKey('Articles', unique=True, db_column = 'article_id')
+    id =  models.AutoField(primary_key = True, db_column = 'status_id' )
     date_updated = models.DateTimeField(blank=True, null=True)
 
     class Meta:
@@ -253,8 +250,8 @@ class ArticleStatus(models.Model):
 
 
 class ArticleStatusHistory(models.Model):
-    article_id = models.IntegerField(blank=True, null=True)
-    status_id = models.IntegerField(blank=True, null=True)
+    article = models.ForeignKey('Articles', db_column='article_id')
+    status = models.ForeignKey('ArticleStatus', db_column='status_id')
     date_updated = models.DateTimeField()
 
     class Meta:
@@ -263,7 +260,7 @@ class ArticleStatusHistory(models.Model):
 
 
 class ArticleSuppFileSettings(models.Model):
-    supp_id = models.BigIntegerField()
+    supp = models.ForeignKey('ArticleSupplementaryFiles', db_column = 'supp_id')
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
@@ -272,13 +269,13 @@ class ArticleSuppFileSettings(models.Model):
     class Meta:
         managed = False
         db_table = 'article_supp_file_settings'
-        unique_together = (('supp_id', 'locale', 'setting_name'),)
+        unique_together = (('supp', 'locale', 'setting_name'),)
 
 
 class ArticleSupplementaryFiles(models.Model):
-    supp_id = models.BigIntegerField(primary_key=True)
-    file_id = models.BigIntegerField()
-    article_id = models.BigIntegerField()
+    id = models.IntegerField(primary_key = True, db_column = 'supp_id' )
+    file = models.ForeignKey('ArticleFiles', db_column='file_id')
+    article = models.ForeignKey('Articles', db_column='article_id')
     type = models.CharField(max_length=255, blank=True, null=True)
     language = models.CharField(max_length=10, blank=True, null=True)
     remote_url = models.CharField(max_length=255, blank=True, null=True)
@@ -293,9 +290,9 @@ class ArticleSupplementaryFiles(models.Model):
 
 
 class ArticleXmlGalleys(models.Model):
-    xml_galley_id = models.BigIntegerField(primary_key=True)
-    galley_id = models.BigIntegerField()
-    article_id = models.BigIntegerField()
+    id = models.IntegerField(primary_key = True, db_column = 'xml_galley_id' )
+    galley = models.ForeignKey('ArticleGalleys', db_column = 'galley_id')
+    article = models.ForeignKey('Articles', db_column='article_id')
     label = models.CharField(max_length=32)
     galley_type = models.CharField(max_length=255)
     views = models.IntegerField()
@@ -306,10 +303,10 @@ class ArticleXmlGalleys(models.Model):
 
 
 class Articles(models.Model):
-    article_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'article_id' )
     locale = models.CharField(max_length=5, blank=True, null=True)
-    user_id = models.BigIntegerField()
-    journal_id = models.BigIntegerField()
+    user = models.ForeignKey('Users', db_column = 'user_id' )
+    journal = models.ForeignKey('Journals', db_column='journal_id')
     section_id = models.BigIntegerField(blank=True, null=True)
     language = models.CharField(max_length=10, blank=True, null=True)
     comments_to_ed = models.TextField(blank=True, null=True)
@@ -329,17 +326,13 @@ class Articles(models.Model):
     hide_author = models.IntegerField()
     comments_status = models.IntegerField()
 
-    def published_article(self):
-        return 'test'
-
-
     class Meta:
         managed = False
         db_table = 'articles'
 
 
 class AuthSources(models.Model):
-    auth_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'auth_id' )
     title = models.CharField(max_length=60)
     plugin = models.CharField(max_length=32)
     auth_default = models.IntegerField()
@@ -351,7 +344,7 @@ class AuthSources(models.Model):
 
 
 class AuthorSettings(models.Model):
-    author_id = models.BigIntegerField()
+    author = models.ForeignKey('Authors', db_column = 'author_id')
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
@@ -360,12 +353,12 @@ class AuthorSettings(models.Model):
     class Meta:
         managed = False
         db_table = 'author_settings'
-        unique_together = (('author_id', 'locale', 'setting_name'),)
+        unique_together = (('author', 'locale', 'setting_name'),)
 
 
 class Authors(models.Model):
-    author_id = models.BigIntegerField(primary_key=True)
-    submission_id = models.ForeignKey('Articles', related_name="authors")
+    id = models.IntegerField(primary_key = True, db_column = 'author_id' )
+    submission_id = models.BigIntegerField()
     primary_contact = models.IntegerField()
     seq = models.FloatField()
     first_name = models.CharField(max_length=40)
@@ -374,7 +367,7 @@ class Authors(models.Model):
     country = models.CharField(max_length=90, blank=True, null=True)
     email = models.CharField(max_length=90)
     url = models.CharField(max_length=255, blank=True, null=True)
-    user_group_id = models.BigIntegerField(blank=True, null=True)
+    user_group = models.ForeignKey('Groups', blank=True, null=True, db_column = 'user_group_id')
     suffix = models.CharField(max_length=40, blank=True, null=True)
 
     class Meta:
@@ -383,8 +376,8 @@ class Authors(models.Model):
 
 
 class BooksForReview(models.Model):
-    book_id = models.BigIntegerField(primary_key=True)
-    journal_id = models.BigIntegerField()
+    id = models.IntegerField(primary_key = True, db_column = 'book_id' )
+    journal = models.ForeignKey('Journals', db_column='journal_id')
     status = models.SmallIntegerField()
     author_type = models.SmallIntegerField()
     publisher = models.CharField(max_length=255)
@@ -401,9 +394,9 @@ class BooksForReview(models.Model):
     date_mailed = models.DateTimeField(blank=True, null=True)
     date_due = models.DateTimeField(blank=True, null=True)
     date_submitted = models.DateTimeField(blank=True, null=True)
-    user_id = models.BigIntegerField(blank=True, null=True)
-    editor_id = models.BigIntegerField(blank=True, null=True)
-    article_id = models.ForeignKey(Articles, blank=True, null=True)
+    user = models.ForeignKey('Users', blank=True, null=True, db_column = 'user_id')
+    editor = models.ForeignKey('Users', blank=True, null=True, db_column = 'editor_id')
+    article = models.ForeignKey('Articles', blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
 
     class Meta:
@@ -412,8 +405,8 @@ class BooksForReview(models.Model):
 
 
 class BooksForReviewAuthors(models.Model):
-    author_id = models.BigIntegerField(primary_key=True)
-    book_id = models.BigIntegerField()
+    author = models.ForeignKey('Authors', primary_key = True, db_column = 'author_id' )
+    book = models.BigIntegerField(BooksForReview, db_column = 'book_id')
     seq = models.FloatField()
     first_name = models.CharField(max_length=40)
     middle_name = models.CharField(max_length=40, blank=True, null=True)
@@ -425,7 +418,7 @@ class BooksForReviewAuthors(models.Model):
 
 
 class BooksForReviewSettings(models.Model):
-    book_id = models.BigIntegerField()
+    book = models.BigIntegerField(BooksForReview, db_column = 'book_id')
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
@@ -434,11 +427,11 @@ class BooksForReviewSettings(models.Model):
     class Meta:
         managed = False
         db_table = 'books_for_review_settings'
-        unique_together = (('book_id', 'locale', 'setting_name'),)
+        unique_together = (('book', 'locale', 'setting_name'),)
 
 
 class Captchas(models.Model):
-    captcha_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'captcha_id' )
     session_id = models.CharField(max_length=40)
     value = models.CharField(max_length=20)
     date_created = models.DateTimeField()
@@ -449,7 +442,7 @@ class Captchas(models.Model):
 
 
 class CitationSettings(models.Model):
-    citation_id = models.BigIntegerField()
+    citation = models.ForeignKey('Citations', db_column = 'citation_id')
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
@@ -458,11 +451,11 @@ class CitationSettings(models.Model):
     class Meta:
         managed = False
         db_table = 'citation_settings'
-        unique_together = (('citation_id', 'locale', 'setting_name'),)
+        unique_together = (('citation', 'locale', 'setting_name'),)
 
 
 class Citations(models.Model):
-    citation_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'citation_id' )
     assoc_type = models.BigIntegerField()
     assoc_id = models.BigIntegerField()
     citation_state = models.BigIntegerField()
@@ -477,7 +470,7 @@ class Citations(models.Model):
 
 
 class Collection(models.Model):
-    id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'collection_id' )
     name = models.CharField(max_length=150)
     abbrev = models.CharField(max_length=150)
     short_description = models.TextField(blank=True, null=True)
@@ -495,32 +488,32 @@ class Collection(models.Model):
 
 
 class CollectionArticle(models.Model):
-    collection_id = models.BigIntegerField()
-    published_article_id = models.BigIntegerField()
+    collection = models.ForeignKey('Collection', db_column = 'collection_id')
+    published_article = models.ForeignKey('Articles', db_column='article_id')
 
     class Meta:
         managed = False
         db_table = 'collection_article'
-        unique_together = (('collection_id', 'published_article_id'),)
+        unique_together = (('collection', 'published_article_id'),)
 
 
 class CollectionUser(models.Model):
-    collection_id = models.BigIntegerField()
-    user_id = models.BigIntegerField()
+    collection = models.ForeignKey('Collection', db_column = 'collection_id')
+    user = models.ForeignKey('Users', db_column = 'user_id' )
     role_name = models.CharField(max_length=50)
 
     class Meta:
         managed = False
         db_table = 'collection_user'
-        unique_together = (('collection_id', 'user_id'),)
+        unique_together = (('collection', 'user'),)
 
 
 class Comments(models.Model):
-    comment_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'comment_id' )
     submission_id = models.BigIntegerField()
-    parent_comment_id = models.BigIntegerField(blank=True, null=True)
+    parent_comment = models.ForeignKey('Comments', blank=True, null=True, db_column = 'parent_comment_id')
     num_children = models.IntegerField()
-    user_id = models.BigIntegerField(blank=True, null=True)
+    user = models.ForeignKey('Users', blank=True, null=True, db_column = 'user_id')
     poster_ip = models.CharField(max_length=15)
     poster_name = models.CharField(max_length=90, blank=True, null=True)
     poster_email = models.CharField(max_length=90, blank=True, null=True)
@@ -535,11 +528,11 @@ class Comments(models.Model):
 
 
 class CompletedPayments(models.Model):
-    completed_payment_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'completed_payment_id' )
     timestamp = models.DateTimeField()
     payment_type = models.BigIntegerField()
-    journal_id = models.BigIntegerField()
-    user_id = models.BigIntegerField(blank=True, null=True)
+    journal = models.ForeignKey('Journals', db_column='journal_id')
+    user = models.ForeignKey('Users', blank=True, null=True, db_column = 'user_id')
     assoc_id = models.BigIntegerField(blank=True, null=True)
     amount = models.FloatField()
     currency_code_alpha = models.CharField(max_length=3, blank=True, null=True)
@@ -551,8 +544,8 @@ class CompletedPayments(models.Model):
 
 
 class ControlledVocabEntries(models.Model):
-    controlled_vocab_entry_id = models.BigIntegerField(primary_key=True)
-    controlled_vocab_id = models.BigIntegerField()
+    id = models.IntegerField(primary_key = True, db_column = 'controlled_vocab_entry_id' )
+    controlled_vocab = models.ForeignKey('ControlledVocabs', db_column = 'controlled_vocab_id')
     seq = models.FloatField(blank=True, null=True)
 
     class Meta:
@@ -561,7 +554,7 @@ class ControlledVocabEntries(models.Model):
 
 
 class ControlledVocabEntrySettings(models.Model):
-    controlled_vocab_entry_id = models.BigIntegerField()
+    controlled_vocab_entry = models.ForeignKey('ControlledVocabEntries', db_column = 'controlled_vocab_entry_id')
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
@@ -570,11 +563,11 @@ class ControlledVocabEntrySettings(models.Model):
     class Meta:
         managed = False
         db_table = 'controlled_vocab_entry_settings'
-        unique_together = (('controlled_vocab_entry_id', 'locale', 'setting_name'),)
+        unique_together = (('controlled_vocab_entry', 'locale', 'setting_name'),)
 
 
 class ControlledVocabs(models.Model):
-    controlled_vocab_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'controlled_vocab_id' )
     symbolic = models.CharField(max_length=64)
     assoc_type = models.BigIntegerField()
     assoc_id = models.BigIntegerField()
@@ -586,8 +579,8 @@ class ControlledVocabs(models.Model):
 
 
 class CustomIssueOrders(models.Model):
-    issue_id = models.BigIntegerField(unique=True)
-    journal_id = models.BigIntegerField()
+    issue = models.ForeignKey('Issues', db_column = 'issue_id', unique=True)
+    journal = models.ForeignKey('Journals', db_column='journal_id')
     seq = models.FloatField()
 
     class Meta:
@@ -596,19 +589,19 @@ class CustomIssueOrders(models.Model):
 
 
 class CustomSectionOrders(models.Model):
-    issue_id = models.BigIntegerField()
+    issue = models.ForeignKey('Issues', db_column = 'issue_id')
     section_id = models.BigIntegerField()
     seq = models.FloatField()
 
     class Meta:
         managed = False
         db_table = 'custom_section_orders'
-        unique_together = (('issue_id', 'section_id'),)
+        unique_together = (('issue', 'section_id'),)
 
 
 class DataObjectTombstoneOaiSetObjects(models.Model):
-    object_id = models.BigIntegerField(primary_key=True)
-    tombstone_id = models.BigIntegerField()
+    id = models.IntegerField(primary_key = True, db_column = 'object_id' )
+    tombstone = models.ForeignKey('DataObjectTombstones', db_column = 'tombstone_id')
     assoc_type = models.BigIntegerField()
     assoc_id = models.BigIntegerField()
 
@@ -618,7 +611,7 @@ class DataObjectTombstoneOaiSetObjects(models.Model):
 
 
 class DataObjectTombstoneSettings(models.Model):
-    tombstone_id = models.BigIntegerField()
+    tombstone = models.ForeignKey('DataObjectTombstones', db_column = 'tombstone_id')
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
@@ -627,11 +620,11 @@ class DataObjectTombstoneSettings(models.Model):
     class Meta:
         managed = False
         db_table = 'data_object_tombstone_settings'
-        unique_together = (('tombstone_id', 'locale', 'setting_name'),)
+        unique_together = (('tombstone', 'locale', 'setting_name'),)
 
 
 class DataObjectTombstones(models.Model):
-    tombstone_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'tombstone_id' )
     data_object_id = models.BigIntegerField()
     date_deleted = models.DateTimeField()
     set_spec = models.CharField(max_length=255)
@@ -644,7 +637,7 @@ class DataObjectTombstones(models.Model):
 
 
 class DataverseFiles(models.Model):
-    dvfile_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'dvfile_id' )
     supp_id = models.BigIntegerField()
     submission_id = models.BigIntegerField()
     study_id = models.BigIntegerField()
@@ -656,7 +649,7 @@ class DataverseFiles(models.Model):
 
 
 class DataverseStudies(models.Model):
-    study_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'study_id' )
     submission_id = models.BigIntegerField()
     edit_uri = models.CharField(max_length=255)
     edit_media_uri = models.CharField(max_length=255)
@@ -669,21 +662,11 @@ class DataverseStudies(models.Model):
         db_table = 'dataverse_studies'
 
 
-class DjangoMigrations(models.Model):
-    app = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
-    applied = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'django_migrations'
-
-
 class DraftDecisions(models.Model):
     key_val = models.CharField(max_length=45)
-    senior_editor_id = models.IntegerField()
-    junior_editor_id = models.IntegerField()
-    article_id = models.IntegerField()
+    senior_editor = models.ForeignKey('Users', db_column='senior_editor_id')
+    junior_editor = models.ForeignKey('Users', db_column='junior_editor_id')
+    article = models.ForeignKey('Articles', db_column = 'article_id')
     decision = models.IntegerField()
     subject = models.CharField(max_length=200, blank=True, null=True)
     body = models.TextField(blank=True, null=True)
@@ -697,9 +680,9 @@ class DraftDecisions(models.Model):
 
 
 class EditAssignments(models.Model):
-    edit_id = models.BigIntegerField(primary_key=True)
-    article_id = models.BigIntegerField()
-    editor_id = models.BigIntegerField()
+    id = models.IntegerField(primary_key = True, db_column = 'edit_id' )
+    article = models.ForeignKey('Articles', db_column='article_id')
+    editor = models.ForeignKey('Users', db_column='editor_id')
     can_edit = models.IntegerField()
     can_review = models.IntegerField()
     date_assigned = models.DateTimeField(blank=True, null=True)
@@ -712,10 +695,10 @@ class EditAssignments(models.Model):
 
 
 class EditDecisions(models.Model):
-    edit_decision_id = models.BigIntegerField(primary_key=True)
-    article_id = models.BigIntegerField()
+    id = models.IntegerField(primary_key = True, db_column = 'edit_decision_id' )
+    article = models.ForeignKey('Articles', db_column='article_id')
     round = models.IntegerField()
-    editor_id = models.BigIntegerField()
+    editor = models.ForeignKey('Users', db_column='editor_id')
     decision = models.IntegerField()
     date_decided = models.DateTimeField()
 
@@ -725,8 +708,8 @@ class EditDecisions(models.Model):
 
 
 class EmailLog(models.Model):
-    log_id = models.BigIntegerField(primary_key=True)
-    sender_id = models.BigIntegerField()
+    id = models.IntegerField(primary_key = True, db_column = 'log_id' )
+    sender = models.ForeignKey('Users', db_column = 'sender_id')
     date_sent = models.DateTimeField()
     ip_address = models.CharField(max_length=39, blank=True, null=True)
     event_type = models.BigIntegerField(blank=True, null=True)
@@ -745,17 +728,17 @@ class EmailLog(models.Model):
 
 
 class EmailLogUsers(models.Model):
-    email_log_id = models.BigIntegerField()
-    user_id = models.BigIntegerField()
+    email_log = models.ForeignKey('EmailLog', db_column = 'email_log_id')
+    user = models.ForeignKey('Users', db_column = 'user_id' )
 
     class Meta:
         managed = False
         db_table = 'email_log_users'
-        unique_together = (('email_log_id', 'user_id'),)
+        unique_together = (('email_log', 'user'),)
 
 
 class EmailTemplates(models.Model):
-    email_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'email_id' )
     email_key = models.CharField(max_length=64)
     assoc_type = models.BigIntegerField(blank=True, null=True)
     assoc_id = models.BigIntegerField(blank=True, null=True)
@@ -782,12 +765,12 @@ class EmailTemplatesData(models.Model):
 
 
 class EmailTemplatesDefault(models.Model):
-    email_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'email_id' )
     email_key = models.CharField(max_length=64)
     can_disable = models.IntegerField()
     can_edit = models.IntegerField()
-    from_role_id = models.BigIntegerField(blank=True, null=True)
-    to_role_id = models.BigIntegerField(blank=True, null=True)
+    from_role = models.ForeignKey('Roles', blank=True, null=True, db_column = 'from_role_id')
+    to_role = models.ForeignKey('Roles', blank=True, null=True, db_column = 'to_role_id')
 
     class Meta:
         managed = False
@@ -808,10 +791,10 @@ class EmailTemplatesDefaultData(models.Model):
 
 
 class EventLog(models.Model):
-    log_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'log_id' )
     assoc_type = models.BigIntegerField(blank=True, null=True)
     assoc_id = models.BigIntegerField(blank=True, null=True)
-    user_id = models.BigIntegerField()
+    user = models.ForeignKey('Users', db_column = 'user_id' )
     date_logged = models.DateTimeField()
     ip_address = models.CharField(max_length=39)
     event_type = models.BigIntegerField(blank=True, null=True)
@@ -824,7 +807,7 @@ class EventLog(models.Model):
 
 
 class EventLogSettings(models.Model):
-    log_id = models.BigIntegerField()
+    id = models.ForeignKey('EventLog', db_column = 'log_id' )
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
@@ -832,11 +815,11 @@ class EventLogSettings(models.Model):
     class Meta:
         managed = False
         db_table = 'event_log_settings'
-        unique_together = (('log_id', 'setting_name'),)
+        unique_together = (('id', 'setting_name'),)
 
 
 class ExternalFeedSettings(models.Model):
-    feed_id = models.BigIntegerField()
+    feed = models.ForeignKey('ExternalFeeds', db_column='feed_id')
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
@@ -845,12 +828,12 @@ class ExternalFeedSettings(models.Model):
     class Meta:
         managed = False
         db_table = 'external_feed_settings'
-        unique_together = (('feed_id', 'locale', 'setting_name'),)
+        unique_together = (('feed', 'locale', 'setting_name'),)
 
 
 class ExternalFeeds(models.Model):
-    feed_id = models.BigIntegerField(primary_key=True)
-    journal_id = models.BigIntegerField()
+    id = models.IntegerField(primary_key = True, db_column = 'feed_id' )
+    journal = models.ForeignKey('Journals', db_column='journal_id')
     url = models.CharField(max_length=255)
     seq = models.FloatField()
     display_homepage = models.IntegerField()
@@ -864,7 +847,7 @@ class ExternalFeeds(models.Model):
 
 
 class FilterGroups(models.Model):
-    filter_group_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'filter_group_id' )
     symbolic = models.CharField(unique=True, max_length=255, blank=True, null=True)
     display_name = models.CharField(max_length=255, blank=True, null=True)
     description = models.CharField(max_length=255, blank=True, null=True)
@@ -877,7 +860,7 @@ class FilterGroups(models.Model):
 
 
 class FilterSettings(models.Model):
-    filter_id = models.BigIntegerField()
+    filter = models.ForeignKey('Filters', db_column = 'filter_id')
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
@@ -886,18 +869,18 @@ class FilterSettings(models.Model):
     class Meta:
         managed = False
         db_table = 'filter_settings'
-        unique_together = (('filter_id', 'locale', 'setting_name'),)
+        unique_together = (('filter', 'locale', 'setting_name'),)
 
 
 class Filters(models.Model):
-    filter_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'filter_id' )
     context_id = models.BigIntegerField()
     display_name = models.CharField(max_length=255, blank=True, null=True)
     class_name = models.CharField(max_length=255, blank=True, null=True)
     is_template = models.IntegerField()
-    parent_filter_id = models.BigIntegerField()
+    parent_filter = models.ForeignKey('Filters', db_column = 'parent_filter_id')
     seq = models.BigIntegerField()
-    filter_group_id = models.BigIntegerField()
+    filter_group = models.ForeignKey('FilterGroups', db_column = 'filter_group_id')
 
     class Meta:
         managed = False
@@ -905,7 +888,7 @@ class Filters(models.Model):
 
 
 class Gifts(models.Model):
-    gift_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'gift_id' )
     assoc_type = models.SmallIntegerField()
     assoc_id = models.BigIntegerField()
     status = models.IntegerField()
@@ -915,12 +898,12 @@ class Gifts(models.Model):
     buyer_middle_name = models.CharField(max_length=40, blank=True, null=True)
     buyer_last_name = models.CharField(max_length=90)
     buyer_email = models.CharField(max_length=90)
-    buyer_user_id = models.BigIntegerField(blank=True, null=True)
+    buyer_user = models.ForeignKey('Users', blank=True, null=True, db_column = 'user_id')
     recipient_first_name = models.CharField(max_length=40)
     recipient_middle_name = models.CharField(max_length=40, blank=True, null=True)
     recipient_last_name = models.CharField(max_length=90)
     recipient_email = models.CharField(max_length=90)
-    recipient_user_id = models.BigIntegerField(blank=True, null=True)
+    recipient_user = models.ForeignKey('Users', blank=True, null=True, db_column = 'user_id')
     date_redeemed = models.DateTimeField(blank=True, null=True)
     locale = models.CharField(max_length=5)
     gift_note_title = models.CharField(max_length=90, blank=True, null=True)
@@ -933,19 +916,19 @@ class Gifts(models.Model):
 
 
 class GroupMemberships(models.Model):
-    user_id = models.BigIntegerField()
-    group_id = models.BigIntegerField()
+    user = models.ForeignKey('Users', db_column = 'user_id' )
+    group = models.ForeignKey('Groups', db_column = 'group_id')
     about_displayed = models.IntegerField()
     seq = models.FloatField()
 
     class Meta:
         managed = False
         db_table = 'group_memberships'
-        unique_together = (('user_id', 'group_id'),)
+        unique_together = (('user', 'group'),)
 
 
 class GroupSettings(models.Model):
-    group_id = models.BigIntegerField()
+    group = models.ForeignKey('Groups', db_column = 'group_id')
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
@@ -954,11 +937,11 @@ class GroupSettings(models.Model):
     class Meta:
         managed = False
         db_table = 'group_settings'
-        unique_together = (('group_id', 'locale', 'setting_name'),)
+        unique_together = (('group', 'locale', 'setting_name'),)
 
 
 class Groups(models.Model):
-    group_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'group_id' )
     assoc_type = models.SmallIntegerField(blank=True, null=True)
     publish_email = models.SmallIntegerField(blank=True, null=True)
     assoc_id = models.BigIntegerField(blank=True, null=True)
@@ -972,7 +955,7 @@ class Groups(models.Model):
 
 
 class InstitutionalSubscriptionIp(models.Model):
-    institutional_subscription_ip_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'institutional_subscription_ip_id' )
     subscription_id = models.BigIntegerField()
     ip_string = models.CharField(max_length=40)
     ip_start = models.BigIntegerField()
@@ -984,7 +967,7 @@ class InstitutionalSubscriptionIp(models.Model):
 
 
 class InstitutionalSubscriptions(models.Model):
-    institutional_subscription_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'institutional_subscription_id' )
     subscription_id = models.BigIntegerField()
     institution_name = models.CharField(max_length=255)
     mailing_address = models.CharField(max_length=255, blank=True, null=True)
@@ -996,8 +979,8 @@ class InstitutionalSubscriptions(models.Model):
 
 
 class IssueFiles(models.Model):
-    file_id = models.BigIntegerField(primary_key=True)
-    issue_id = models.BigIntegerField()
+    id = models.IntegerField(primary_key = True, db_column = 'file_id' )
+    issue = models.ForeignKey('Issues', db_column = 'issue_id')
     file_name = models.CharField(max_length=90)
     file_type = models.CharField(max_length=255)
     file_size = models.BigIntegerField()
@@ -1012,7 +995,7 @@ class IssueFiles(models.Model):
 
 
 class IssueGalleySettings(models.Model):
-    galley_id = models.BigIntegerField()
+    galley = models.ForeignKey('IssueGalleys', db_column = 'galley_id')
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
@@ -1021,14 +1004,14 @@ class IssueGalleySettings(models.Model):
     class Meta:
         managed = False
         db_table = 'issue_galley_settings'
-        unique_together = (('galley_id', 'locale', 'setting_name'),)
+        unique_together = (('galley', 'locale', 'setting_name'),)
 
 
 class IssueGalleys(models.Model):
-    galley_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'galley_id' )
     locale = models.CharField(max_length=5, blank=True, null=True)
-    issue_id = models.BigIntegerField()
-    file_id = models.BigIntegerField()
+    issue = models.ForeignKey('Issues', db_column = 'issue_id')
+    file = models.ForeignKey('IssueFiles', db_column = "file_id")
     label = models.CharField(max_length=32, blank=True, null=True)
     seq = models.FloatField()
 
@@ -1038,7 +1021,7 @@ class IssueGalleys(models.Model):
 
 
 class IssueSettings(models.Model):
-    issue_id = models.BigIntegerField()
+    issue = models.ForeignKey('Issues', db_column = 'issue_id')
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
@@ -1047,12 +1030,12 @@ class IssueSettings(models.Model):
     class Meta:
         managed = False
         db_table = 'issue_settings'
-        unique_together = (('issue_id', 'locale', 'setting_name'),)
+        unique_together = (('issue', 'locale', 'setting_name'),)
 
 
 class Issues(models.Model):
-    issue_id = models.BigIntegerField(primary_key=True)
-    journal_id = models.BigIntegerField()
+    id = models.IntegerField(primary_key = True, db_column = 'issue_id' )
+    journal = models.ForeignKey('Journals', db_column='journal_id')
     volume = models.SmallIntegerField(blank=True, null=True)
     number = models.CharField(max_length=10, blank=True, null=True)
     year = models.SmallIntegerField(blank=True, null=True)
@@ -1076,7 +1059,7 @@ class Issues(models.Model):
 
 
 class JournalSettings(models.Model):
-    journal_id = models.BigIntegerField()
+    journal = models.ForeignKey('Journals', db_column='journal_id')
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
@@ -1085,11 +1068,11 @@ class JournalSettings(models.Model):
     class Meta:
         managed = False
         db_table = 'journal_settings'
-        unique_together = (('journal_id', 'locale', 'setting_name'),)
+        unique_together = (('journal', 'locale', 'setting_name'),)
 
 
 class Journals(models.Model):
-    journal_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'journal_id' )
     path = models.CharField(unique=True, max_length=32)
     seq = models.FloatField()
     primary_locale = models.CharField(max_length=5)
@@ -1112,7 +1095,7 @@ class Licenses(models.Model):
 
 
 class MetadataDescriptionSettings(models.Model):
-    metadata_description_id = models.BigIntegerField()
+    metadata_description = models.ForeignKey('MetadataDescriptions', db_column = 'metadata_description_id')
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
@@ -1121,11 +1104,11 @@ class MetadataDescriptionSettings(models.Model):
     class Meta:
         managed = False
         db_table = 'metadata_description_settings'
-        unique_together = (('metadata_description_id', 'locale', 'setting_name'),)
+        unique_together = (('metadata_description', 'locale', 'setting_name'),)
 
 
 class MetadataDescriptions(models.Model):
-    metadata_description_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'metadata_description_id' )
     assoc_type = models.BigIntegerField()
     assoc_id = models.BigIntegerField()
     schema_namespace = models.CharField(max_length=255)
@@ -1142,7 +1125,7 @@ class Metrics(models.Model):
     load_id = models.CharField(max_length=255)
     assoc_type = models.BigIntegerField()
     context_id = models.BigIntegerField()
-    issue_id = models.BigIntegerField(blank=True, null=True)
+    issue = models.ForeignKey(Issues, blank=True, null=True, db_column = 'issue_id')
     submission_id = models.BigIntegerField(blank=True, null=True)
     assoc_id = models.BigIntegerField()
     day = models.CharField(max_length=8, blank=True, null=True)
@@ -1168,10 +1151,10 @@ class Mutex(models.Model):
 
 
 class Notes(models.Model):
-    note_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'note_id' )
     assoc_type = models.BigIntegerField(blank=True, null=True)
     assoc_id = models.BigIntegerField(blank=True, null=True)
-    user_id = models.BigIntegerField()
+    user = models.ForeignKey('Users', db_column = 'user_id' )
     date_created = models.DateTimeField()
     date_modified = models.DateTimeField(blank=True, null=True)
     title = models.CharField(max_length=255, blank=True, null=True)
@@ -1184,7 +1167,7 @@ class Notes(models.Model):
 
 
 class NotificationMailList(models.Model):
-    notification_mail_list_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'notification_mail_list_id' )
     email = models.CharField(max_length=90)
     confirmed = models.IntegerField()
     token = models.CharField(max_length=40)
@@ -1197,7 +1180,7 @@ class NotificationMailList(models.Model):
 
 
 class NotificationSettings(models.Model):
-    notification_id = models.BigIntegerField()
+    notification = models.ForeignKey('Notifications', db_column='notification_id')
     locale = models.CharField(max_length=5, blank=True, null=True)
     setting_name = models.CharField(max_length=64)
     setting_value = models.TextField(blank=True, null=True)
@@ -1206,14 +1189,14 @@ class NotificationSettings(models.Model):
     class Meta:
         managed = False
         db_table = 'notification_settings'
-        unique_together = (('notification_id', 'locale', 'setting_name'),)
+        unique_together = (('notification', 'locale', 'setting_name'),)
 
 
 class NotificationSubscriptionSettings(models.Model):
-    setting_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'setting_id' )
     setting_name = models.CharField(max_length=64)
     setting_value = models.TextField(blank=True, null=True)
-    user_id = models.BigIntegerField()
+    user = models.ForeignKey('Users', db_column = 'user_id' )
     context = models.BigIntegerField()
     setting_type = models.CharField(max_length=6)
 
@@ -1223,9 +1206,9 @@ class NotificationSubscriptionSettings(models.Model):
 
 
 class Notifications(models.Model):
-    notification_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'notification_id' )
     context_id = models.BigIntegerField()
-    user_id = models.BigIntegerField(blank=True, null=True)
+    user = models.ForeignKey('Users', blank=True, null=True, db_column = 'user_id')
     level = models.BigIntegerField()
     type = models.BigIntegerField()
     date_created = models.DateTimeField()
@@ -1267,7 +1250,7 @@ class PaypalTransactions(models.Model):
 class PluginSettings(models.Model):
     plugin_name = models.CharField(max_length=80)
     locale = models.CharField(max_length=5)
-    journal_id = models.BigIntegerField()
+    journal = models.ForeignKey('Journals', db_column='journal_id')
     setting_name = models.CharField(max_length=80)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
@@ -1275,7 +1258,7 @@ class PluginSettings(models.Model):
     class Meta:
         managed = False
         db_table = 'plugin_settings'
-        unique_together = (('plugin_name', 'locale', 'journal_id', 'setting_name'),)
+        unique_together = (('plugin_name', 'locale', 'journal', 'setting_name'),)
 
 
 class Processes(models.Model):
@@ -1290,9 +1273,9 @@ class Processes(models.Model):
 
 
 class PublishedArticles(models.Model):
-    published_article_id = models.BigIntegerField(primary_key=True)
-    article_id = models.ForeignKey(Articles, unique=True)
-    issue_id = models.BigIntegerField()
+    id = models.IntegerField(primary_key = True, db_column = 'published_article_id' )
+    article = models.ForeignKey('Articles', unique=True)
+    issue = models.ForeignKey('Issues', db_column = 'issue_id')
     date_published = models.DateTimeField(blank=True, null=True)
     seq = models.FloatField()
     access_status = models.IntegerField()
@@ -1303,7 +1286,7 @@ class PublishedArticles(models.Model):
 
 
 class QueuedPayments(models.Model):
-    queued_payment_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'queued_payment_id' )
     date_created = models.DateTimeField()
     date_modified = models.DateTimeField()
     expiry_date = models.DateField(blank=True, null=True)
@@ -1315,7 +1298,7 @@ class QueuedPayments(models.Model):
 
 
 class ReferralSettings(models.Model):
-    referral_id = models.BigIntegerField()
+    referral_id = models.ForeignKey('Referrals', db_column='referral_id')
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
@@ -1324,12 +1307,12 @@ class ReferralSettings(models.Model):
     class Meta:
         managed = False
         db_table = 'referral_settings'
-        unique_together = (('referral_id', 'locale', 'setting_name'),)
+        unique_together = (('referral', 'locale', 'setting_name'),)
 
 
 class Referrals(models.Model):
-    referral_id = models.BigIntegerField(primary_key=True)
-    article_id = models.BigIntegerField()
+    id = models.IntegerField(primary_key = True, db_column = 'referral_id' )
+    article = models.ForeignKey('Articles', db_column='article_id')
     status = models.SmallIntegerField()
     url = models.CharField(max_length=255)
     date_added = models.DateTimeField()
@@ -1338,13 +1321,13 @@ class Referrals(models.Model):
     class Meta:
         managed = False
         db_table = 'referrals'
-        unique_together = (('article_id', 'url'),)
+        unique_together = (('article', 'url'),)
 
 
 class ReviewAssignments(models.Model):
-    review_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'review_id' )
     submission_id = models.BigIntegerField()
-    reviewer_id = models.BigIntegerField()
+    reviewer = models.ForeignKey('Users', db_column = 'reviewer_id')
     competing_interests = models.TextField(blank=True, null=True)
     regret_message = models.TextField(blank=True, null=True)
     recommendation = models.IntegerField(blank=True, null=True)
@@ -1367,8 +1350,8 @@ class ReviewAssignments(models.Model):
     review_method = models.IntegerField()
     round = models.IntegerField()
     step = models.IntegerField()
-    review_form_id = models.BigIntegerField(blank=True, null=True)
-    review_round_id = models.BigIntegerField(blank=True, null=True)
+    review_form = models.ForeignKey('ReviewForms',blank=True, null=True, db_column = 'review_form_id')
+    review_round = models.ForeignKey('ReviewRounds', blank=True, null=True, db_column = 'review_round_id')
     stage_id = models.IntegerField()
     unconsidered = models.IntegerField(blank=True, null=True)
 
@@ -1378,7 +1361,7 @@ class ReviewAssignments(models.Model):
 
 
 class ReviewFormElementSettings(models.Model):
-    review_form_element_id = models.BigIntegerField()
+    review_form_element = models.ForeignKey('ReviewFormElements', db_column = 'review_form_element_id')
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
@@ -1387,12 +1370,12 @@ class ReviewFormElementSettings(models.Model):
     class Meta:
         managed = False
         db_table = 'review_form_element_settings'
-        unique_together = (('review_form_element_id', 'locale', 'setting_name'),)
+        unique_together = (('review_form_element', 'locale', 'setting_name'),)
 
 
 class ReviewFormElements(models.Model):
-    review_form_element_id = models.BigIntegerField(primary_key=True)
-    review_form_id = models.BigIntegerField()
+    id = models.IntegerField(primary_key = True, db_column = 'review_form_element_id' )
+    review_form = models.ForeignKey('ReviewForms', db_column = 'review_form_id')
     seq = models.FloatField(blank=True, null=True)
     element_type = models.BigIntegerField(blank=True, null=True)
     required = models.IntegerField(blank=True, null=True)
@@ -1404,8 +1387,8 @@ class ReviewFormElements(models.Model):
 
 
 class ReviewFormResponses(models.Model):
-    review_form_element_id = models.BigIntegerField()
-    review_id = models.BigIntegerField()
+    review_form_element = models.ForeignKey('ReviewFormElements', db_column = 'review_form_element_id')
+    review = models.ForeignKey('ReviewAssignments', db_column='review_id')
     response_type = models.CharField(max_length=6, blank=True, null=True)
     response_value = models.TextField(blank=True, null=True)
 
@@ -1415,7 +1398,7 @@ class ReviewFormResponses(models.Model):
 
 
 class ReviewFormSettings(models.Model):
-    review_form_id = models.BigIntegerField()
+    review_form = models.ForeignKey('ReviewForms', db_column = 'review_form_id')
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
@@ -1424,11 +1407,11 @@ class ReviewFormSettings(models.Model):
     class Meta:
         managed = False
         db_table = 'review_form_settings'
-        unique_together = (('review_form_id', 'locale', 'setting_name'),)
+        unique_together = (('review_form', 'locale', 'setting_name'),)
 
 
 class ReviewForms(models.Model):
-    review_form_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'review_form_id' )
     assoc_type = models.BigIntegerField(blank=True, null=True)
     assoc_id = models.BigIntegerField(blank=True, null=True)
     seq = models.FloatField(blank=True, null=True)
@@ -1444,7 +1427,7 @@ class ReviewRounds(models.Model):
     round = models.IntegerField()
     review_revision = models.BigIntegerField(blank=True, null=True)
     status = models.BigIntegerField(blank=True, null=True)
-    review_round_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'review_round_id' )
     stage_id = models.BigIntegerField(blank=True, null=True)
 
     class Meta:
@@ -1454,19 +1437,19 @@ class ReviewRounds(models.Model):
 
 
 class Roles(models.Model):
-    journal_id = models.BigIntegerField()
-    user_id = models.BigIntegerField()
-    role_id = models.BigIntegerField()
+    journal = models.ForeignKey('Journals', db_column='journal_id')
+    user = models.ForeignKey('Users', db_column = 'user_id' )
+    id = models.IntegerField(db_column = 'role_id' )
 
     class Meta:
         managed = False
         db_table = 'roles'
-        unique_together = (('journal_id', 'user_id', 'role_id'),)
+        unique_together = (('journal', 'user_id', 'id'),)
 
 
 class RtContexts(models.Model):
-    context_id = models.BigIntegerField(primary_key=True)
-    version_id = models.BigIntegerField()
+    id = models.IntegerField(primary_key = True, db_column = 'context_id' )
+    version = models.ForeignKey('RtVersions', db_column = 'version_id')
     title = models.CharField(max_length=120)
     abbrev = models.CharField(max_length=32)
     description = models.TextField(blank=True, null=True)
@@ -1482,8 +1465,8 @@ class RtContexts(models.Model):
 
 
 class RtSearches(models.Model):
-    search_id = models.BigIntegerField(primary_key=True)
-    context_id = models.BigIntegerField()
+    id = models.IntegerField(primary_key = True, db_column = 'search_id' )
+    context = models.ForeignKey('RtContexts', db_column = 'context_id')
     title = models.CharField(max_length=120)
     description = models.TextField(blank=True, null=True)
     url = models.TextField(blank=True, null=True)
@@ -1497,8 +1480,8 @@ class RtSearches(models.Model):
 
 
 class RtVersions(models.Model):
-    version_id = models.BigIntegerField(primary_key=True)
-    journal_id = models.BigIntegerField()
+    id = models.IntegerField(primary_key = True, db_column = 'version_id' )
+    journal = models.ForeignKey('Journals', db_column='journal_id')
     version_key = models.CharField(max_length=40)
     locale = models.CharField(max_length=5, blank=True, null=True)
     title = models.CharField(max_length=120)
@@ -1519,20 +1502,20 @@ class ScheduledTasks(models.Model):
 
 
 class SectionEditors(models.Model):
-    journal_id = models.BigIntegerField()
-    section_id = models.BigIntegerField()
-    user_id = models.BigIntegerField()
+    journal = models.ForeignKey('Journals', db_column='journal_id')
+    section = models.ForeignKey('Sections', db_column = 'section_id')
+    user = models.ForeignKey('Users', db_column = 'user_id' )
     can_edit = models.IntegerField()
     can_review = models.IntegerField()
 
     class Meta:
         managed = False
         db_table = 'section_editors'
-        unique_together = (('journal_id', 'section_id', 'user_id'),)
+        unique_together = (('journal', 'section', 'user'),)
 
 
 class SectionSettings(models.Model):
-    section_id = models.BigIntegerField()
+    section = models.ForeignKey('Sections', db_column = 'section_id')
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
@@ -1541,13 +1524,13 @@ class SectionSettings(models.Model):
     class Meta:
         managed = False
         db_table = 'section_settings'
-        unique_together = (('section_id', 'locale', 'setting_name'),)
+        unique_together = (('section', 'locale', 'setting_name'),)
 
 
 class Sections(models.Model):
-    section_id = models.BigIntegerField(primary_key=True)
-    journal_id = models.BigIntegerField()
-    review_form_id = models.BigIntegerField(blank=True, null=True)
+    id = models.IntegerField(primary_key = True, db_column = 'section_id' )
+    journal = models.ForeignKey('Journals', db_column='journal_id')
+    review_form = models.ForeignKey('ReviewForms', blank=True, null=True, db_column = 'review_form_id')
     seq = models.FloatField()
     editor_restricted = models.IntegerField()
     meta_indexed = models.IntegerField()
@@ -1565,8 +1548,8 @@ class Sections(models.Model):
 
 
 class Sessions(models.Model):
-    session_id = models.CharField(unique=True, max_length=40)
-    user_id = models.BigIntegerField(blank=True, null=True)
+    id = models.CharField(unique=True, max_length=40, db_column="session_id")
+    user = models.ForeignKey('Users', blank=True, null=True, db_column = 'user_id')
     ip_address = models.CharField(max_length=39)
     user_agent = models.CharField(max_length=255, blank=True, null=True)
     created = models.BigIntegerField()
@@ -1580,23 +1563,23 @@ class Sessions(models.Model):
 
 
 class Signoffs(models.Model):
-    signoff_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'signoff_id' )
     symbolic = models.CharField(max_length=32)
     assoc_type = models.BigIntegerField()
     assoc_id = models.BigIntegerField()
-    user_id = models.BigIntegerField()
-    file_id = models.BigIntegerField(blank=True, null=True)
+    user = models.ForeignKey('Users', db_column = 'user_id' )
+    file = models.ForeignKey('IssueFiles', blank=True, null=True, db_column='file_id')
     file_revision = models.BigIntegerField(blank=True, null=True)
     date_notified = models.DateTimeField(blank=True, null=True)
     date_underway = models.DateTimeField(blank=True, null=True)
     date_completed = models.DateTimeField(blank=True, null=True)
     date_acknowledged = models.DateTimeField(blank=True, null=True)
-    user_group_id = models.BigIntegerField(blank=True, null=True)
+    user_group = models.BigIntegerField(Groups,blank=True, null=True, db_column = 'user_group_id')
 
     class Meta:
         managed = False
         db_table = 'signoffs'
-        unique_together = (('assoc_type', 'assoc_id', 'symbolic', 'user_id', 'user_group_id', 'file_id', 'file_revision'),)
+        unique_together = (('assoc_type', 'assoc_id', 'symbolic', 'user', 'user_group', 'file', 'file_revision'),)
 
 
 class Site(models.Model):
@@ -1625,7 +1608,7 @@ class SiteSettings(models.Model):
 
 
 class StaticPageSettings(models.Model):
-    static_page_id = models.BigIntegerField()
+    static_page = models.ForeignKey('StaticPages', db_column = 'static_page_id')
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
@@ -1634,13 +1617,13 @@ class StaticPageSettings(models.Model):
     class Meta:
         managed = False
         db_table = 'static_page_settings'
-        unique_together = (('static_page_id', 'locale', 'setting_name'),)
+        unique_together = (('static_page', 'locale', 'setting_name'),)
 
 
 class StaticPages(models.Model):
-    static_page_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'static_page_id' )
     path = models.CharField(max_length=255)
-    journal_id = models.BigIntegerField()
+    journal = models.ForeignKey('Journals', db_column='journal_id')
 
     class Meta:
         managed = False
@@ -1648,7 +1631,7 @@ class StaticPages(models.Model):
 
 
 class SubscriptionTypeSettings(models.Model):
-    type_id = models.BigIntegerField()
+    type = models.ForeignKey('SubscriptionTypes', db_column='type_id')
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
@@ -1657,12 +1640,12 @@ class SubscriptionTypeSettings(models.Model):
     class Meta:
         managed = False
         db_table = 'subscription_type_settings'
-        unique_together = (('type_id', 'locale', 'setting_name'),)
+        unique_together = (('type', 'locale', 'setting_name'),)
 
 
 class SubscriptionTypes(models.Model):
-    type_id = models.BigIntegerField(primary_key=True)
-    journal_id = models.BigIntegerField()
+    id = models.IntegerField(primary_key = True, db_column = 'type_id' )
+    journal = models.ForeignKey('Journals', db_column='journal_id')
     cost = models.FloatField()
     currency_code_alpha = models.CharField(max_length=3)
     non_expiring = models.IntegerField()
@@ -1679,10 +1662,10 @@ class SubscriptionTypes(models.Model):
 
 
 class Subscriptions(models.Model):
-    subscription_id = models.BigIntegerField(primary_key=True)
-    journal_id = models.BigIntegerField()
-    user_id = models.BigIntegerField()
-    type_id = models.BigIntegerField()
+    id = models.IntegerField(primary_key = True, db_column = 'subscription_id' )
+    journal = models.ForeignKey('Journals', db_column='journal_id')
+    user = models.ForeignKey('Users', db_column = 'user_id' )
+    type = models.ForeignKey('AnnouncementTypes', db_column='type_id')
     date_start = models.DateField(blank=True, null=True)
     date_end = models.DateTimeField(blank=True, null=True)
     status = models.IntegerField()
@@ -1706,8 +1689,8 @@ class Taxonomy(models.Model):
 
 
 class TaxonomyArticle(models.Model):
-    taxonomy_id = models.IntegerField()
-    article_id = models.IntegerField()
+    taxonomy = models.ForeignKey('Taxonomy', db_column = 'taxonomy_id')
+    article = models.ForeignKey('Articles', db_column = 'article_id')
 
     class Meta:
         managed = False
@@ -1715,8 +1698,8 @@ class TaxonomyArticle(models.Model):
 
 
 class TaxonomyEditor(models.Model):
-    taxonomy_id = models.IntegerField()
-    user_id = models.IntegerField()
+    taxonomy = models.ForeignKey('Taxonomy', db_column = 'taxonomy_id')
+    user = models.ForeignKey('Users', db_column = 'user_id')
 
     class Meta:
         managed = False
@@ -1724,8 +1707,8 @@ class TaxonomyEditor(models.Model):
 
 
 class TemporaryFiles(models.Model):
-    file_id = models.BigIntegerField(primary_key=True)
-    user_id = models.BigIntegerField()
+    id = models.IntegerField(primary_key = True, db_column = 'file_id' )
+    user = models.ForeignKey('Users', db_column = 'user_id' )
     file_name = models.CharField(max_length=90)
     file_type = models.CharField(max_length=255, blank=True, null=True)
     file_size = models.BigIntegerField()
@@ -1738,8 +1721,8 @@ class TemporaryFiles(models.Model):
 
 
 class Theses(models.Model):
-    thesis_id = models.BigIntegerField(primary_key=True)
-    journal_id = models.BigIntegerField()
+    id = models.IntegerField(primary_key = True, db_column = 'thesis_id' )
+    journal = models.ForeignKey('Journals', db_column='journal_id')
     status = models.SmallIntegerField()
     degree = models.SmallIntegerField()
     degree_name = models.CharField(max_length=255, blank=True, null=True)
@@ -1792,17 +1775,17 @@ class UsageStatsTemporaryRecords(models.Model):
 
 
 class UserInterests(models.Model):
-    user_id = models.BigIntegerField()
+    user = models.ForeignKey('Users', db_column = 'user_id' )
     controlled_vocab_entry_id = models.BigIntegerField()
 
     class Meta:
         managed = False
         db_table = 'user_interests'
-        unique_together = (('user_id', 'controlled_vocab_entry_id'),)
+        unique_together = (('user', 'controlled_vocab_entry_id'),)
 
 
 class UserSettings(models.Model):
-    user_id = models.BigIntegerField()
+    user = models.ForeignKey('Users', db_column = 'user_id' )
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     assoc_type = models.BigIntegerField(blank=True, null=True)
@@ -1813,11 +1796,11 @@ class UserSettings(models.Model):
     class Meta:
         managed = False
         db_table = 'user_settings'
-        unique_together = (('user_id', 'locale', 'setting_name', 'assoc_type', 'assoc_id'),)
+        unique_together = (('user', 'locale', 'setting_name', 'assoc_type', 'assoc_id'),)
 
 
 class Users(models.Model):
-    user_id = models.BigIntegerField(primary_key=True)
+    id = models.IntegerField(primary_key = True, db_column = 'user_id' )
     username = models.CharField(unique=True, max_length=200, blank=True, null=True)
     password = models.CharField(max_length=40)
     salutation = models.CharField(max_length=40, blank=True, null=True)
