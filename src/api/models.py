@@ -133,7 +133,7 @@ class ArticleFiles(models.Model):
 
 
 class ArticleGalleySettings(models.Model):
-    id = models.ForeignKey('ArticleGalleys', db_column='galley_id')
+    galley = models.ForeignKey('ArticleGalleys', db_column='galley_id')
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
@@ -142,7 +142,7 @@ class ArticleGalleySettings(models.Model):
     class Meta:
         managed = False
         db_table = 'article_galley_settings'
-        unique_together = (('id', 'locale', 'setting_name'),)
+        unique_together = (('galley', 'locale', 'setting_name'),)
 
 
 class ArticleGalleys(models.Model):
@@ -152,7 +152,7 @@ class ArticleGalleys(models.Model):
     file = models.ForeignKey('ArticleFiles', db_column='file_id')
     label = models.CharField(max_length=32, blank=True, null=True)
     html_galley = models.IntegerField()
-    style_file = models.ForeignKey('ArticleFiles', blank=True, null=True,db_column='style_file_id')
+    style_file = models.ForeignKey('ArticleFiles', blank=True, null=True, related_name = 'style_file',db_column='style_file_id')
     seq = models.FloatField()
     remote_url = models.CharField(max_length=255, blank=True, null=True)
 
@@ -240,7 +240,7 @@ class ArticleStages(models.Model):
 
 
 class ArticleStatus(models.Model):
-    article = models.ForeignKey('Articles', unique=True, db_column = 'article_id')
+    article = models.OneToOneField('Articles', db_column = 'article_id')
     id =  models.AutoField(primary_key = True, db_column = 'status_id' )
     date_updated = models.DateTimeField(blank=True, null=True)
 
@@ -395,7 +395,7 @@ class BooksForReview(models.Model):
     date_due = models.DateTimeField(blank=True, null=True)
     date_submitted = models.DateTimeField(blank=True, null=True)
     user = models.ForeignKey('Users', blank=True, null=True, db_column = 'user_id')
-    editor = models.ForeignKey('Users', blank=True, null=True, db_column = 'editor_id')
+    editor = models.ForeignKey('Users', blank=True, null=True, related_name = 'editor' , db_column = 'editor_id')
     article = models.ForeignKey('Articles', blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
 
@@ -405,7 +405,7 @@ class BooksForReview(models.Model):
 
 
 class BooksForReviewAuthors(models.Model):
-    author = models.ForeignKey('Authors', primary_key = True, db_column = 'author_id' )
+    author = models.OneToOneField('Authors', db_column = 'author_id' )
     book = models.BigIntegerField(BooksForReview, db_column = 'book_id')
     seq = models.FloatField()
     first_name = models.CharField(max_length=40)
@@ -494,7 +494,7 @@ class CollectionArticle(models.Model):
     class Meta:
         managed = False
         db_table = 'collection_article'
-        unique_together = (('collection', 'published_article_id'),)
+        unique_together = (('collection', 'published_article'),)
 
 
 class CollectionUser(models.Model):
@@ -579,7 +579,7 @@ class ControlledVocabs(models.Model):
 
 
 class CustomIssueOrders(models.Model):
-    issue = models.ForeignKey('Issues', db_column = 'issue_id', unique=True)
+    issue = models.OneToOneField('Issues', db_column = 'issue_id')
     journal = models.ForeignKey('Journals', db_column='journal_id')
     seq = models.FloatField()
 
@@ -664,7 +664,7 @@ class DataverseStudies(models.Model):
 
 class DraftDecisions(models.Model):
     key_val = models.CharField(max_length=45)
-    senior_editor = models.ForeignKey('Users', db_column='senior_editor_id')
+    senior_editor = models.ForeignKey('Users',related_name = 'senior_editor', db_column='senior_editor_id')
     junior_editor = models.ForeignKey('Users', db_column='junior_editor_id')
     article = models.ForeignKey('Articles', db_column = 'article_id')
     decision = models.IntegerField()
@@ -769,8 +769,8 @@ class EmailTemplatesDefault(models.Model):
     email_key = models.CharField(max_length=64)
     can_disable = models.IntegerField()
     can_edit = models.IntegerField()
-    from_role = models.ForeignKey('Roles', blank=True, null=True, db_column = 'from_role_id')
-    to_role = models.ForeignKey('Roles', blank=True, null=True, db_column = 'to_role_id')
+    from_role = models.ForeignKey('Roles', blank=True, null=True, related_name = "from_role", db_column = 'from_role_id')
+    to_role = models.ForeignKey('Roles', blank=True, null=True, related_name = "to_role", db_column = 'to_role_id')
 
     class Meta:
         managed = False
@@ -807,7 +807,7 @@ class EventLog(models.Model):
 
 
 class EventLogSettings(models.Model):
-    id = models.ForeignKey('EventLog', db_column = 'log_id' )
+    event_log = models.ForeignKey('EventLog', db_column = 'log_id' )
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
@@ -815,7 +815,7 @@ class EventLogSettings(models.Model):
     class Meta:
         managed = False
         db_table = 'event_log_settings'
-        unique_together = (('id', 'setting_name'),)
+        unique_together = (('event_log', 'setting_name'),)
 
 
 class ExternalFeedSettings(models.Model):
@@ -898,12 +898,12 @@ class Gifts(models.Model):
     buyer_middle_name = models.CharField(max_length=40, blank=True, null=True)
     buyer_last_name = models.CharField(max_length=90)
     buyer_email = models.CharField(max_length=90)
-    buyer_user = models.ForeignKey('Users', blank=True, null=True, db_column = 'user_id')
+    buyer_user = models.ForeignKey('Users', blank=True, null=True, related_name = "buyer", db_column = 'buyer_user_id')
     recipient_first_name = models.CharField(max_length=40)
     recipient_middle_name = models.CharField(max_length=40, blank=True, null=True)
     recipient_last_name = models.CharField(max_length=90)
     recipient_email = models.CharField(max_length=90)
-    recipient_user = models.ForeignKey('Users', blank=True, null=True, db_column = 'user_id')
+    recipient_user = models.ForeignKey('Users', blank=True, null=True, related_name = "recipient", db_column = 'recipient_user_id')
     date_redeemed = models.DateTimeField(blank=True, null=True)
     locale = models.CharField(max_length=5)
     gift_note_title = models.CharField(max_length=90, blank=True, null=True)
@@ -1274,7 +1274,7 @@ class Processes(models.Model):
 
 class PublishedArticles(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'published_article_id' )
-    article = models.ForeignKey('Articles', unique=True)
+    article = models.OneToOneField('Articles')
     issue = models.ForeignKey('Issues', db_column = 'issue_id')
     date_published = models.DateTimeField(blank=True, null=True)
     seq = models.FloatField()
@@ -1298,7 +1298,7 @@ class QueuedPayments(models.Model):
 
 
 class ReferralSettings(models.Model):
-    referral_id = models.ForeignKey('Referrals', db_column='referral_id')
+    referral = models.ForeignKey('Referrals', db_column='referral_id')
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
@@ -1439,12 +1439,12 @@ class ReviewRounds(models.Model):
 class Roles(models.Model):
     journal = models.ForeignKey('Journals', db_column='journal_id')
     user = models.ForeignKey('Users', db_column = 'user_id' )
-    id = models.IntegerField(db_column = 'role_id' )
+    id = models.IntegerField( primary_key = True, db_column = 'role_id' )
 
     class Meta:
         managed = False
         db_table = 'roles'
-        unique_together = (('journal', 'user_id', 'id'),)
+        unique_together = (('journal', 'user', 'id'),)
 
 
 class RtContexts(models.Model):
@@ -1548,7 +1548,7 @@ class Sections(models.Model):
 
 
 class Sessions(models.Model):
-    id = models.CharField(unique=True, max_length=40, db_column="session_id")
+    id = models.CharField(primary_key=True, max_length=40, db_column="session_id")
     user = models.ForeignKey('Users', blank=True, null=True, db_column = 'user_id')
     ip_address = models.CharField(max_length=39)
     user_agent = models.CharField(max_length=255, blank=True, null=True)
