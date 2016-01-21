@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
-import api.models
 
 
 class Migration(migrations.Migration):
@@ -423,7 +422,6 @@ class Migration(migrations.Migration):
             name='BooksForReviewAuthors',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('book', models.BigIntegerField(verbose_name=api.models.BooksForReview, db_column='book_id')),
                 ('seq', models.FloatField()),
                 ('first_name', models.CharField(max_length=40)),
                 ('middle_name', models.CharField(max_length=40, null=True, blank=True)),
@@ -438,7 +436,6 @@ class Migration(migrations.Migration):
             name='BooksForReviewSettings',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('book', models.BigIntegerField(verbose_name=api.models.BooksForReview, db_column='book_id')),
                 ('locale', models.CharField(max_length=5)),
                 ('setting_name', models.CharField(max_length=255)),
                 ('setting_value', models.TextField(null=True, blank=True)),
@@ -1678,7 +1675,6 @@ class Migration(migrations.Migration):
                 ('date_underway', models.DateTimeField(null=True, blank=True)),
                 ('date_completed', models.DateTimeField(null=True, blank=True)),
                 ('date_acknowledged', models.DateTimeField(null=True, blank=True)),
-                ('user_group', models.BigIntegerField(null=True, verbose_name=api.models.Groups, db_column='user_group_id', blank=True)),
             ],
             options={
                 'db_table': 'signoffs',

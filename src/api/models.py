@@ -21,6 +21,7 @@ class AccessKeys(models.Model):
     expiry_date = models.DateTimeField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'access_keys'
 
@@ -33,6 +34,7 @@ class AnnouncementSettings(models.Model):
     setting_type = models.CharField(max_length=6)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'announcement_settings'
         unique_together = (('announcement', 'locale', 'setting_name'),)
@@ -46,6 +48,7 @@ class AnnouncementTypeSettings(models.Model):
     setting_type = models.CharField(max_length=6)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'announcement_type_settings'
         unique_together = (('type', 'locale', 'setting_name'),)
@@ -57,6 +60,7 @@ class AnnouncementTypes(models.Model):
     assoc_id = models.BigIntegerField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'announcement_types'
 
@@ -70,6 +74,7 @@ class Announcements(models.Model):
     date_posted = models.DateTimeField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'announcements'
 
@@ -88,6 +93,7 @@ class ArticleComments(models.Model):
     viewable = models.IntegerField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'article_comments'
 
@@ -105,6 +111,7 @@ class ArticleEventLog(models.Model):
     message = models.TextField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'article_event_log'
 
@@ -127,6 +134,7 @@ class ArticleFiles(models.Model):
     assoc_id = models.BigIntegerField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'article_files'
         unique_together = (('id', 'revision'),)
@@ -140,6 +148,7 @@ class ArticleGalleySettings(models.Model):
     setting_type = models.CharField(max_length=6)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'article_galley_settings'
         unique_together = (('galley', 'locale', 'setting_name'),)
@@ -157,6 +166,7 @@ class ArticleGalleys(models.Model):
     remote_url = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'article_galleys'
 
@@ -166,6 +176,7 @@ class ArticleHtmlGalleyImages(models.Model):
     file = models.ForeignKey('ArticleFiles', db_column='file_id')
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'article_html_galley_images'
         unique_together = (('galley', 'file'),)
@@ -182,6 +193,7 @@ class ArticleNotes(models.Model):
     file = models.ForeignKey('ArticleFiles', db_column='file_id')
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'article_notes'
 
@@ -191,6 +203,7 @@ class ArticleSearchKeywordList(models.Model):
     keyword_text = models.CharField(unique=True, max_length=60)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'article_search_keyword_list'
 
@@ -201,6 +214,7 @@ class ArticleSearchObjectKeywords(models.Model):
     pos = models.IntegerField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'article_search_object_keywords'
         unique_together = (('object', 'pos'),)
@@ -213,6 +227,7 @@ class ArticleSearchObjects(models.Model):
     assoc_id = models.BigIntegerField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'article_search_objects'
 
@@ -225,6 +240,7 @@ class ArticleSettings(models.Model):
     setting_type = models.CharField(max_length=6)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'article_settings'
         unique_together = (('article', 'locale', 'setting_name'),)
@@ -235,6 +251,7 @@ class ArticleStages(models.Model):
     stage_name = models.CharField(max_length=45, blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'article_stages'
 
@@ -245,6 +262,7 @@ class ArticleStatus(models.Model):
     date_updated = models.DateTimeField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'article_status'
 
@@ -255,6 +273,7 @@ class ArticleStatusHistory(models.Model):
     date_updated = models.DateTimeField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'article_status_history'
 
@@ -267,6 +286,7 @@ class ArticleSuppFileSettings(models.Model):
     setting_type = models.CharField(max_length=6)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'article_supp_file_settings'
         unique_together = (('supp', 'locale', 'setting_name'),)
@@ -285,6 +305,7 @@ class ArticleSupplementaryFiles(models.Model):
     seq = models.FloatField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'article_supplementary_files'
 
@@ -298,6 +319,7 @@ class ArticleXmlGalleys(models.Model):
     views = models.IntegerField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'article_xml_galleys'
 
@@ -327,6 +349,7 @@ class Articles(models.Model):
     comments_status = models.IntegerField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'articles'
 
@@ -339,6 +362,7 @@ class AuthSources(models.Model):
     settings = models.TextField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'auth_sources'
 
@@ -351,6 +375,7 @@ class AuthorSettings(models.Model):
     setting_type = models.CharField(max_length=6)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'author_settings'
         unique_together = (('author', 'locale', 'setting_name'),)
@@ -371,6 +396,7 @@ class Authors(models.Model):
     suffix = models.CharField(max_length=40, blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'authors'
 
@@ -400,31 +426,34 @@ class BooksForReview(models.Model):
     notes = models.TextField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'books_for_review'
 
 
 class BooksForReviewAuthors(models.Model):
     author = models.OneToOneField('Authors', db_column = 'author_id' )
-    book = models.BigIntegerField(BooksForReview, db_column = 'book_id')
+    book = models.ForeignKey('BooksForReview', db_column = 'book_id')
     seq = models.FloatField()
     first_name = models.CharField(max_length=40)
     middle_name = models.CharField(max_length=40, blank=True, null=True)
     last_name = models.CharField(max_length=90)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'books_for_review_authors'
 
 
 class BooksForReviewSettings(models.Model):
-    book = models.BigIntegerField(BooksForReview, db_column = 'book_id')
+    book = models.ForeignKey('BooksForReview', db_column = 'book_id')
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'books_for_review_settings'
         unique_together = (('book', 'locale', 'setting_name'),)
@@ -437,6 +466,7 @@ class Captchas(models.Model):
     date_created = models.DateTimeField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'captchas'
 
@@ -449,6 +479,7 @@ class CitationSettings(models.Model):
     setting_type = models.CharField(max_length=6)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'citation_settings'
         unique_together = (('citation', 'locale', 'setting_name'),)
@@ -464,6 +495,7 @@ class Citations(models.Model):
     lock_id = models.CharField(max_length=23, blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'citations'
         unique_together = (('assoc_type', 'assoc_id', 'seq'),)
@@ -483,6 +515,7 @@ class Collection(models.Model):
     discussions = models.IntegerField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'collection'
 
@@ -492,6 +525,7 @@ class CollectionArticle(models.Model):
     published_article = models.ForeignKey('Articles', db_column='article_id')
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'collection_article'
         unique_together = (('collection', 'published_article'),)
@@ -503,6 +537,7 @@ class CollectionUser(models.Model):
     role_name = models.CharField(max_length=50)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'collection_user'
         unique_together = (('collection', 'user'),)
@@ -523,6 +558,7 @@ class Comments(models.Model):
     date_modified = models.DateTimeField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'comments'
 
@@ -539,6 +575,7 @@ class CompletedPayments(models.Model):
     payment_method_plugin_name = models.CharField(max_length=80, blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'completed_payments'
 
@@ -549,6 +586,7 @@ class ControlledVocabEntries(models.Model):
     seq = models.FloatField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'controlled_vocab_entries'
 
@@ -561,6 +599,7 @@ class ControlledVocabEntrySettings(models.Model):
     setting_type = models.CharField(max_length=6)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'controlled_vocab_entry_settings'
         unique_together = (('controlled_vocab_entry', 'locale', 'setting_name'),)
@@ -573,6 +612,7 @@ class ControlledVocabs(models.Model):
     assoc_id = models.BigIntegerField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'controlled_vocabs'
         unique_together = (('symbolic', 'assoc_type', 'assoc_id'),)
@@ -584,6 +624,7 @@ class CustomIssueOrders(models.Model):
     seq = models.FloatField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'custom_issue_orders'
 
@@ -594,6 +635,7 @@ class CustomSectionOrders(models.Model):
     seq = models.FloatField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'custom_section_orders'
         unique_together = (('issue', 'section_id'),)
@@ -606,6 +648,7 @@ class DataObjectTombstoneOaiSetObjects(models.Model):
     assoc_id = models.BigIntegerField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'data_object_tombstone_oai_set_objects'
 
@@ -618,6 +661,7 @@ class DataObjectTombstoneSettings(models.Model):
     setting_type = models.CharField(max_length=6)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'data_object_tombstone_settings'
         unique_together = (('tombstone', 'locale', 'setting_name'),)
@@ -632,6 +676,7 @@ class DataObjectTombstones(models.Model):
     oai_identifier = models.CharField(max_length=255)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'data_object_tombstones'
 
@@ -644,6 +689,7 @@ class DataverseFiles(models.Model):
     content_source_uri = models.CharField(max_length=255)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'dataverse_files'
 
@@ -658,6 +704,7 @@ class DataverseStudies(models.Model):
     data_citation = models.TextField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'dataverse_studies'
 
@@ -675,6 +722,7 @@ class DraftDecisions(models.Model):
     status = models.CharField(max_length=45)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'draft_decisions'
 
@@ -690,6 +738,7 @@ class EditAssignments(models.Model):
     date_underway = models.DateTimeField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'edit_assignments'
 
@@ -703,6 +752,7 @@ class EditDecisions(models.Model):
     date_decided = models.DateTimeField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'edit_decisions'
 
@@ -723,6 +773,7 @@ class EmailLog(models.Model):
     body = models.TextField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'email_log'
 
@@ -732,6 +783,7 @@ class EmailLogUsers(models.Model):
     user = models.ForeignKey('Users', db_column = 'user_id' )
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'email_log_users'
         unique_together = (('email_log', 'user'),)
@@ -745,6 +797,7 @@ class EmailTemplates(models.Model):
     enabled = models.IntegerField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'email_templates'
         unique_together = (('email_key', 'assoc_type', 'assoc_id'),)
@@ -759,6 +812,7 @@ class EmailTemplatesData(models.Model):
     body = models.TextField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'email_templates_data'
         unique_together = (('email_key', 'locale', 'assoc_type', 'assoc_id'),)
@@ -773,6 +827,7 @@ class EmailTemplatesDefault(models.Model):
     to_role = models.ForeignKey('Roles', blank=True, null=True, related_name = "to_role", db_column = 'to_role_id')
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'email_templates_default'
 
@@ -785,6 +840,7 @@ class EmailTemplatesDefaultData(models.Model):
     description = models.TextField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'email_templates_default_data'
         unique_together = (('email_key', 'locale'),)
@@ -802,6 +858,7 @@ class EventLog(models.Model):
     is_translated = models.IntegerField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'event_log'
 
@@ -813,6 +870,7 @@ class EventLogSettings(models.Model):
     setting_type = models.CharField(max_length=6)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'event_log_settings'
         unique_together = (('event_log', 'setting_name'),)
@@ -826,6 +884,7 @@ class ExternalFeedSettings(models.Model):
     setting_type = models.CharField(max_length=6)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'external_feed_settings'
         unique_together = (('feed', 'locale', 'setting_name'),)
@@ -842,6 +901,7 @@ class ExternalFeeds(models.Model):
     recent_items = models.SmallIntegerField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'external_feeds'
 
@@ -855,6 +915,7 @@ class FilterGroups(models.Model):
     output_type = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'filter_groups'
 
@@ -867,6 +928,7 @@ class FilterSettings(models.Model):
     setting_type = models.CharField(max_length=6)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'filter_settings'
         unique_together = (('filter', 'locale', 'setting_name'),)
@@ -883,6 +945,7 @@ class Filters(models.Model):
     filter_group = models.ForeignKey('FilterGroups', db_column = 'filter_group_id')
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'filters'
 
@@ -911,6 +974,7 @@ class Gifts(models.Model):
     notes = models.TextField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'gifts'
 
@@ -922,6 +986,7 @@ class GroupMemberships(models.Model):
     seq = models.FloatField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'group_memberships'
         unique_together = (('user', 'group'),)
@@ -935,6 +1000,7 @@ class GroupSettings(models.Model):
     setting_type = models.CharField(max_length=6)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'group_settings'
         unique_together = (('group', 'locale', 'setting_name'),)
@@ -950,6 +1016,7 @@ class Groups(models.Model):
     seq = models.FloatField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'groups'
 
@@ -962,6 +1029,7 @@ class InstitutionalSubscriptionIp(models.Model):
     ip_end = models.BigIntegerField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'institutional_subscription_ip'
 
@@ -974,6 +1042,7 @@ class InstitutionalSubscriptions(models.Model):
     domain = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'institutional_subscriptions'
 
@@ -990,6 +1059,7 @@ class IssueFiles(models.Model):
     date_modified = models.DateTimeField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'issue_files'
 
@@ -1002,6 +1072,7 @@ class IssueGalleySettings(models.Model):
     setting_type = models.CharField(max_length=6)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'issue_galley_settings'
         unique_together = (('galley', 'locale', 'setting_name'),)
@@ -1016,6 +1087,7 @@ class IssueGalleys(models.Model):
     seq = models.FloatField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'issue_galleys'
 
@@ -1028,6 +1100,7 @@ class IssueSettings(models.Model):
     setting_type = models.CharField(max_length=6)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'issue_settings'
         unique_together = (('issue', 'locale', 'setting_name'),)
@@ -1054,6 +1127,7 @@ class Issues(models.Model):
     last_modified = models.DateTimeField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'issues'
 
@@ -1066,6 +1140,7 @@ class JournalSettings(models.Model):
     setting_type = models.CharField(max_length=6)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'journal_settings'
         unique_together = (('journal', 'locale', 'setting_name'),)
@@ -1079,6 +1154,7 @@ class Journals(models.Model):
     enabled = models.IntegerField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'journals'
 
@@ -1090,6 +1166,7 @@ class Licenses(models.Model):
     enabled = models.IntegerField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'licenses'
 
@@ -1102,6 +1179,7 @@ class MetadataDescriptionSettings(models.Model):
     setting_type = models.CharField(max_length=6)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'metadata_description_settings'
         unique_together = (('metadata_description', 'locale', 'setting_name'),)
@@ -1117,6 +1195,7 @@ class MetadataDescriptions(models.Model):
     seq = models.BigIntegerField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'metadata_descriptions'
 
@@ -1138,6 +1217,7 @@ class Metrics(models.Model):
     metric = models.IntegerField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'metrics'
 
@@ -1146,6 +1226,7 @@ class Mutex(models.Model):
     i = models.IntegerField(primary_key=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'mutex'
 
@@ -1162,6 +1243,7 @@ class Notes(models.Model):
     contents = models.TextField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'notes'
 
@@ -1174,6 +1256,7 @@ class NotificationMailList(models.Model):
     context = models.BigIntegerField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'notification_mail_list'
         unique_together = (('email', 'context'),)
@@ -1187,6 +1270,7 @@ class NotificationSettings(models.Model):
     setting_type = models.CharField(max_length=6)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'notification_settings'
         unique_together = (('notification', 'locale', 'setting_name'),)
@@ -1201,6 +1285,7 @@ class NotificationSubscriptionSettings(models.Model):
     setting_type = models.CharField(max_length=6)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'notification_subscription_settings'
 
@@ -1217,6 +1302,7 @@ class Notifications(models.Model):
     assoc_id = models.BigIntegerField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'notifications'
 
@@ -1228,6 +1314,7 @@ class OaiResumptionTokens(models.Model):
     params = models.TextField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'oai_resumption_tokens'
 
@@ -1243,6 +1330,7 @@ class PaypalTransactions(models.Model):
     receiver_id = models.CharField(max_length=13, blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'paypal_transactions'
 
@@ -1256,6 +1344,7 @@ class PluginSettings(models.Model):
     setting_type = models.CharField(max_length=6)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'plugin_settings'
         unique_together = (('plugin_name', 'locale', 'journal', 'setting_name'),)
@@ -1268,6 +1357,7 @@ class Processes(models.Model):
     obliterated = models.IntegerField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'processes'
 
@@ -1281,6 +1371,7 @@ class PublishedArticles(models.Model):
     access_status = models.IntegerField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'published_articles'
 
@@ -1293,6 +1384,7 @@ class QueuedPayments(models.Model):
     payment_data = models.TextField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'queued_payments'
 
@@ -1305,6 +1397,7 @@ class ReferralSettings(models.Model):
     setting_type = models.CharField(max_length=6)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'referral_settings'
         unique_together = (('referral', 'locale', 'setting_name'),)
@@ -1319,6 +1412,7 @@ class Referrals(models.Model):
     link_count = models.BigIntegerField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'referrals'
         unique_together = (('article', 'url'),)
@@ -1356,6 +1450,7 @@ class ReviewAssignments(models.Model):
     unconsidered = models.IntegerField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'review_assignments'
 
@@ -1368,6 +1463,7 @@ class ReviewFormElementSettings(models.Model):
     setting_type = models.CharField(max_length=6)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'review_form_element_settings'
         unique_together = (('review_form_element', 'locale', 'setting_name'),)
@@ -1382,6 +1478,7 @@ class ReviewFormElements(models.Model):
     included = models.IntegerField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'review_form_elements'
 
@@ -1393,6 +1490,7 @@ class ReviewFormResponses(models.Model):
     response_value = models.TextField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'review_form_responses'
 
@@ -1405,6 +1503,7 @@ class ReviewFormSettings(models.Model):
     setting_type = models.CharField(max_length=6)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'review_form_settings'
         unique_together = (('review_form', 'locale', 'setting_name'),)
@@ -1418,6 +1517,7 @@ class ReviewForms(models.Model):
     is_active = models.IntegerField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'review_forms'
 
@@ -1431,6 +1531,7 @@ class ReviewRounds(models.Model):
     stage_id = models.BigIntegerField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'review_rounds'
         unique_together = (('submission_id', 'stage_id', 'round'),)
@@ -1442,6 +1543,7 @@ class Roles(models.Model):
     id = models.IntegerField( primary_key = True, db_column = 'role_id' )
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'roles'
         unique_together = (('journal', 'user', 'id'),)
@@ -1460,6 +1562,7 @@ class RtContexts(models.Model):
     seq = models.FloatField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'rt_contexts'
 
@@ -1475,6 +1578,7 @@ class RtSearches(models.Model):
     seq = models.FloatField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'rt_searches'
 
@@ -1488,6 +1592,7 @@ class RtVersions(models.Model):
     description = models.TextField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'rt_versions'
 
@@ -1497,6 +1602,7 @@ class ScheduledTasks(models.Model):
     last_run = models.DateTimeField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'scheduled_tasks'
 
@@ -1509,6 +1615,7 @@ class SectionEditors(models.Model):
     can_review = models.IntegerField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'section_editors'
         unique_together = (('journal', 'section', 'user'),)
@@ -1522,6 +1629,7 @@ class SectionSettings(models.Model):
     setting_type = models.CharField(max_length=6)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'section_settings'
         unique_together = (('section', 'locale', 'setting_name'),)
@@ -1543,6 +1651,7 @@ class Sections(models.Model):
     abstract_word_count = models.BigIntegerField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'sections'
 
@@ -1558,6 +1667,7 @@ class Sessions(models.Model):
     data = models.TextField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'sessions'
 
@@ -1574,9 +1684,10 @@ class Signoffs(models.Model):
     date_underway = models.DateTimeField(blank=True, null=True)
     date_completed = models.DateTimeField(blank=True, null=True)
     date_acknowledged = models.DateTimeField(blank=True, null=True)
-    user_group = models.BigIntegerField(Groups,blank=True, null=True, db_column = 'user_group_id')
+    user_group = models.ForeignKey('Groups',blank=True, null=True, db_column = 'user_group_id')
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'signoffs'
         unique_together = (('assoc_type', 'assoc_id', 'symbolic', 'user', 'user_group', 'file', 'file_revision'),)
@@ -1591,6 +1702,7 @@ class Site(models.Model):
     original_style_file_name = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'site'
 
@@ -1602,6 +1714,7 @@ class SiteSettings(models.Model):
     setting_type = models.CharField(max_length=6)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'site_settings'
         unique_together = (('setting_name', 'locale'),)
@@ -1615,6 +1728,7 @@ class StaticPageSettings(models.Model):
     setting_type = models.CharField(max_length=6)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'static_page_settings'
         unique_together = (('static_page', 'locale', 'setting_name'),)
@@ -1626,6 +1740,7 @@ class StaticPages(models.Model):
     journal = models.ForeignKey('Journals', db_column='journal_id')
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'static_pages'
 
@@ -1638,6 +1753,7 @@ class SubscriptionTypeSettings(models.Model):
     setting_type = models.CharField(max_length=6)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'subscription_type_settings'
         unique_together = (('type', 'locale', 'setting_name'),)
@@ -1657,6 +1773,7 @@ class SubscriptionTypes(models.Model):
     seq = models.FloatField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'subscription_types'
 
@@ -1674,6 +1791,7 @@ class Subscriptions(models.Model):
     notes = models.TextField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'subscriptions'
 
@@ -1684,6 +1802,7 @@ class Taxonomy(models.Model):
     front_end = models.IntegerField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'taxonomy'
 
@@ -1693,6 +1812,7 @@ class TaxonomyArticle(models.Model):
     article = models.ForeignKey('Articles', db_column = 'article_id')
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'taxonomy_article'
 
@@ -1702,6 +1822,7 @@ class TaxonomyEditor(models.Model):
     user = models.ForeignKey('Users', db_column = 'user_id')
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'taxonomy_editor'
 
@@ -1716,6 +1837,7 @@ class TemporaryFiles(models.Model):
     date_uploaded = models.DateTimeField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'temporary_files'
 
@@ -1754,6 +1876,7 @@ class Theses(models.Model):
     date_submitted = models.DateTimeField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'theses'
 
@@ -1770,6 +1893,7 @@ class UsageStatsTemporaryRecords(models.Model):
     file_type = models.IntegerField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'usage_stats_temporary_records'
 
@@ -1779,6 +1903,7 @@ class UserInterests(models.Model):
     controlled_vocab_entry_id = models.BigIntegerField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'user_interests'
         unique_together = (('user', 'controlled_vocab_entry_id'),)
@@ -1794,6 +1919,7 @@ class UserSettings(models.Model):
     setting_type = models.CharField(max_length=6)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'user_settings'
         unique_together = (('user', 'locale', 'setting_name', 'assoc_type', 'assoc_id'),)
@@ -1830,6 +1956,7 @@ class Users(models.Model):
     inline_help = models.IntegerField(blank=True, null=True)
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'users'
 
@@ -1848,6 +1975,7 @@ class Versions(models.Model):
     sitewide = models.IntegerField()
 
     class Meta:
+        app_label='api'
         managed = False
         db_table = 'versions'
         unique_together = (('product_type', 'product', 'major', 'minor', 'revision', 'build'),)
