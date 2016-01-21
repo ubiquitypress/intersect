@@ -43,7 +43,7 @@ class AnnouncementSetting(models.Model):
 
 
 class AnnouncementTypeSetting(models.Model):
-    type = models.ForeignKey('AnnouncementType', db_column='type_id')
+    type = models.OneToOneField('AnnouncementType', db_column='type_id')
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
@@ -1440,7 +1440,7 @@ class PluginSetting(models.Model):
 
 
 class Process(models.Model):
-    process_id = models.CharField(unique=True, max_length=23)
+    process_id = models.CharField(primary_key=True, max_length=23)
     process_type = models.IntegerField()
     time_started = models.BigIntegerField()
     obliterated = models.IntegerField()
