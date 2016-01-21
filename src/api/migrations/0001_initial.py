@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='AccessKeys',
+            name='AccessKey',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='access_key_id')),
                 ('context', models.CharField(max_length=40)),
@@ -22,10 +22,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'access_keys',
                 'managed': False,
+                'verbose_name_plural': 'AccessKeys',
             },
         ),
         migrations.CreateModel(
-            name='Announcements',
+            name='Announcement',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='announcement_id')),
                 ('assoc_type', models.SmallIntegerField(null=True, blank=True)),
@@ -36,10 +37,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'announcements',
                 'managed': False,
+                'verbose_name_plural': 'Announcements',
             },
         ),
         migrations.CreateModel(
-            name='AnnouncementSettings',
+            name='AnnouncementSetting',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('locale', models.CharField(max_length=5)),
@@ -50,10 +52,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'announcement_settings',
                 'managed': False,
+                'verbose_name_plural': 'AnnouncementSettings',
             },
         ),
         migrations.CreateModel(
-            name='AnnouncementTypes',
+            name='AnnouncementType',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='type_id')),
                 ('assoc_type', models.SmallIntegerField(null=True, blank=True)),
@@ -62,10 +65,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'announcement_types',
                 'managed': False,
+                'verbose_name_plural': 'AnnouncementTypes',
             },
         ),
         migrations.CreateModel(
-            name='AnnouncementTypeSettings',
+            name='AnnouncementTypeSetting',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('locale', models.CharField(max_length=5)),
@@ -76,119 +80,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'announcement_type_settings',
                 'managed': False,
+                'verbose_name_plural': 'AnnouncementTypeSettings',
             },
         ),
         migrations.CreateModel(
-            name='ArticleComments',
-            fields=[
-                ('id', models.IntegerField(serialize=False, primary_key=True, db_column='comment_id')),
-                ('comment_type', models.BigIntegerField(null=True, blank=True)),
-                ('assoc_id', models.BigIntegerField()),
-                ('comment_title', models.CharField(max_length=255)),
-                ('comments', models.TextField(null=True, blank=True)),
-                ('date_posted', models.DateTimeField(null=True, blank=True)),
-                ('date_modified', models.DateTimeField(null=True, blank=True)),
-                ('viewable', models.IntegerField(null=True, blank=True)),
-            ],
-            options={
-                'db_table': 'article_comments',
-                'managed': False,
-            },
-        ),
-        migrations.CreateModel(
-            name='ArticleEventLog',
-            fields=[
-                ('id', models.IntegerField(serialize=False, primary_key=True, db_column='log_id')),
-                ('date_logged', models.DateTimeField()),
-                ('ip_address', models.CharField(max_length=15)),
-                ('log_level', models.CharField(max_length=1, null=True, blank=True)),
-                ('event_type', models.BigIntegerField(null=True, blank=True)),
-                ('assoc_type', models.BigIntegerField(null=True, blank=True)),
-                ('assoc_id', models.BigIntegerField(null=True, blank=True)),
-                ('message', models.TextField(null=True, blank=True)),
-            ],
-            options={
-                'db_table': 'article_event_log',
-                'managed': False,
-            },
-        ),
-        migrations.CreateModel(
-            name='ArticleFiles',
-            fields=[
-                ('id', models.IntegerField(serialize=False, primary_key=True, db_column='file_id')),
-                ('revision', models.BigIntegerField()),
-                ('source_revision', models.BigIntegerField(null=True, blank=True)),
-                ('file_name', models.CharField(max_length=90)),
-                ('file_type', models.CharField(max_length=255)),
-                ('file_size', models.BigIntegerField()),
-                ('original_file_name', models.CharField(max_length=127, null=True, blank=True)),
-                ('file_stage', models.BigIntegerField()),
-                ('viewable', models.IntegerField(null=True, blank=True)),
-                ('date_uploaded', models.DateTimeField()),
-                ('date_modified', models.DateTimeField()),
-                ('round', models.IntegerField()),
-                ('assoc_id', models.BigIntegerField(null=True, blank=True)),
-            ],
-            options={
-                'db_table': 'article_files',
-                'managed': False,
-            },
-        ),
-        migrations.CreateModel(
-            name='ArticleGalleys',
-            fields=[
-                ('id', models.IntegerField(serialize=False, primary_key=True, db_column='galley_id')),
-                ('locale', models.CharField(max_length=5, null=True, blank=True)),
-                ('label', models.CharField(max_length=32, null=True, blank=True)),
-                ('html_galley', models.IntegerField()),
-                ('seq', models.FloatField()),
-                ('remote_url', models.CharField(max_length=255, null=True, blank=True)),
-            ],
-            options={
-                'db_table': 'article_galleys',
-                'managed': False,
-            },
-        ),
-        migrations.CreateModel(
-            name='ArticleGalleySettings',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('locale', models.CharField(max_length=5)),
-                ('setting_name', models.CharField(max_length=255)),
-                ('setting_value', models.TextField(null=True, blank=True)),
-                ('setting_type', models.CharField(max_length=6)),
-            ],
-            options={
-                'db_table': 'article_galley_settings',
-                'managed': False,
-            },
-        ),
-        migrations.CreateModel(
-            name='ArticleHtmlGalleyImages',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-            ],
-            options={
-                'db_table': 'article_html_galley_images',
-                'managed': False,
-            },
-        ),
-        migrations.CreateModel(
-            name='ArticleNotes',
-            fields=[
-                ('id', models.IntegerField(serialize=False, primary_key=True, db_column='note_id')),
-                ('date_created', models.DateTimeField()),
-                ('date_modified', models.DateTimeField()),
-                ('title', models.CharField(max_length=255)),
-                ('note', models.TextField(null=True, blank=True)),
-            ],
-            options={
-                'db_table': 'article_notes',
-                'managed': False,
-            },
-        ),
-        migrations.CreateModel(
-            name='Articles',
+            name='Article',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='article_id')),
                 ('locale', models.CharField(max_length=5, null=True, blank=True)),
@@ -214,6 +110,123 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'articles',
                 'managed': False,
+                'verbose_name_plural': 'Articles',
+            },
+        ),
+        migrations.CreateModel(
+            name='ArticleComment',
+            fields=[
+                ('id', models.IntegerField(serialize=False, primary_key=True, db_column='comment_id')),
+                ('comment_type', models.BigIntegerField(null=True, blank=True)),
+                ('assoc_id', models.BigIntegerField()),
+                ('comment_title', models.CharField(max_length=255)),
+                ('comments', models.TextField(null=True, blank=True)),
+                ('date_posted', models.DateTimeField(null=True, blank=True)),
+                ('date_modified', models.DateTimeField(null=True, blank=True)),
+                ('viewable', models.IntegerField(null=True, blank=True)),
+            ],
+            options={
+                'db_table': 'article_comments',
+                'managed': False,
+                'verbose_name_plural': 'ArticleComments',
+            },
+        ),
+        migrations.CreateModel(
+            name='ArticleEventLog',
+            fields=[
+                ('id', models.IntegerField(serialize=False, primary_key=True, db_column='log_id')),
+                ('date_logged', models.DateTimeField()),
+                ('ip_address', models.CharField(max_length=15)),
+                ('log_level', models.CharField(max_length=1, null=True, blank=True)),
+                ('event_type', models.BigIntegerField(null=True, blank=True)),
+                ('assoc_type', models.BigIntegerField(null=True, blank=True)),
+                ('assoc_id', models.BigIntegerField(null=True, blank=True)),
+                ('message', models.TextField(null=True, blank=True)),
+            ],
+            options={
+                'db_table': 'article_event_log',
+                'managed': False,
+                'verbose_name_plural': 'ArticleEventLogs',
+            },
+        ),
+        migrations.CreateModel(
+            name='ArticleFile',
+            fields=[
+                ('id', models.IntegerField(serialize=False, primary_key=True, db_column='file_id')),
+                ('revision', models.BigIntegerField()),
+                ('source_revision', models.BigIntegerField(null=True, blank=True)),
+                ('file_name', models.CharField(max_length=90)),
+                ('file_type', models.CharField(max_length=255)),
+                ('file_size', models.BigIntegerField()),
+                ('original_file_name', models.CharField(max_length=127, null=True, blank=True)),
+                ('file_stage', models.BigIntegerField()),
+                ('viewable', models.IntegerField(null=True, blank=True)),
+                ('date_uploaded', models.DateTimeField()),
+                ('date_modified', models.DateTimeField()),
+                ('round', models.IntegerField()),
+                ('assoc_id', models.BigIntegerField(null=True, blank=True)),
+            ],
+            options={
+                'db_table': 'article_files',
+                'managed': False,
+                'verbose_name_plural': 'ArticleFiles',
+            },
+        ),
+        migrations.CreateModel(
+            name='ArticleGalley',
+            fields=[
+                ('id', models.IntegerField(serialize=False, primary_key=True, db_column='galley_id')),
+                ('locale', models.CharField(max_length=5, null=True, blank=True)),
+                ('label', models.CharField(max_length=32, null=True, blank=True)),
+                ('html_galley', models.IntegerField()),
+                ('seq', models.FloatField()),
+                ('remote_url', models.CharField(max_length=255, null=True, blank=True)),
+            ],
+            options={
+                'db_table': 'article_galleys',
+                'managed': False,
+                'verbose_name_plural': 'ArticleGalleys',
+            },
+        ),
+        migrations.CreateModel(
+            name='ArticleGalleySetting',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('locale', models.CharField(max_length=5)),
+                ('setting_name', models.CharField(max_length=255)),
+                ('setting_value', models.TextField(null=True, blank=True)),
+                ('setting_type', models.CharField(max_length=6)),
+            ],
+            options={
+                'db_table': 'article_galley_settings',
+                'managed': False,
+                'verbose_name_plural': 'ArticleGalleySettings',
+            },
+        ),
+        migrations.CreateModel(
+            name='ArticleHtmlGalleyImage',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+            ],
+            options={
+                'db_table': 'article_html_galley_images',
+                'managed': False,
+                'verbose_name_plural': 'ArticleHtmlGalleyImages',
+            },
+        ),
+        migrations.CreateModel(
+            name='ArticleNote',
+            fields=[
+                ('id', models.IntegerField(serialize=False, primary_key=True, db_column='note_id')),
+                ('date_created', models.DateTimeField()),
+                ('date_modified', models.DateTimeField()),
+                ('title', models.CharField(max_length=255)),
+                ('note', models.TextField(null=True, blank=True)),
+            ],
+            options={
+                'db_table': 'article_notes',
+                'managed': False,
+                'verbose_name_plural': 'ArticleNotes',
             },
         ),
         migrations.CreateModel(
@@ -225,22 +238,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'article_search_keyword_list',
                 'managed': False,
+                'verbose_name_plural': 'ArticleSearchKeywordLists',
             },
         ),
         migrations.CreateModel(
-            name='ArticleSearchObjectKeywords',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('keyword_id', models.BigIntegerField()),
-                ('pos', models.IntegerField()),
-            ],
-            options={
-                'db_table': 'article_search_object_keywords',
-                'managed': False,
-            },
-        ),
-        migrations.CreateModel(
-            name='ArticleSearchObjects',
+            name='ArticleSearchObject',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='object_id')),
                 ('type', models.IntegerField()),
@@ -249,10 +251,24 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'article_search_objects',
                 'managed': False,
+                'verbose_name_plural': 'ArticleSearchObjects',
             },
         ),
         migrations.CreateModel(
-            name='ArticleSettings',
+            name='ArticleSearchObjectKeyword',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('keyword_id', models.BigIntegerField()),
+                ('pos', models.IntegerField()),
+            ],
+            options={
+                'db_table': 'article_search_object_keywords',
+                'managed': False,
+                'verbose_name_plural': 'ArticleSearchObjectKeywords',
+            },
+        ),
+        migrations.CreateModel(
+            name='ArticleSetting',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('locale', models.CharField(max_length=5)),
@@ -263,10 +279,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'article_settings',
                 'managed': False,
+                'verbose_name_plural': 'ArticleSettings',
             },
         ),
         migrations.CreateModel(
-            name='ArticleStages',
+            name='ArticleStage',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('stage_id', models.IntegerField(null=True, blank=True)),
@@ -275,6 +292,7 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'article_stages',
                 'managed': False,
+                'verbose_name_plural': 'ArticleStages',
             },
         ),
         migrations.CreateModel(
@@ -286,6 +304,7 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'article_status',
                 'managed': False,
+                'verbose_name_plural': 'ArticleStatuses',
             },
         ),
         migrations.CreateModel(
@@ -297,10 +316,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'article_status_history',
                 'managed': False,
+                'verbose_name_plural': 'ArticleStatusHistories',
             },
         ),
         migrations.CreateModel(
-            name='ArticleSuppFileSettings',
+            name='ArticleSuppFileSetting',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('locale', models.CharField(max_length=5)),
@@ -311,10 +331,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'article_supp_file_settings',
                 'managed': False,
+                'verbose_name_plural': 'ArticleSuppFileSettings',
             },
         ),
         migrations.CreateModel(
-            name='ArticleSupplementaryFiles',
+            name='ArticleSupplementaryFile',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='supp_id')),
                 ('type', models.CharField(max_length=255, null=True, blank=True)),
@@ -328,10 +349,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'article_supplementary_files',
                 'managed': False,
+                'verbose_name_plural': 'ArticleSupplementaryFiles',
             },
         ),
         migrations.CreateModel(
-            name='ArticleXmlGalleys',
+            name='ArticleXmlGalley',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='xml_galley_id')),
                 ('label', models.CharField(max_length=32)),
@@ -341,10 +363,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'article_xml_galleys',
                 'managed': False,
+                'verbose_name_plural': 'ArticleXmlGalleys',
             },
         ),
         migrations.CreateModel(
-            name='Authors',
+            name='Author',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='author_id')),
                 ('submission_id', models.BigIntegerField()),
@@ -361,10 +384,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'authors',
                 'managed': False,
+                'verbose_name_plural': 'Authors',
             },
         ),
         migrations.CreateModel(
-            name='AuthorSettings',
+            name='AuthorSetting',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('locale', models.CharField(max_length=5)),
@@ -375,10 +399,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'author_settings',
                 'managed': False,
+                'verbose_name_plural': 'AuthorSettings',
             },
         ),
         migrations.CreateModel(
-            name='AuthSources',
+            name='AuthSource',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='auth_id')),
                 ('title', models.CharField(max_length=60)),
@@ -389,6 +414,7 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'auth_sources',
                 'managed': False,
+                'verbose_name_plural': 'AuthSources',
             },
         ),
         migrations.CreateModel(
@@ -416,10 +442,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'books_for_review',
                 'managed': False,
+                'verbose_name_plural': 'BooksForReviews',
             },
         ),
         migrations.CreateModel(
-            name='BooksForReviewAuthors',
+            name='BooksForReviewAuthor',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('seq', models.FloatField()),
@@ -430,10 +457,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'books_for_review_authors',
                 'managed': False,
+                'verbose_name_plural': 'BooksForReviewAuthor',
             },
         ),
         migrations.CreateModel(
-            name='BooksForReviewSettings',
+            name='BooksForReviewSetting',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('locale', models.CharField(max_length=5)),
@@ -444,10 +472,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'books_for_review_settings',
                 'managed': False,
+                'verbose_name_plural': 'BooksForReviewSettings',
             },
         ),
         migrations.CreateModel(
-            name='Captchas',
+            name='Captcha',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='captcha_id')),
                 ('session_id', models.CharField(max_length=40)),
@@ -457,10 +486,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'captchas',
                 'managed': False,
+                'verbose_name_plural': 'Captchas',
             },
         ),
         migrations.CreateModel(
-            name='Citations',
+            name='Citation',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='citation_id')),
                 ('assoc_type', models.BigIntegerField()),
@@ -473,10 +503,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'citations',
                 'managed': False,
+                'verbose_name_plural': 'Citations',
             },
         ),
         migrations.CreateModel(
-            name='CitationSettings',
+            name='CitationSetting',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('locale', models.CharField(max_length=5)),
@@ -487,6 +518,7 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'citation_settings',
                 'managed': False,
+                'verbose_name_plural': 'CitationSettings',
             },
         ),
         migrations.CreateModel(
@@ -507,6 +539,7 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'collection',
                 'managed': False,
+                'verbose_name_plural': 'Collections',
             },
         ),
         migrations.CreateModel(
@@ -517,6 +550,7 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'collection_article',
                 'managed': False,
+                'verbose_name_plural': 'CollectionArticles',
             },
         ),
         migrations.CreateModel(
@@ -528,10 +562,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'collection_user',
                 'managed': False,
+                'verbose_name_plural': 'CollectionUsers',
             },
         ),
         migrations.CreateModel(
-            name='Comments',
+            name='Comment',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='comment_id')),
                 ('submission_id', models.BigIntegerField()),
@@ -547,10 +582,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'comments',
                 'managed': False,
+                'verbose_name_plural': 'Comments',
             },
         ),
         migrations.CreateModel(
-            name='CompletedPayments',
+            name='CompletedPayment',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='completed_payment_id')),
                 ('timestamp', models.DateTimeField()),
@@ -563,10 +599,25 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'completed_payments',
                 'managed': False,
+                'verbose_name_plural': 'CompletedPayments',
             },
         ),
         migrations.CreateModel(
-            name='ControlledVocabEntries',
+            name='ControlledVocab',
+            fields=[
+                ('id', models.IntegerField(serialize=False, primary_key=True, db_column='controlled_vocab_id')),
+                ('symbolic', models.CharField(max_length=64)),
+                ('assoc_type', models.BigIntegerField()),
+                ('assoc_id', models.BigIntegerField()),
+            ],
+            options={
+                'db_table': 'controlled_vocabs',
+                'managed': False,
+                'verbose_name_plural': 'ControlledVocabs',
+            },
+        ),
+        migrations.CreateModel(
+            name='ControlledVocabEntry',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='controlled_vocab_entry_id')),
                 ('seq', models.FloatField(null=True, blank=True)),
@@ -574,10 +625,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'controlled_vocab_entries',
                 'managed': False,
+                'verbose_name_plural': 'ControlledVocabEntries',
             },
         ),
         migrations.CreateModel(
-            name='ControlledVocabEntrySettings',
+            name='ControlledVocabEntrySetting',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('locale', models.CharField(max_length=5)),
@@ -588,23 +640,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'controlled_vocab_entry_settings',
                 'managed': False,
+                'verbose_name_plural': 'ControlledVocabEntrySettings',
             },
         ),
         migrations.CreateModel(
-            name='ControlledVocabs',
-            fields=[
-                ('id', models.IntegerField(serialize=False, primary_key=True, db_column='controlled_vocab_id')),
-                ('symbolic', models.CharField(max_length=64)),
-                ('assoc_type', models.BigIntegerField()),
-                ('assoc_id', models.BigIntegerField()),
-            ],
-            options={
-                'db_table': 'controlled_vocabs',
-                'managed': False,
-            },
-        ),
-        migrations.CreateModel(
-            name='CustomIssueOrders',
+            name='CustomIssueOrder',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('seq', models.FloatField()),
@@ -612,10 +652,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'custom_issue_orders',
                 'managed': False,
+                'verbose_name_plural': 'CustomIssueOrders',
             },
         ),
         migrations.CreateModel(
-            name='CustomSectionOrders',
+            name='CustomSectionOrder',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('section_id', models.BigIntegerField()),
@@ -624,22 +665,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'custom_section_orders',
                 'managed': False,
+                'verbose_name_plural': 'CustomSectionOrders',
             },
         ),
         migrations.CreateModel(
-            name='DataObjectTombstoneOaiSetObjects',
-            fields=[
-                ('id', models.IntegerField(serialize=False, primary_key=True, db_column='object_id')),
-                ('assoc_type', models.BigIntegerField()),
-                ('assoc_id', models.BigIntegerField()),
-            ],
-            options={
-                'db_table': 'data_object_tombstone_oai_set_objects',
-                'managed': False,
-            },
-        ),
-        migrations.CreateModel(
-            name='DataObjectTombstones',
+            name='DataObjectTombstone',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='tombstone_id')),
                 ('data_object_id', models.BigIntegerField()),
@@ -651,10 +681,24 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'data_object_tombstones',
                 'managed': False,
+                'verbose_name_plural': 'DataObjectTombstones',
             },
         ),
         migrations.CreateModel(
-            name='DataObjectTombstoneSettings',
+            name='DataObjectTombstoneOaiSetObject',
+            fields=[
+                ('id', models.IntegerField(serialize=False, primary_key=True, db_column='object_id')),
+                ('assoc_type', models.BigIntegerField()),
+                ('assoc_id', models.BigIntegerField()),
+            ],
+            options={
+                'db_table': 'data_object_tombstone_oai_set_objects',
+                'managed': False,
+                'verbose_name_plural': 'DataObjectTombstoneOaiSetObjects',
+            },
+        ),
+        migrations.CreateModel(
+            name='DataObjectTombstoneSetting',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('locale', models.CharField(max_length=5)),
@@ -665,10 +709,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'data_object_tombstone_settings',
                 'managed': False,
+                'verbose_name_plural': 'DataObjectTombstoneSetting',
             },
         ),
         migrations.CreateModel(
-            name='DataverseFiles',
+            name='DataverseFile',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='dvfile_id')),
                 ('supp_id', models.BigIntegerField()),
@@ -679,10 +724,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'dataverse_files',
                 'managed': False,
+                'verbose_name_plural': 'DataverseFiles',
             },
         ),
         migrations.CreateModel(
-            name='DataverseStudies',
+            name='DataverseStudy',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='study_id')),
                 ('submission_id', models.BigIntegerField()),
@@ -695,10 +741,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'dataverse_studies',
                 'managed': False,
+                'verbose_name_plural': 'DataverseStudies',
             },
         ),
         migrations.CreateModel(
-            name='DraftDecisions',
+            name='DraftDecision',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('key_val', models.CharField(max_length=45)),
@@ -712,10 +759,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'draft_decisions',
                 'managed': False,
+                'verbose_name_plural': 'DraftDecisions',
             },
         ),
         migrations.CreateModel(
-            name='EditAssignments',
+            name='EditAssignment',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='edit_id')),
                 ('can_edit', models.IntegerField()),
@@ -727,10 +775,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'edit_assignments',
                 'managed': False,
+                'verbose_name_plural': 'EditAssignments',
             },
         ),
         migrations.CreateModel(
-            name='EditDecisions',
+            name='EditDecision',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='edit_decision_id')),
                 ('round', models.IntegerField()),
@@ -740,6 +789,7 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'edit_decisions',
                 'managed': False,
+                'verbose_name_plural': 'EditDecisions',
             },
         ),
         migrations.CreateModel(
@@ -761,20 +811,22 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'email_log',
                 'managed': False,
+                'verbose_name_plural': 'EmailLogs',
             },
         ),
         migrations.CreateModel(
-            name='EmailLogUsers',
+            name='EmailLogUser',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
             ],
             options={
                 'db_table': 'email_log_users',
                 'managed': False,
+                'verbose_name_plural': 'EmailLogUsers',
             },
         ),
         migrations.CreateModel(
-            name='EmailTemplates',
+            name='EmailTemplate',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='email_id')),
                 ('email_key', models.CharField(max_length=64)),
@@ -785,6 +837,7 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'email_templates',
                 'managed': False,
+                'verbose_name_plural': 'EmailTemplates',
             },
         ),
         migrations.CreateModel(
@@ -801,6 +854,7 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'email_templates_data',
                 'managed': False,
+                'verbose_name_plural': 'EmailTemplatesDatas',
             },
         ),
         migrations.CreateModel(
@@ -814,6 +868,7 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'email_templates_default',
                 'managed': False,
+                'verbose_name_plural': 'EmailTemplatesDefaults',
             },
         ),
         migrations.CreateModel(
@@ -829,6 +884,7 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'email_templates_default_data',
                 'managed': False,
+                'verbose_name_plural': 'EmailTemplatesDefaultDatas',
             },
         ),
         migrations.CreateModel(
@@ -846,10 +902,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'event_log',
                 'managed': False,
+                'verbose_name_plural': 'EventLogs',
             },
         ),
         migrations.CreateModel(
-            name='EventLogSettings',
+            name='EventLogSetting',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('setting_name', models.CharField(max_length=255)),
@@ -859,10 +916,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'event_log_settings',
                 'managed': False,
+                'verbose_name_plural': 'EventLogSettings',
             },
         ),
         migrations.CreateModel(
-            name='ExternalFeeds',
+            name='ExternalFeed',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='feed_id')),
                 ('url', models.CharField(max_length=255)),
@@ -875,10 +933,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'external_feeds',
                 'managed': False,
+                'verbose_name_plural': 'ExternalFeeds',
             },
         ),
         migrations.CreateModel(
-            name='ExternalFeedSettings',
+            name='ExternalFeedSetting',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('locale', models.CharField(max_length=5)),
@@ -889,25 +948,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'external_feed_settings',
                 'managed': False,
+                'verbose_name_plural': 'ExternalFeedSettings',
             },
         ),
         migrations.CreateModel(
-            name='FilterGroups',
-            fields=[
-                ('id', models.IntegerField(serialize=False, primary_key=True, db_column='filter_group_id')),
-                ('symbolic', models.CharField(max_length=255, unique=True, null=True, blank=True)),
-                ('display_name', models.CharField(max_length=255, null=True, blank=True)),
-                ('description', models.CharField(max_length=255, null=True, blank=True)),
-                ('input_type', models.CharField(max_length=255, null=True, blank=True)),
-                ('output_type', models.CharField(max_length=255, null=True, blank=True)),
-            ],
-            options={
-                'db_table': 'filter_groups',
-                'managed': False,
-            },
-        ),
-        migrations.CreateModel(
-            name='Filters',
+            name='Filter',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='filter_id')),
                 ('context_id', models.BigIntegerField()),
@@ -919,10 +964,27 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'filters',
                 'managed': False,
+                'verbose_name_plural': 'Filters',
             },
         ),
         migrations.CreateModel(
-            name='FilterSettings',
+            name='FilterGroup',
+            fields=[
+                ('id', models.IntegerField(serialize=False, primary_key=True, db_column='filter_group_id')),
+                ('symbolic', models.CharField(max_length=255, unique=True, null=True, blank=True)),
+                ('display_name', models.CharField(max_length=255, null=True, blank=True)),
+                ('description', models.CharField(max_length=255, null=True, blank=True)),
+                ('input_type', models.CharField(max_length=255, null=True, blank=True)),
+                ('output_type', models.CharField(max_length=255, null=True, blank=True)),
+            ],
+            options={
+                'db_table': 'filter_groups',
+                'managed': False,
+                'verbose_name_plural': 'FilterGroups',
+            },
+        ),
+        migrations.CreateModel(
+            name='FilterSetting',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('locale', models.CharField(max_length=5)),
@@ -933,10 +995,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'filter_settings',
                 'managed': False,
+                'verbose_name_plural': 'FilterSettings',
             },
         ),
         migrations.CreateModel(
-            name='Gifts',
+            name='Gift',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='gift_id')),
                 ('assoc_type', models.SmallIntegerField()),
@@ -961,22 +1024,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'gifts',
                 'managed': False,
+                'verbose_name_plural': 'Gifts',
             },
         ),
         migrations.CreateModel(
-            name='GroupMemberships',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('about_displayed', models.IntegerField()),
-                ('seq', models.FloatField()),
-            ],
-            options={
-                'db_table': 'group_memberships',
-                'managed': False,
-            },
-        ),
-        migrations.CreateModel(
-            name='Groups',
+            name='Group',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='group_id')),
                 ('assoc_type', models.SmallIntegerField(null=True, blank=True)),
@@ -989,10 +1041,24 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'groups',
                 'managed': False,
+                'verbose_name_plural': 'Groups',
             },
         ),
         migrations.CreateModel(
-            name='GroupSettings',
+            name='GroupMembership',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('about_displayed', models.IntegerField()),
+                ('seq', models.FloatField()),
+            ],
+            options={
+                'db_table': 'group_memberships',
+                'managed': False,
+                'verbose_name_plural': 'GroupMemberships',
+            },
+        ),
+        migrations.CreateModel(
+            name='GroupSetting',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('locale', models.CharField(max_length=5)),
@@ -1003,24 +1069,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'group_settings',
                 'managed': False,
+                'verbose_name_plural': 'GroupSettings',
             },
         ),
         migrations.CreateModel(
-            name='InstitutionalSubscriptionIp',
-            fields=[
-                ('id', models.IntegerField(serialize=False, primary_key=True, db_column='institutional_subscription_ip_id')),
-                ('subscription_id', models.BigIntegerField()),
-                ('ip_string', models.CharField(max_length=40)),
-                ('ip_start', models.BigIntegerField()),
-                ('ip_end', models.BigIntegerField(null=True, blank=True)),
-            ],
-            options={
-                'db_table': 'institutional_subscription_ip',
-                'managed': False,
-            },
-        ),
-        migrations.CreateModel(
-            name='InstitutionalSubscriptions',
+            name='InstitutionalSubscription',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='institutional_subscription_id')),
                 ('subscription_id', models.BigIntegerField()),
@@ -1031,54 +1084,26 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'institutional_subscriptions',
                 'managed': False,
+                'verbose_name_plural': 'InstitutionalSubscriptions',
             },
         ),
         migrations.CreateModel(
-            name='IssueFiles',
+            name='InstitutionalSubscriptionIP',
             fields=[
-                ('id', models.IntegerField(serialize=False, primary_key=True, db_column='file_id')),
-                ('file_name', models.CharField(max_length=90)),
-                ('file_type', models.CharField(max_length=255)),
-                ('file_size', models.BigIntegerField()),
-                ('content_type', models.BigIntegerField()),
-                ('original_file_name', models.CharField(max_length=127, null=True, blank=True)),
-                ('date_uploaded', models.DateTimeField()),
-                ('date_modified', models.DateTimeField()),
+                ('id', models.IntegerField(serialize=False, primary_key=True, db_column='institutional_subscription_ip_id')),
+                ('subscription_id', models.BigIntegerField()),
+                ('ip_string', models.CharField(max_length=40)),
+                ('ip_start', models.BigIntegerField()),
+                ('ip_end', models.BigIntegerField(null=True, blank=True)),
             ],
             options={
-                'db_table': 'issue_files',
+                'db_table': 'institutional_subscription_ip',
                 'managed': False,
+                'verbose_name_plural': 'InstitutionalSubscriptionIPs',
             },
         ),
         migrations.CreateModel(
-            name='IssueGalleys',
-            fields=[
-                ('id', models.IntegerField(serialize=False, primary_key=True, db_column='galley_id')),
-                ('locale', models.CharField(max_length=5, null=True, blank=True)),
-                ('label', models.CharField(max_length=32, null=True, blank=True)),
-                ('seq', models.FloatField()),
-            ],
-            options={
-                'db_table': 'issue_galleys',
-                'managed': False,
-            },
-        ),
-        migrations.CreateModel(
-            name='IssueGalleySettings',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('locale', models.CharField(max_length=5)),
-                ('setting_name', models.CharField(max_length=255)),
-                ('setting_value', models.TextField(null=True, blank=True)),
-                ('setting_type', models.CharField(max_length=6)),
-            ],
-            options={
-                'db_table': 'issue_galley_settings',
-                'managed': False,
-            },
-        ),
-        migrations.CreateModel(
-            name='Issues',
+            name='Issue',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='issue_id')),
                 ('volume', models.SmallIntegerField(null=True, blank=True)),
@@ -1101,10 +1126,58 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'issues',
                 'managed': False,
+                'verbose_name_plural': 'Issues',
             },
         ),
         migrations.CreateModel(
-            name='IssueSettings',
+            name='IssueFile',
+            fields=[
+                ('id', models.IntegerField(serialize=False, primary_key=True, db_column='file_id')),
+                ('file_name', models.CharField(max_length=90)),
+                ('file_type', models.CharField(max_length=255)),
+                ('file_size', models.BigIntegerField()),
+                ('content_type', models.BigIntegerField()),
+                ('original_file_name', models.CharField(max_length=127, null=True, blank=True)),
+                ('date_uploaded', models.DateTimeField()),
+                ('date_modified', models.DateTimeField()),
+            ],
+            options={
+                'db_table': 'issue_files',
+                'managed': False,
+                'verbose_name_plural': 'IssueFiles',
+            },
+        ),
+        migrations.CreateModel(
+            name='IssueGalley',
+            fields=[
+                ('id', models.IntegerField(serialize=False, primary_key=True, db_column='galley_id')),
+                ('locale', models.CharField(max_length=5, null=True, blank=True)),
+                ('label', models.CharField(max_length=32, null=True, blank=True)),
+                ('seq', models.FloatField()),
+            ],
+            options={
+                'db_table': 'issue_galleys',
+                'managed': False,
+                'verbose_name_plural': 'IssueGalleys',
+            },
+        ),
+        migrations.CreateModel(
+            name='IssueGalleySetting',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('locale', models.CharField(max_length=5)),
+                ('setting_name', models.CharField(max_length=255)),
+                ('setting_value', models.TextField(null=True, blank=True)),
+                ('setting_type', models.CharField(max_length=6)),
+            ],
+            options={
+                'db_table': 'issue_galley_settings',
+                'managed': False,
+                'verbose_name_plural': 'IssueGalleySettings',
+            },
+        ),
+        migrations.CreateModel(
+            name='IssueSetting',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('locale', models.CharField(max_length=5)),
@@ -1115,10 +1188,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'issue_settings',
                 'managed': False,
+                'verbose_name_plural': 'IssueSettings',
             },
         ),
         migrations.CreateModel(
-            name='Journals',
+            name='Journal',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='journal_id')),
                 ('path', models.CharField(unique=True, max_length=32)),
@@ -1129,10 +1203,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'journals',
                 'managed': False,
+                'verbose_name_plural': 'Journals',
             },
         ),
         migrations.CreateModel(
-            name='JournalSettings',
+            name='JournalSetting',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('locale', models.CharField(max_length=5)),
@@ -1143,10 +1218,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'journal_settings',
                 'managed': False,
+                'verbose_name_plural': 'JournalSettings',
             },
         ),
         migrations.CreateModel(
-            name='Licenses',
+            name='License',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=200, null=True, blank=True)),
@@ -1157,10 +1233,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'licenses',
                 'managed': False,
+                'verbose_name_plural': 'Licenses',
             },
         ),
         migrations.CreateModel(
-            name='MetadataDescriptions',
+            name='MetadataDescription',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='metadata_description_id')),
                 ('assoc_type', models.BigIntegerField()),
@@ -1173,10 +1250,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'metadata_descriptions',
                 'managed': False,
+                'verbose_name_plural': 'MetadataDescriptions',
             },
         ),
         migrations.CreateModel(
-            name='MetadataDescriptionSettings',
+            name='MetadataDescriptionSetting',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('locale', models.CharField(max_length=5)),
@@ -1187,10 +1265,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'metadata_description_settings',
                 'managed': False,
+                'verbose_name_plural': 'MetadataDescriptionSettings',
             },
         ),
         migrations.CreateModel(
-            name='Metrics',
+            name='Metric',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('load_id', models.CharField(max_length=255)),
@@ -1210,6 +1289,7 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'metrics',
                 'managed': False,
+                'verbose_name_plural': 'Metrics',
             },
         ),
         migrations.CreateModel(
@@ -1220,10 +1300,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'mutex',
                 'managed': False,
+                'verbose_name_plural': 'Mutexes',
             },
         ),
         migrations.CreateModel(
-            name='Notes',
+            name='Note',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='note_id')),
                 ('assoc_type', models.BigIntegerField(null=True, blank=True)),
@@ -1237,6 +1318,25 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'notes',
                 'managed': False,
+                'verbose_name_plural': 'Notes',
+            },
+        ),
+        migrations.CreateModel(
+            name='Notification',
+            fields=[
+                ('id', models.IntegerField(serialize=False, primary_key=True, db_column='notification_id')),
+                ('context_id', models.BigIntegerField()),
+                ('level', models.BigIntegerField()),
+                ('type', models.BigIntegerField()),
+                ('date_created', models.DateTimeField()),
+                ('date_read', models.DateTimeField(null=True, blank=True)),
+                ('assoc_type', models.BigIntegerField(null=True, blank=True)),
+                ('assoc_id', models.BigIntegerField(null=True, blank=True)),
+            ],
+            options={
+                'db_table': 'notifications',
+                'managed': False,
+                'verbose_name_plural': 'Notifications',
             },
         ),
         migrations.CreateModel(
@@ -1251,27 +1351,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'notification_mail_list',
                 'managed': False,
+                'verbose_name_plural': 'NotificationMailLists',
             },
         ),
         migrations.CreateModel(
-            name='Notifications',
-            fields=[
-                ('id', models.IntegerField(serialize=False, primary_key=True, db_column='notification_id')),
-                ('context_id', models.BigIntegerField()),
-                ('level', models.BigIntegerField()),
-                ('type', models.BigIntegerField()),
-                ('date_created', models.DateTimeField()),
-                ('date_read', models.DateTimeField(null=True, blank=True)),
-                ('assoc_type', models.BigIntegerField(null=True, blank=True)),
-                ('assoc_id', models.BigIntegerField(null=True, blank=True)),
-            ],
-            options={
-                'db_table': 'notifications',
-                'managed': False,
-            },
-        ),
-        migrations.CreateModel(
-            name='NotificationSettings',
+            name='NotificationSetting',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('locale', models.CharField(max_length=5, null=True, blank=True)),
@@ -1282,10 +1366,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'notification_settings',
                 'managed': False,
+                'verbose_name_plural': 'NotificationSettings',
             },
         ),
         migrations.CreateModel(
-            name='NotificationSubscriptionSettings',
+            name='NotificationSubscriptionSetting',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='setting_id')),
                 ('setting_name', models.CharField(max_length=64)),
@@ -1296,10 +1381,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'notification_subscription_settings',
                 'managed': False,
+                'verbose_name_plural': 'NotificationSubscriptionSettings',
             },
         ),
         migrations.CreateModel(
-            name='OaiResumptionTokens',
+            name='OaiResumptionToken',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('token', models.CharField(unique=True, max_length=32)),
@@ -1310,10 +1396,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'oai_resumption_tokens',
                 'managed': False,
+                'verbose_name_plural': 'OaiResumptionTokens',
             },
         ),
         migrations.CreateModel(
-            name='PaypalTransactions',
+            name='PaypalTransaction',
             fields=[
                 ('txn_id', models.CharField(max_length=17, serialize=False, primary_key=True)),
                 ('txn_type', models.CharField(max_length=20, null=True, blank=True)),
@@ -1327,10 +1414,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'paypal_transactions',
                 'managed': False,
+                'verbose_name_plural': 'PaypalTransactions',
             },
         ),
         migrations.CreateModel(
-            name='PluginSettings',
+            name='PluginSetting',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('plugin_name', models.CharField(max_length=80)),
@@ -1342,10 +1430,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'plugin_settings',
                 'managed': False,
+                'verbose_name_plural': 'PluginSettings',
             },
         ),
         migrations.CreateModel(
-            name='Processes',
+            name='Process',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('process_id', models.CharField(unique=True, max_length=23)),
@@ -1356,10 +1445,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'processes',
                 'managed': False,
+                'verbose_name_plural': 'Processes',
             },
         ),
         migrations.CreateModel(
-            name='PublishedArticles',
+            name='PublishedArticle',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='published_article_id')),
                 ('date_published', models.DateTimeField(null=True, blank=True)),
@@ -1369,10 +1459,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'published_articles',
                 'managed': False,
+                'verbose_name_plural': 'PublishedArticles',
             },
         ),
         migrations.CreateModel(
-            name='QueuedPayments',
+            name='QueuedPayment',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='queued_payment_id')),
                 ('date_created', models.DateTimeField()),
@@ -1383,10 +1474,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'queued_payments',
                 'managed': False,
+                'verbose_name_plural': 'QueuedPayments',
             },
         ),
         migrations.CreateModel(
-            name='Referrals',
+            name='Referral',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='referral_id')),
                 ('status', models.SmallIntegerField()),
@@ -1397,10 +1489,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'referrals',
                 'managed': False,
+                'verbose_name_plural': 'Referrals',
             },
         ),
         migrations.CreateModel(
-            name='ReferralSettings',
+            name='ReferralSetting',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('locale', models.CharField(max_length=5)),
@@ -1411,10 +1504,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'referral_settings',
                 'managed': False,
+                'verbose_name_plural': 'ReferralSettings',
             },
         ),
         migrations.CreateModel(
-            name='ReviewAssignments',
+            name='ReviewAssignment',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='review_id')),
                 ('submission_id', models.BigIntegerField()),
@@ -1446,50 +1540,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'review_assignments',
                 'managed': False,
+                'verbose_name_plural': 'ReviewAssignments',
             },
         ),
         migrations.CreateModel(
-            name='ReviewFormElements',
-            fields=[
-                ('id', models.IntegerField(serialize=False, primary_key=True, db_column='review_form_element_id')),
-                ('seq', models.FloatField(null=True, blank=True)),
-                ('element_type', models.BigIntegerField(null=True, blank=True)),
-                ('required', models.IntegerField(null=True, blank=True)),
-                ('included', models.IntegerField(null=True, blank=True)),
-            ],
-            options={
-                'db_table': 'review_form_elements',
-                'managed': False,
-            },
-        ),
-        migrations.CreateModel(
-            name='ReviewFormElementSettings',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('locale', models.CharField(max_length=5)),
-                ('setting_name', models.CharField(max_length=255)),
-                ('setting_value', models.TextField(null=True, blank=True)),
-                ('setting_type', models.CharField(max_length=6)),
-            ],
-            options={
-                'db_table': 'review_form_element_settings',
-                'managed': False,
-            },
-        ),
-        migrations.CreateModel(
-            name='ReviewFormResponses',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('response_type', models.CharField(max_length=6, null=True, blank=True)),
-                ('response_value', models.TextField(null=True, blank=True)),
-            ],
-            options={
-                'db_table': 'review_form_responses',
-                'managed': False,
-            },
-        ),
-        migrations.CreateModel(
-            name='ReviewForms',
+            name='ReviewForm',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='review_form_id')),
                 ('assoc_type', models.BigIntegerField(null=True, blank=True)),
@@ -1500,10 +1555,54 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'review_forms',
                 'managed': False,
+                'verbose_name_plural': 'ReviewForms',
             },
         ),
         migrations.CreateModel(
-            name='ReviewFormSettings',
+            name='ReviewFormElement',
+            fields=[
+                ('id', models.IntegerField(serialize=False, primary_key=True, db_column='review_form_element_id')),
+                ('seq', models.FloatField(null=True, blank=True)),
+                ('element_type', models.BigIntegerField(null=True, blank=True)),
+                ('required', models.IntegerField(null=True, blank=True)),
+                ('included', models.IntegerField(null=True, blank=True)),
+            ],
+            options={
+                'db_table': 'review_form_elements',
+                'managed': False,
+                'verbose_name_plural': 'ReviewFormElements',
+            },
+        ),
+        migrations.CreateModel(
+            name='ReviewFormElementSetting',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('locale', models.CharField(max_length=5)),
+                ('setting_name', models.CharField(max_length=255)),
+                ('setting_value', models.TextField(null=True, blank=True)),
+                ('setting_type', models.CharField(max_length=6)),
+            ],
+            options={
+                'db_table': 'review_form_element_settings',
+                'managed': False,
+                'verbose_name_plural': 'ReviewFormElementSettings',
+            },
+        ),
+        migrations.CreateModel(
+            name='ReviewFormResponse',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('response_type', models.CharField(max_length=6, null=True, blank=True)),
+                ('response_value', models.TextField(null=True, blank=True)),
+            ],
+            options={
+                'db_table': 'review_form_responses',
+                'managed': False,
+                'verbose_name_plural': 'ReviewFormResponses',
+            },
+        ),
+        migrations.CreateModel(
+            name='ReviewFormSetting',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('locale', models.CharField(max_length=5)),
@@ -1514,10 +1613,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'review_form_settings',
                 'managed': False,
+                'verbose_name_plural': 'ReviewFormSettings',
             },
         ),
         migrations.CreateModel(
-            name='ReviewRounds',
+            name='ReviewRound',
             fields=[
                 ('submission_id', models.BigIntegerField()),
                 ('round', models.IntegerField()),
@@ -1529,20 +1629,22 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'review_rounds',
                 'managed': False,
+                'verbose_name_plural': 'ReviewRounds',
             },
         ),
         migrations.CreateModel(
-            name='Roles',
+            name='Role',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='role_id')),
             ],
             options={
                 'db_table': 'roles',
                 'managed': False,
+                'verbose_name_plural': 'Roles',
             },
         ),
         migrations.CreateModel(
-            name='RtContexts',
+            name='RtContext',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='context_id')),
                 ('title', models.CharField(max_length=120)),
@@ -1557,10 +1659,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'rt_contexts',
                 'managed': False,
+                'verbose_name_plural': 'RtContexts',
             },
         ),
         migrations.CreateModel(
-            name='RtSearches',
+            name='RtSearch',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='search_id')),
                 ('title', models.CharField(max_length=120)),
@@ -1573,10 +1676,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'rt_searches',
                 'managed': False,
+                'verbose_name_plural': 'RtSearches',
             },
         ),
         migrations.CreateModel(
-            name='RtVersions',
+            name='RtVersion',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='version_id')),
                 ('version_key', models.CharField(max_length=40)),
@@ -1587,10 +1691,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'rt_versions',
                 'managed': False,
+                'verbose_name_plural': 'RtVersions',
             },
         ),
         migrations.CreateModel(
-            name='ScheduledTasks',
+            name='ScheduledTask',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('class_name', models.CharField(unique=True, max_length=255)),
@@ -1599,22 +1704,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'scheduled_tasks',
                 'managed': False,
+                'verbose_name_plural': 'ScheduledTasks',
             },
         ),
         migrations.CreateModel(
-            name='SectionEditors',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('can_edit', models.IntegerField()),
-                ('can_review', models.IntegerField()),
-            ],
-            options={
-                'db_table': 'section_editors',
-                'managed': False,
-            },
-        ),
-        migrations.CreateModel(
-            name='Sections',
+            name='Section',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='section_id')),
                 ('seq', models.FloatField()),
@@ -1631,10 +1725,24 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'sections',
                 'managed': False,
+                'verbose_name_plural': 'Sections',
             },
         ),
         migrations.CreateModel(
-            name='SectionSettings',
+            name='SectionEditor',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('can_edit', models.IntegerField()),
+                ('can_review', models.IntegerField()),
+            ],
+            options={
+                'db_table': 'section_editors',
+                'managed': False,
+                'verbose_name_plural': 'SectionEditors',
+            },
+        ),
+        migrations.CreateModel(
+            name='SectionSetting',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('locale', models.CharField(max_length=5)),
@@ -1645,10 +1753,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'section_settings',
                 'managed': False,
+                'verbose_name_plural': 'SectionSettings',
             },
         ),
         migrations.CreateModel(
-            name='Sessions',
+            name='Session',
             fields=[
                 ('id', models.CharField(max_length=40, serialize=False, primary_key=True, db_column='session_id')),
                 ('ip_address', models.CharField(max_length=39)),
@@ -1661,10 +1770,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'sessions',
                 'managed': False,
+                'verbose_name_plural': 'Sessions',
             },
         ),
         migrations.CreateModel(
-            name='Signoffs',
+            name='Signoff',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='signoff_id')),
                 ('symbolic', models.CharField(max_length=32)),
@@ -1679,6 +1789,7 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'signoffs',
                 'managed': False,
+                'verbose_name_plural': 'Signoffs',
             },
         ),
         migrations.CreateModel(
@@ -1695,10 +1806,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'site',
                 'managed': False,
+                'verbose_name_plural': 'Sites',
             },
         ),
         migrations.CreateModel(
-            name='SiteSettings',
+            name='SiteSetting',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('setting_name', models.CharField(max_length=255)),
@@ -1709,10 +1821,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'site_settings',
                 'managed': False,
+                'verbose_name_plural': 'SiteSettings',
             },
         ),
         migrations.CreateModel(
-            name='StaticPages',
+            name='StaticPage',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='static_page_id')),
                 ('path', models.CharField(max_length=255)),
@@ -1720,10 +1833,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'static_pages',
                 'managed': False,
+                'verbose_name_plural': 'StaticPages',
             },
         ),
         migrations.CreateModel(
-            name='StaticPageSettings',
+            name='StaticPageSetting',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('locale', models.CharField(max_length=5)),
@@ -1734,10 +1848,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'static_page_settings',
                 'managed': False,
+                'verbose_name_plural': 'StaticPageSettings',
             },
         ),
         migrations.CreateModel(
-            name='Subscriptions',
+            name='Subscription',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='subscription_id')),
                 ('date_start', models.DateField(null=True, blank=True)),
@@ -1750,10 +1865,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'subscriptions',
                 'managed': False,
+                'verbose_name_plural': 'Subscriptions',
             },
         ),
         migrations.CreateModel(
-            name='SubscriptionTypes',
+            name='SubscriptionType',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='type_id')),
                 ('cost', models.FloatField()),
@@ -1769,10 +1885,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'subscription_types',
                 'managed': False,
+                'verbose_name_plural': 'SubscriptionTypes',
             },
         ),
         migrations.CreateModel(
-            name='SubscriptionTypeSettings',
+            name='SubscriptionTypeSetting',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('locale', models.CharField(max_length=5)),
@@ -1783,6 +1900,7 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'subscription_type_settings',
                 'managed': False,
+                'verbose_name_plural': 'SubscriptionTypeSettings',
             },
         ),
         migrations.CreateModel(
@@ -1796,6 +1914,7 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'taxonomy',
                 'managed': False,
+                'verbose_name_plural': 'Taxonomies',
             },
         ),
         migrations.CreateModel(
@@ -1806,6 +1925,7 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'taxonomy_article',
                 'managed': False,
+                'verbose_name_plural': 'TaxonomyArticles',
             },
         ),
         migrations.CreateModel(
@@ -1816,10 +1936,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'taxonomy_editor',
                 'managed': False,
+                'verbose_name_plural': 'TaxonomyEditors',
             },
         ),
         migrations.CreateModel(
-            name='TemporaryFiles',
+            name='TemporaryFile',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='file_id')),
                 ('file_name', models.CharField(max_length=90)),
@@ -1831,10 +1952,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'temporary_files',
                 'managed': False,
+                'verbose_name_plural': 'TemporaryFiles',
             },
         ),
         migrations.CreateModel(
-            name='Theses',
+            name='Thesis',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='thesis_id')),
                 ('status', models.SmallIntegerField()),
@@ -1870,10 +1992,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'theses',
                 'managed': False,
+                'verbose_name_plural': 'Theses',
             },
         ),
         migrations.CreateModel(
-            name='UsageStatsTemporaryRecords',
+            name='UsageStatsTemporaryRecord',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('assoc_id', models.BigIntegerField()),
@@ -1889,21 +2012,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'usage_stats_temporary_records',
                 'managed': False,
+                'verbose_name_plural': 'UsageStatsTemporaryRecords',
             },
         ),
         migrations.CreateModel(
-            name='UserInterests',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('controlled_vocab_entry_id', models.BigIntegerField()),
-            ],
-            options={
-                'db_table': 'user_interests',
-                'managed': False,
-            },
-        ),
-        migrations.CreateModel(
-            name='Users',
+            name='User',
             fields=[
                 ('id', models.IntegerField(serialize=False, primary_key=True, db_column='user_id')),
                 ('username', models.CharField(max_length=200, unique=True, null=True, blank=True)),
@@ -1937,10 +2050,23 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'users',
                 'managed': False,
+                'verbose_name_plural': 'Users',
             },
         ),
         migrations.CreateModel(
-            name='UserSettings',
+            name='UserInterest',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('controlled_vocab_entry_id', models.BigIntegerField()),
+            ],
+            options={
+                'db_table': 'user_interests',
+                'managed': False,
+                'verbose_name_plural': 'UserInterests',
+            },
+        ),
+        migrations.CreateModel(
+            name='UserSetting',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('locale', models.CharField(max_length=5)),
@@ -1953,10 +2079,11 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'user_settings',
                 'managed': False,
+                'verbose_name_plural': 'UserSettings',
             },
         ),
         migrations.CreateModel(
-            name='Versions',
+            name='Version',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('major', models.IntegerField()),
@@ -1974,6 +2101,7 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'versions',
                 'managed': False,
+                'verbose_name_plural': 'Versions',
             },
         ),
     ]
