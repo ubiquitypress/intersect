@@ -1639,8 +1639,8 @@ class ReviewRound(models.Model):
 
 
 class Role(models.Model):
-    journal = models.ForeignKey('Journal', db_column='journal_id')
-    user = models.ForeignKey('User', db_column = 'user_id' )
+    journal = models.OneToOneField('Journal', db_column='journal_id')
+    user = models.OneToOneField('User', db_column = 'user_id')
     id = models.IntegerField( primary_key = True, db_column = 'role_id' )
 
     class Meta:
@@ -1714,9 +1714,9 @@ class ScheduledTask(models.Model):
 
 
 class SectionEditor(models.Model):
-    journal = models.ForeignKey('Journal', db_column='journal_id')
-    section = models.ForeignKey('Section', db_column = 'section_id')
-    user = models.ForeignKey('User', db_column = 'user_id' )
+    journal = models.OneToOneField('Journal', db_column='journal_id')
+    section = models.OneToOneField('Section', db_column = 'section_id')
+    user = models.OneToOneField('User', db_column = 'user_id')
     can_edit = models.IntegerField()
     can_review = models.IntegerField()
 
@@ -1729,9 +1729,9 @@ class SectionEditor(models.Model):
 
 
 class SectionSetting(models.Model):
-    section = models.ForeignKey('Section', db_column = 'section_id')
-    locale = models.CharField(max_length=5)
-    setting_name = models.CharField(max_length=255)
+    section = models.OneToOneField('Section', db_column = 'section_id')
+    locale = models.CharField(max_length=5, primary_key = True)
+    setting_name = models.CharField(max_length=255, primary_key = True)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 
@@ -1784,17 +1784,17 @@ class Session(models.Model):
 
 class Signoff(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'signoff_id' )
-    symbolic = models.CharField(max_length=32)
-    assoc_type = models.BigIntegerField()
-    assoc_id = models.BigIntegerField()
-    user = models.ForeignKey('User', db_column = 'user_id' )
-    file = models.ForeignKey('IssueFile', blank=True, null=True, db_column='file_id')
-    file_revision = models.BigIntegerField(blank=True, null=True)
+    symbolic = models.CharField(max_length=32, primary_key = True)
+    assoc_type = models.BigIntegerField(primary_key = True)
+    assoc_id = models.BigIntegerField(primary_key = True)
+    user = models.OneToOneField('User', db_column = 'user_id')
+    file = models.OneToOneField('IssueFile', db_column='file_id')
+    file_revision = models.BigIntegerField(primary_key = True)
     date_notified = models.DateTimeField(blank=True, null=True)
     date_underway = models.DateTimeField(blank=True, null=True)
     date_completed = models.DateTimeField(blank=True, null=True)
     date_acknowledged = models.DateTimeField(blank=True, null=True)
-    user_group = models.ForeignKey('Group',blank=True, null=True, db_column = 'user_group_id')
+    user_group = models.OneToOneField('Group', db_column = 'user_group_id')
 
     class Meta:
         verbose_name_plural = 'Signoffs' 
@@ -1820,8 +1820,8 @@ class Site(models.Model):
 
 
 class SiteSetting(models.Model):
-    setting_name = models.CharField(max_length=255)
-    locale = models.CharField(max_length=5)
+    setting_name = models.CharField(max_length=255, primary_key = True)
+    locale = models.CharField(max_length=5, primary_key = True)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 
@@ -1834,9 +1834,9 @@ class SiteSetting(models.Model):
 
 
 class StaticPageSetting(models.Model):
-    static_page = models.ForeignKey('StaticPage', db_column = 'static_page_id')
-    locale = models.CharField(max_length=5)
-    setting_name = models.CharField(max_length=255)
+    static_page = models.OneToOneField('StaticPage', db_column = 'static_page_id')
+    locale = models.CharField(max_length=5, primary_key = True)
+    setting_name = models.CharField(max_length=255, primary_key = True)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 
@@ -1861,9 +1861,9 @@ class StaticPage(models.Model):
 
 
 class SubscriptionTypeSetting(models.Model):
-    type = models.ForeignKey('SubscriptionType', db_column='type_id')
-    locale = models.CharField(max_length=5)
-    setting_name = models.CharField(max_length=255)
+    type = models.OneToOneField('SubscriptionType', db_column='type_id')
+    locale = models.CharField(max_length=5, primary_key = True)
+    setting_name = models.CharField(max_length=255, primary_key = True)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 

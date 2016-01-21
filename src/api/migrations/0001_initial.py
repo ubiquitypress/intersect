@@ -1436,8 +1436,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Process',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('process_id', models.CharField(unique=True, max_length=23)),
+                ('process_id', models.CharField(max_length=23, serialize=False, primary_key=True)),
                 ('process_type', models.IntegerField()),
                 ('time_started', models.BigIntegerField()),
                 ('obliterated', models.IntegerField()),
@@ -1729,34 +1728,6 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='SectionEditor',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('can_edit', models.IntegerField()),
-                ('can_review', models.IntegerField()),
-            ],
-            options={
-                'db_table': 'section_editors',
-                'managed': False,
-                'verbose_name_plural': 'SectionEditors',
-            },
-        ),
-        migrations.CreateModel(
-            name='SectionSetting',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('locale', models.CharField(max_length=5)),
-                ('setting_name', models.CharField(max_length=255)),
-                ('setting_value', models.TextField(null=True, blank=True)),
-                ('setting_type', models.CharField(max_length=6)),
-            ],
-            options={
-                'db_table': 'section_settings',
-                'managed': False,
-                'verbose_name_plural': 'SectionSettings',
-            },
-        ),
-        migrations.CreateModel(
             name='Session',
             fields=[
                 ('id', models.CharField(max_length=40, serialize=False, primary_key=True, db_column='session_id')),
@@ -1771,25 +1742,6 @@ class Migration(migrations.Migration):
                 'db_table': 'sessions',
                 'managed': False,
                 'verbose_name_plural': 'Sessions',
-            },
-        ),
-        migrations.CreateModel(
-            name='Signoff',
-            fields=[
-                ('id', models.IntegerField(serialize=False, primary_key=True, db_column='signoff_id')),
-                ('symbolic', models.CharField(max_length=32)),
-                ('assoc_type', models.BigIntegerField()),
-                ('assoc_id', models.BigIntegerField()),
-                ('file_revision', models.BigIntegerField(null=True, blank=True)),
-                ('date_notified', models.DateTimeField(null=True, blank=True)),
-                ('date_underway', models.DateTimeField(null=True, blank=True)),
-                ('date_completed', models.DateTimeField(null=True, blank=True)),
-                ('date_acknowledged', models.DateTimeField(null=True, blank=True)),
-            ],
-            options={
-                'db_table': 'signoffs',
-                'managed': False,
-                'verbose_name_plural': 'Signoffs',
             },
         ),
         migrations.CreateModel(
@@ -1812,9 +1764,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='SiteSetting',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('setting_name', models.CharField(max_length=255)),
-                ('locale', models.CharField(max_length=5)),
+                ('setting_name', models.CharField(max_length=255, primary_key=True)),
+                ('locale', models.CharField(max_length=5, serialize=False, primary_key=True)),
                 ('setting_value', models.TextField(null=True, blank=True)),
                 ('setting_type', models.CharField(max_length=6)),
             ],
@@ -1834,21 +1785,6 @@ class Migration(migrations.Migration):
                 'db_table': 'static_pages',
                 'managed': False,
                 'verbose_name_plural': 'StaticPages',
-            },
-        ),
-        migrations.CreateModel(
-            name='StaticPageSetting',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('locale', models.CharField(max_length=5)),
-                ('setting_name', models.CharField(max_length=255)),
-                ('setting_value', models.TextField(null=True, blank=True)),
-                ('setting_type', models.CharField(max_length=6)),
-            ],
-            options={
-                'db_table': 'static_page_settings',
-                'managed': False,
-                'verbose_name_plural': 'StaticPageSettings',
             },
         ),
         migrations.CreateModel(
@@ -1886,21 +1822,6 @@ class Migration(migrations.Migration):
                 'db_table': 'subscription_types',
                 'managed': False,
                 'verbose_name_plural': 'SubscriptionTypes',
-            },
-        ),
-        migrations.CreateModel(
-            name='SubscriptionTypeSetting',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('locale', models.CharField(max_length=5)),
-                ('setting_name', models.CharField(max_length=255)),
-                ('setting_value', models.TextField(null=True, blank=True)),
-                ('setting_type', models.CharField(max_length=6)),
-            ],
-            options={
-                'db_table': 'subscription_type_settings',
-                'managed': False,
-                'verbose_name_plural': 'SubscriptionTypeSettings',
             },
         ),
         migrations.CreateModel(
@@ -2102,6 +2023,88 @@ class Migration(migrations.Migration):
                 'db_table': 'versions',
                 'managed': False,
                 'verbose_name_plural': 'Versions',
+            },
+        ),
+        migrations.CreateModel(
+            name='SectionEditor',
+            fields=[
+                ('journal', models.ForeignKey(primary_key=True, db_column='journal_id', serialize=False, to='api.Journal')),
+                ('section', models.ForeignKey(primary_key=True, db_column='section_id', to='api.Section')),
+                ('user', models.ForeignKey(primary_key=True, db_column='user_id', to='api.User')),
+                ('can_edit', models.IntegerField()),
+                ('can_review', models.IntegerField()),
+            ],
+            options={
+                'db_table': 'section_editors',
+                'managed': False,
+                'verbose_name_plural': 'SectionEditors',
+            },
+        ),
+        migrations.CreateModel(
+            name='SectionSetting',
+            fields=[
+                ('section', models.ForeignKey(primary_key=True, db_column='section_id', to='api.Section')),
+                ('locale', models.CharField(max_length=5, serialize=False, primary_key=True)),
+                ('setting_name', models.CharField(max_length=255, primary_key=True)),
+                ('setting_value', models.TextField(null=True, blank=True)),
+                ('setting_type', models.CharField(max_length=6)),
+            ],
+            options={
+                'db_table': 'section_settings',
+                'managed': False,
+                'verbose_name_plural': 'SectionSettings',
+            },
+        ),
+        migrations.CreateModel(
+            name='Signoff',
+            fields=[
+                ('id', models.IntegerField(primary_key=True, db_column='signoff_id')),
+                ('symbolic', models.CharField(max_length=32, primary_key=True)),
+                ('assoc_type', models.BigIntegerField(primary_key=True)),
+                ('assoc_id', models.BigIntegerField(serialize=False, primary_key=True)),
+                ('user', models.ForeignKey(primary_key=True, db_column='user_id', to='api.User')),
+                ('file', models.ForeignKey(primary_key=True, db_column='file_id', to='api.IssueFile')),
+                ('file_revision', models.BigIntegerField(primary_key=True)),
+                ('date_notified', models.DateTimeField(null=True, blank=True)),
+                ('date_underway', models.DateTimeField(null=True, blank=True)),
+                ('date_completed', models.DateTimeField(null=True, blank=True)),
+                ('date_acknowledged', models.DateTimeField(null=True, blank=True)),
+                ('user_group', models.ForeignKey(primary_key=True, db_column='user_group_id', to='api.Group')),
+            ],
+            options={
+                'db_table': 'signoffs',
+                'managed': False,
+                'verbose_name_plural': 'Signoffs',
+            },
+        ),
+        migrations.CreateModel(
+            name='StaticPageSetting',
+            fields=[
+                ('static_page', models.ForeignKey(primary_key=True, db_column='static_page_id', to='api.StaticPage')),
+                ('locale', models.CharField(max_length=5, serialize=False, primary_key=True)),
+                ('setting_name', models.CharField(max_length=255, primary_key=True)),
+                ('setting_value', models.TextField(null=True, blank=True)),
+                ('setting_type', models.CharField(max_length=6)),
+            ],
+            options={
+                'db_table': 'static_page_settings',
+                'managed': False,
+                'verbose_name_plural': 'StaticPageSettings',
+            },
+        ),
+        migrations.CreateModel(
+            name='SubscriptionTypeSetting',
+            fields=[
+                ('type', models.ForeignKey(primary_key=True, db_column='type_id', to='api.SubscriptionType')),
+                ('locale', models.CharField(max_length=5, serialize=False, primary_key=True)),
+                ('setting_name', models.CharField(max_length=255, primary_key=True)),
+                ('setting_value', models.TextField(null=True, blank=True)),
+                ('setting_type', models.CharField(max_length=6)),
+            ],
+            options={
+                'db_table': 'subscription_type_settings',
+                'managed': False,
+                'verbose_name_plural': 'SubscriptionTypeSettings',
             },
         ),
     ]
