@@ -1359,11 +1359,16 @@ class Gift(models.Model):
         app_label='api'
         managed = False
         db_table = 'gifts'
+    
+    def __unicode__(self):
+        return u'%s - Type: %s, From: %s %s, To: %s %s' % (self.id, self.gift_type, self.buyer_first_name, self.buyer_last_name, self.recipient_first_name, self.recipient_last_name)
 
+    def __repr__(self):
+        return u'%s - Type: %s, From: %s %s, To: %s %s' % (self.id, self.gift_type, self.buyer_first_name, self.buyer_last_name, self.recipient_first_name, self.recipient_last_name)
 
 class GroupMembership(models.Model):
-    user = models.ForeignKey('User', db_column = 'user_id' )
-    group = models.ForeignKey('Group', db_column = 'group_id')
+    user = models.OneToOneField('User', db_column = 'user_id', primary_key = True )
+    group = models.OneToOneField('Group', db_column = 'group_id', primary_key = True )
     about_displayed = models.IntegerField()
     seq = models.FloatField()
 
@@ -1373,12 +1378,18 @@ class GroupMembership(models.Model):
         managed = False
         db_table = 'group_memberships'
         unique_together = (('user', 'group'),)
+    
+    def __unicode__(self):
+        return u'User: %s %s - Group: %s, Seq: %s' % (self.user.first_name, self.user.last_name, self.group.id, self.seq)
+
+    def __repr__(self):
+        return u'User: %s %s - Group: %s, Seq: %s' % (self.user.first_name, self.user.last_name, self.group.id, self.seq)
 
 
 class GroupSetting(models.Model):
-    group = models.ForeignKey('Group', db_column = 'group_id')
-    locale = models.CharField(max_length=5)
-    setting_name = models.CharField(max_length=255)
+    group = models.OneToOneField('Group', db_column = 'group_id', primary_key = True)
+    locale = models.CharField(max_length=5, primary_key = True)
+    setting_name = models.CharField(max_length=255, primary_key = True)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 
@@ -1388,7 +1399,12 @@ class GroupSetting(models.Model):
         managed = False
         db_table = 'group_settings'
         unique_together = (('group', 'locale', 'setting_name'),)
+    
+    def __unicode__(self):
+        return u'Group: %s - Setting: %s (%s)' % (self.group.id, self.setting_name, self.locale)
 
+    def __repr__(self):
+        return u'Group: %s - Setting: %s (%s)' % (self.group.id, self.setting_name, self.locale)
 
 class Group(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'group_id' )
@@ -1405,6 +1421,12 @@ class Group(models.Model):
         managed = False
         db_table = 'groups'
 
+    def __unicode__(self):
+        return u'%s, Assoc (ID: %s, Type: %s), Seq: %s' % (self.id, self.assoc_id, self.assoc_type, self.seq)
+
+    def __repr__(self):
+        return u'%s, Assoc (ID: %s, Type: %s), Seq: %s' % (self.id, self.assoc_id, self.assoc_type, self.seq)
+
 
 class InstitutionalSubscriptionIP(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'institutional_subscription_ip_id' )
@@ -1418,6 +1440,12 @@ class InstitutionalSubscriptionIP(models.Model):
         app_label='api'
         managed = False
         db_table = 'institutional_subscription_ip'
+
+    def __unicode__(self):
+        return u'%s, Subscription: %s, IP: %s' % (self.id, self.subscription_id, self.ip_string)
+
+    def __repr__(self):
+        return u'%s, Subscription: %s, IP: %s' % (self.id, self.subscription_id, self.ip_string)
 
 
 class InstitutionalSubscription(models.Model):
@@ -1433,6 +1461,11 @@ class InstitutionalSubscription(models.Model):
         managed = False
         db_table = 'institutional_subscriptions'
 
+    def __unicode__(self):
+        return u'%s, Subscription: %s, Institution: %s' % (self.id, self.subscription_id, self.institution_name)
+
+    def __repr__(self):
+        return u'%s, Subscription: %s, Institution: %s' % (self.id, self.subscription_id, self.institution_name)
 
 class IssueFile(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'file_id' )
@@ -1451,11 +1484,16 @@ class IssueFile(models.Model):
         managed = False
         db_table = 'issue_files'
 
+    def __unicode__(self):
+        return u'%s, Issue: %s, Name: %s' % (self.id, self.issue.id, self.original_file_name)
+
+    def __repr__(self):
+        return u'%s, Issue: %s, Name: %s' % (self.id, self.issue.id, self.original_file_name)
 
 class IssueGalleySetting(models.Model):
-    galley = models.ForeignKey('IssueGalley', db_column = 'galley_id')
-    locale = models.CharField(max_length=5)
-    setting_name = models.CharField(max_length=255)
+    galley = models.OneToOneField('IssueGalley', db_column = 'galley_id', primary_key = True)
+    locale = models.CharField(max_length=5, primary_key = True)
+    setting_name = models.CharField(max_length=255, primary_key = True)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 
@@ -1466,6 +1504,11 @@ class IssueGalleySetting(models.Model):
         db_table = 'issue_galley_settings'
         unique_together = (('galley', 'locale', 'setting_name'),)
 
+    def __unicode__(self):
+        return u'%s, Issue Galley: %s, Setting: %s' % (self.pk, self.galley.id, self.setting_name)
+
+    def __repr__(self):
+        return u'%s, Issue Galley: %s, Setting: %s' % (self.pk, self.galley.id, self.setting_name)
 
 class IssueGalley(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'galley_id' )
@@ -1481,11 +1524,16 @@ class IssueGalley(models.Model):
         managed = False
         db_table = 'issue_galleys'
 
+    def __unicode__(self):
+        return u'%s, Issue: %s, Seq: %s' % (self.id, self.issue.id, self.seq)
+
+    def __repr__(self):
+        return u'%s, Issue: %s, Seq: %s' % (self.id, self.issue.id, self.seq)
 
 class IssueSetting(models.Model):
-    issue = models.ForeignKey('Issue', db_column = 'issue_id')
-    locale = models.CharField(max_length=5)
-    setting_name = models.CharField(max_length=255)
+    issue = models.OneToOneField('Issue', db_column = 'issue_id', primary_key = True)
+    locale = models.CharField(max_length=5, primary_key = True)
+    setting_name = models.CharField(max_length=255, primary_key = True)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 
@@ -1496,6 +1544,11 @@ class IssueSetting(models.Model):
         db_table = 'issue_settings'
         unique_together = (('issue', 'locale', 'setting_name'),)
 
+    def __unicode__(self):
+        return u'%s, Issue: %s, Setting: %s' % (self.pk, self.issue.id, self.setting_name)
+
+    def __repr__(self):
+        return u'%s, Issue: %s, Setting: %s' % (self.pk, self.issue.id, self.setting_name)
 
 class Issue(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'issue_id' )
@@ -1523,11 +1576,16 @@ class Issue(models.Model):
         managed = False
         db_table = 'issues'
 
+    def __unicode__(self):
+        return u'%s, Journal: %s' % (self.id, self.journal.id)
+
+    def __repr__(self):
+        return u'%s, Journal: %s' % (self.id, self.journal.id)
 
 class JournalSetting(models.Model):
-    journal = models.ForeignKey('Journal', db_column='journal_id')
-    locale = models.CharField(max_length=5)
-    setting_name = models.CharField(max_length=255)
+    journal = models.OneToOneField('Journal', db_column='journal_id', primary_key = True)
+    locale = models.CharField(max_length=5, primary_key = True)
+    setting_name = models.CharField(max_length=255, primary_key = True)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 
@@ -1538,6 +1596,11 @@ class JournalSetting(models.Model):
         db_table = 'journal_settings'
         unique_together = (('journal', 'locale', 'setting_name'),)
 
+    def __unicode__(self):
+        return u'Journal: %s, Setting: %s (%s)' % (self.journal.id, self.setting_name, self.locale)
+
+    def __repr__(self):
+        return u'Journal: %s, Setting: %s (%s)' % (self.journal.id, self.setting_name, self.locale)
 
 class Journal(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'journal_id' )
@@ -1552,6 +1615,11 @@ class Journal(models.Model):
         managed = False
         db_table = 'journals'
 
+    def __unicode__(self):
+        return u'%s - Path: %s, Seq: %s' % (self.id, self.path, self.seq)
+
+    def __repr__(self):
+        return u'%s - Path: %s, Seq: %s' % (self.id, self.path, self.seq)
 
 class License(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True)
@@ -1565,11 +1633,16 @@ class License(models.Model):
         managed = False
         db_table = 'licenses'
 
+    def __unicode__(self):
+        return u'%s - %s' % (self.pk, self.pretty_name)
+
+    def __repr__(self):
+        return u'%s - %s' % (self.pk, self.pretty_name)
 
 class MetadataDescriptionSetting(models.Model):
-    metadata_description = models.ForeignKey('MetadataDescription', db_column = 'metadata_description_id')
-    locale = models.CharField(max_length=5)
-    setting_name = models.CharField(max_length=255)
+    metadata_description = models.OneToOneField('MetadataDescription', db_column = 'metadata_description_id', primary_key = True)
+    locale = models.CharField(max_length=5, primary_key = True)
+    setting_name = models.CharField(max_length=255, primary_key = True)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 
@@ -1580,6 +1653,11 @@ class MetadataDescriptionSetting(models.Model):
         db_table = 'metadata_description_settings'
         unique_together = (('metadata_description', 'locale', 'setting_name'),)
 
+    def __unicode__(self):
+        return u'%s - %s (%s)' % (self.pk, self.setting_name, self.locale)
+
+    def __repr__(self):
+        return u'%s - %s (%s)' % (self.pk, self.setting_name, self.locale)
 
 class MetadataDescription(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'metadata_description_id' )
@@ -1596,6 +1674,11 @@ class MetadataDescription(models.Model):
         managed = False
         db_table = 'metadata_descriptions'
 
+    def __unicode__(self):
+        return u'%s - %s' % (self.id, self.display_name)
+
+    def __repr__(self):
+        return u'%s - %s' % (self.id, self.display_name)
 
 class Metric(models.Model):
     load_id = models.CharField(max_length=255)
@@ -1611,13 +1694,19 @@ class Metric(models.Model):
     region = models.SmallIntegerField(blank=True, null=True)
     city = models.CharField(max_length=255, blank=True, null=True)
     metric_type = models.CharField(max_length=255)
-    metric = models.IntegerField(blank=True, null=True)
+    metric = models.IntegerField(primary_key = True )
 
     class Meta:
         verbose_name_plural = 'Metrics' 
         app_label='api'
         managed = False
         db_table = 'metrics'
+
+    def __unicode__(self):
+        return u'Context: %s, Issue: %s, Submission: %s' % (self.context_id, self.issue.id, self.submission_id)
+
+    def __repr__(self):
+        return u'Context: %s, Issue: %s, Submission: %s' % (self.context_id, self.issue.id, self.submission_id)
 
 
 class Mutex(models.Model):
@@ -1629,6 +1718,11 @@ class Mutex(models.Model):
         managed = False
         db_table = 'mutex'
 
+    def __unicode__(self):
+        return u'%s' % (self.i)
+
+    def __repr__(self):
+        return u'%s' % (self.i)
 
 class Note(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'note_id' )
@@ -1647,6 +1741,11 @@ class Note(models.Model):
         managed = False
         db_table = 'notes'
 
+    def __unicode__(self):
+        return u'%s - %s , User: %s %s' % (self.id, self.title, self.user.first_name, self.user.last_name)
+
+    def __repr__(self):
+        return u'%s - %s , User: %s %s' % (self.id, self.title, self.user.first_name, self.user.last_name)
 
 class NotificationMailList(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'notification_mail_list_id' )
