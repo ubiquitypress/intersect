@@ -1749,10 +1749,10 @@ class Note(models.Model):
 
 class NotificationMailList(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'notification_mail_list_id' )
-    email = models.CharField(max_length=90)
+    email = models.CharField(max_length=90, unique = True)
     confirmed = models.IntegerField()
     token = models.CharField(max_length=40)
-    context = models.BigIntegerField()
+    context = models.BigIntegerField(unique = True)
 
     class Meta:
         verbose_name_plural = 'NotificationMailLists' 
@@ -1761,11 +1761,16 @@ class NotificationMailList(models.Model):
         db_table = 'notification_mail_list'
         unique_together = (('email', 'context'),)
 
+    def __unicode__(self):
+        return u'%s - %s' % (self.id, self.email)
+
+    def __repr__(self):
+        return u'%s - %s' % (self.id, self.email)
 
 class NotificationSetting(models.Model):
-    notification = models.ForeignKey('Notification', db_column='notification_id')
-    locale = models.CharField(max_length=5, blank=True, null=True)
-    setting_name = models.CharField(max_length=64)
+    notification = models.OneToOneField('Notification', db_column='notification_id',primary_key = True)
+    locale = models.CharField(max_length=5,blank=True, null=True, unique=True)
+    setting_name = models.CharField(max_length=64, primary_key = True)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 
@@ -1776,6 +1781,17 @@ class NotificationSetting(models.Model):
         db_table = 'notification_settings'
         unique_together = (('notification', 'locale', 'setting_name'),)
 
+    def __unicode__(self):
+        if self.locale:
+            return u'Notification: %s - Setting: %s (%s)' % (self.notification.id, self.setting_name, self.locale)
+        else:
+            return u'Notification: %s - Setting: %s' % (self.notification.id, self.setting_name)
+
+    def __repr__(self):
+        if self.locale:
+            return u'Notification: %s - Setting: %s (%s)' % (self.notification.id, self.setting_name, self.locale)
+        else:
+            return u'Notification: %s - Setting: %s' % (self.notification.id, self.setting_name)
 
 class NotificationSubscriptionSetting(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'setting_id' )
@@ -1790,7 +1806,12 @@ class NotificationSubscriptionSetting(models.Model):
         app_label='api'
         managed = False
         db_table = 'notification_subscription_settings'
+ 
+    def __unicode__(self):
+        return u'%s - Setting: %s, User: %s %s' % (self.id, self.setting_name, self.user.first_name, self.user.last_name)
 
+    def __repr__(self):
+        return u'%s - Setting: %s, User: %s %s' % (self.id, self.setting_name, self.user.first_name, self.user.last_name)
 
 class Notification(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'notification_id' )
@@ -1809,9 +1830,14 @@ class Notification(models.Model):
         managed = False
         db_table = 'notifications'
 
+    def __unicode__(self):
+        return u'%s - Type: %s, User: %s %s' % (self.id, self.type, self.user.first_name, self.user.last_name)
+
+    def __repr__(self):
+        return u'%s - Type: %s, User: %s %s' % (self.id, self.type, self.user.first_name, self.user.last_name)
 
 class OaiResumptionToken(models.Model):
-    token = models.CharField(unique=True, max_length=32)
+    token = models.CharField(primary_key=True, max_length=32)
     expire = models.BigIntegerField()
     record_offset = models.IntegerField()
     params = models.TextField(blank=True, null=True)
@@ -1822,6 +1848,11 @@ class OaiResumptionToken(models.Model):
         managed = False
         db_table = 'oai_resumption_tokens'
 
+    def __unicode__(self):
+        return u'%s' % (self.token)
+
+    def __repr__(self):
+        return u'%s' % (self.token)
 
 class PaypalTransaction(models.Model):
     txn_id = models.CharField(primary_key=True, max_length=17)
@@ -1839,12 +1870,17 @@ class PaypalTransaction(models.Model):
         managed = False
         db_table = 'paypal_transactions'
 
+    def __unicode__(self):
+        return u'%s Type: %s Receiver: %s' % (self.txn_id, self.txn_type, self.receiver_email)
+
+    def __repr__(self):
+        return u'%s Type: %s Receiver: %s' % (self.txn_id, self.txn_type, self.receiver_email)
 
 class PluginSetting(models.Model):
-    plugin_name = models.CharField(max_length=80)
-    locale = models.CharField(max_length=5)
-    journal = models.ForeignKey('Journal', db_column='journal_id')
-    setting_name = models.CharField(max_length=80)
+    plugin_name = models.CharField(max_length=80, primary_key = True)
+    locale = models.CharField(max_length=5, unique = True)
+    journal = models.ForeignKey('Journal', db_column='journal_id', primary_key = True)
+    setting_name = models.CharField(max_length=80, primary_key = True)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 
@@ -1855,6 +1891,17 @@ class PluginSetting(models.Model):
         db_table = 'plugin_settings'
         unique_together = (('plugin_name', 'locale', 'journal', 'setting_name'),)
 
+    def __unicode__(self):
+        if self.locale:
+            return u'%s (%s) - Setting: %s' % (self.plugin_name, self.locale, self.setting_name)
+        else:
+            return u'%s - Setting: %s' % (self.plugin_name, self.setting_name)
+
+    def __repr__(self):
+        if self.locale:
+            return u'%s (%s) - Setting: %s' % (self.plugin_name, self.locale, self.setting_name)
+        else:
+            return u'%s - Setting: %s' % (self.plugin_name, self.setting_name)
 
 class Process(models.Model):
     process_id = models.CharField(primary_key=True, max_length=23)
@@ -1868,6 +1915,11 @@ class Process(models.Model):
         managed = False
         db_table = 'processes'
 
+    def __unicode__(self):
+        return u'%s Type: %s' % (self.process_id, self.process_type)
+
+    def __repr__(self):
+        return u'%s Type: %s' % (self.process_id, self.process_type)
 
 class PublishedArticle(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'published_article_id' )
@@ -1883,6 +1935,11 @@ class PublishedArticle(models.Model):
         managed = False
         db_table = 'published_articles'
 
+    def __unicode__(self):
+        return u'%s Article: %s Issue: %s' % (self.id, self.article.id, self.issue.id)
+
+    def __repr__(self):
+        return u'%s Article: %s Issue: %s' % (self.id, self.article.id, self.issue.id)
 
 class QueuedPayment(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'queued_payment_id' )
@@ -1897,11 +1954,16 @@ class QueuedPayment(models.Model):
         managed = False
         db_table = 'queued_payments'
 
+    def __unicode__(self):
+        return u'%s Created: %s Expiring: %s' % (self.id, self.date_created, self.expiry_date)
+
+    def __repr__(self):
+        return u'%s Created: %s Expiring: %s' % (self.id, self.date_created, self.expiry_date)
 
 class ReferralSetting(models.Model):
-    referral = models.ForeignKey('Referral', db_column='referral_id')
-    locale = models.CharField(max_length=5)
-    setting_name = models.CharField(max_length=255)
+    referral = models.OneToOneField('Referral', db_column='referral_id', primary_key=True)
+    locale = models.CharField(max_length=5, primary_key=True)
+    setting_name = models.CharField(max_length=255, primary_key=True)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 
@@ -1912,12 +1974,23 @@ class ReferralSetting(models.Model):
         db_table = 'referral_settings'
         unique_together = (('referral', 'locale', 'setting_name'),)
 
+    def __unicode__(self):
+        if self.locale:
+            return u'Referral: %s Setting: %s (%s)' % (self.referral.id, self.setting_name, self.locale)
+        else:            
+            return u'Referral: %s Setting: %s' % (self.referral.id, self.setting_name)
+
+    def __repr__(self):
+        if self.locale:
+            return u'Referral: %s Setting: %s (%s)' % (self.referral.id, self.setting_name, self.locale)
+        else:            
+            return u'Referral: %s Setting: %s' % (self.referral.id, self.setting_name)
 
 class Referral(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'referral_id' )
-    article = models.ForeignKey('Article', db_column='article_id')
+    article = models.OneToOneField('Article', db_column='article_id', unique=True)
     status = models.SmallIntegerField()
-    url = models.CharField(max_length=255)
+    url = models.CharField(max_length=255, unique=True)
     date_added = models.DateTimeField()
     link_count = models.BigIntegerField()
 
@@ -1927,6 +2000,12 @@ class Referral(models.Model):
         managed = False
         db_table = 'referrals'
         unique_together = (('article', 'url'),)
+
+    def __unicode__(self):
+        return u'%s Article: %s' % (self.id, self.article.id)
+
+    def __repr__(self):
+        return u'%s Article: %s' % (self.id, self.article.id)
 
 
 class ReviewAssignment(models.Model):
@@ -1966,11 +2045,16 @@ class ReviewAssignment(models.Model):
         managed = False
         db_table = 'review_assignments'
 
+    def __unicode__(self):
+        return u'%s - Submission: %s , Stage: %s' % (self.id, self.submission_id, self.stage_id)
+
+    def __repr__(self):
+        return u'%s - Submission: %s , Stage: %s' % (self.id, self.submission_id, self.stage_id)
 
 class ReviewFormElementSetting(models.Model):
-    review_form_element = models.ForeignKey('ReviewFormElement', db_column = 'review_form_element_id')
-    locale = models.CharField(max_length=5)
-    setting_name = models.CharField(max_length=255)
+    review_form_element = models.ForeignKey('ReviewFormElement', db_column = 'review_form_element_id', primary_key = True)
+    locale = models.CharField(max_length=5, primary_key = True)
+    setting_name = models.CharField(max_length=255, primary_key = True)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 
@@ -1981,6 +2065,17 @@ class ReviewFormElementSetting(models.Model):
         db_table = 'review_form_element_settings'
         unique_together = (('review_form_element', 'locale', 'setting_name'),)
 
+    def __unicode__(self):
+        if self.locale:
+            return u'Element: %s Setting: %s (%s)' % (self.review_form_element.id, self.setting_name, self.locale)
+        else:
+            return u'Element: %s Setting: %s' % (self.review_form_element.id, self.setting_name)
+
+    def __repr__(self):
+        if self.locale:
+            return u'Element: %s Setting: %s (%s)' % (self.review_form_element.id, self.setting_name, self.locale)
+        else:
+            return u'Element: %s Setting: %s' % (self.review_form_element.id, self.setting_name)
 
 class ReviewFormElement(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'review_form_element_id' )
@@ -1996,10 +2091,15 @@ class ReviewFormElement(models.Model):
         managed = False
         db_table = 'review_form_elements'
 
+    def __unicode__(self):
+        return u'%s - Review form: %s' % (self.id, self.review_form.id)
+
+    def __repr__(self):
+        return u'%s - Review form: %s' % (self.id, self.review_form.id)
 
 class ReviewFormResponse(models.Model):
-    review_form_element = models.ForeignKey('ReviewFormElement', db_column = 'review_form_element_id')
-    review = models.ForeignKey('ReviewAssignment', db_column='review_id')
+    review_form_element = models.ForeignKey('ReviewFormElement', db_column = 'review_form_element_id', primary_key=True)
+    review = models.OneToOneField('ReviewAssignment', db_column='review_id', primary_key=True)
     response_type = models.CharField(max_length=6, blank=True, null=True)
     response_value = models.TextField(blank=True, null=True)
 
@@ -2009,11 +2109,16 @@ class ReviewFormResponse(models.Model):
         managed = False
         db_table = 'review_form_responses'
 
+    def __unicode__(self):
+        return u'Assignment:%s - Element: %s' % (self.review.id, self.review_form_element.id)
+
+    def __repr__(self):
+        return u'Assignment:%s - Element: %s' % (self.review.id, self.review_form_element.id)
 
 class ReviewFormSetting(models.Model):
-    review_form = models.ForeignKey('ReviewForm', db_column = 'review_form_id')
-    locale = models.CharField(max_length=5)
-    setting_name = models.CharField(max_length=255)
+    review_form = models.ForeignKey('ReviewForm', db_column = 'review_form_id', primary_key = True)
+    locale = models.CharField(max_length=5, primary_key = True)
+    setting_name = models.CharField(max_length=255, primary_key = True)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 
@@ -2024,6 +2129,17 @@ class ReviewFormSetting(models.Model):
         db_table = 'review_form_settings'
         unique_together = (('review_form', 'locale', 'setting_name'),)
 
+    def __unicode__(self):
+        if self.locale:
+            return u'Form: %s - Setting: %s (%s)' % (self.review_form.id, self.setting_name, self.locale)
+        else:
+            return u'Form: %s - Setting: %s' % (self.review_form.id, self.setting_name)
+
+    def __repr__(self):
+        if self.locale:
+            return u'Form: %s - Setting: %s (%s)' % (self.review_form.id, self.setting_name, self.locale)
+        else:
+            return u'Form: %s - Setting: %s' % (self.review_form.id, self.setting_name)
 
 class ReviewForm(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'review_form_id' )
@@ -2038,6 +2154,11 @@ class ReviewForm(models.Model):
         managed = False
         db_table = 'review_forms'
 
+    def __unicode__(self):
+        return u'%s - Assoc (ID: %s, Type: %s)' % (self.id, self.assoc_id, self.assoc_type)
+
+    def __repr__(self):
+        return u'%s - Assoc (ID: %s, Type: %s)' % (self.id, self.assoc_id, self.assoc_type)
 
 class ReviewRound(models.Model):
     submission_id = models.BigIntegerField()
@@ -2052,7 +2173,12 @@ class ReviewRound(models.Model):
         app_label='api'
         managed = False
         db_table = 'review_rounds'
-        unique_together = (('submission_id', 'stage_id', 'round'),)
+   
+    def __unicode__(self):
+        return u'%s - Submission: %s Round: %s' % (self.id, self.submission_id, self.round)
+
+    def __repr__(self):
+        return u'%s - Submission: %s Round: %s' % (self.id, self.submission_id, self.round)
 
 
 class Role(models.Model):
@@ -2066,7 +2192,12 @@ class Role(models.Model):
         managed = False
         db_table = 'roles'
         unique_together = (('journal', 'user', 'id'),)
+   
+    def __unicode__(self):
+        return u'Journal: %s - User: %s %s - Role: %s' % (self.journal.id, self.user.first_name, self.user.last_name, self.id)
 
+    def __repr__(self):
+        return u'Journal: %s - User: %s %s - Role: %s' % (self.journal.id, self.user.first_name, self.user.last_name, self.id)
 
 class RtContext(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'context_id' )
@@ -2086,6 +2217,12 @@ class RtContext(models.Model):
         managed = False
         db_table = 'rt_contexts'
 
+    def __unicode__(self):
+        return u'%s - Title: %s Version %s' % (self.id, self.title, self.version)
+
+    def __repr__(self):
+        return u'%s - Title: %s Version %s' % (self.id, self.title, self.version)
+
 
 class RtSearch(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'search_id' )
@@ -2103,6 +2240,11 @@ class RtSearch(models.Model):
         managed = False
         db_table = 'rt_searches'
 
+    def __unicode__(self):
+        return u'%s - Title: %s Context: %s' % (self.id, self.title, self.context.title)
+
+    def __repr__(self):
+        return u'%s - Title: %s Context: %s' % (self.id, self.title, self.context.title)
 
 class RtVersion(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'version_id' )
@@ -2118,6 +2260,11 @@ class RtVersion(models.Model):
         managed = False
         db_table = 'rt_versions'
 
+    def __unicode__(self):
+        return u'%s - Journal: %s Title: %s' % (self.id, self.journal.id, self.title)
+
+    def __repr__(self):
+        return u'%s - Journal: %s Title: %s' % (self.id, self.journal.id, self.title)
 
 class ScheduledTask(models.Model):
     class_name = models.CharField(unique=True, max_length=255)
