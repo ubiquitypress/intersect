@@ -279,7 +279,7 @@ class ArticleSearchKeywordList(models.Model):
         app_label='api'
         managed = False
         db_table = 'article_search_keyword_list'
-        
+
     def __unicode__(self):
         return u'%s - Keyword text: %s' % (self.id, self.keyword_text)
 
@@ -287,17 +287,21 @@ class ArticleSearchKeywordList(models.Model):
         return u'%s - Keyword text: %s' % (self.id, self.keyword_text)
 
 class ArticleSearchObjectKeyword(models.Model):
-    object = models.ForeignKey('ArticleSearchObject', db_column='object_id')
-    keyword_id = models.BigIntegerField()
-    pos = models.IntegerField()
+    object = models.OneToOneField('ArticleSearchObject', db_column='object_id')
+    keyword = models.OneToOneField('ArticleSearchKeywordList', db_column='keyword_id')
+    pos = models.IntegerField( primary_key = True)
 
     class Meta:
         verbose_name_plural = 'ArticleSearchObjectKeywords' 
         app_label='api'
         managed = False
         db_table = 'article_search_object_keywords'
-        unique_together = (('object', 'pos'),)
+        unique_together = (('object','keyword', 'pos',),)
+    def __unicode__(self):
+        return u'%s - Pos: %s,  Keyword text: %s' % (self.pk, self.pos, self.keyword.keyword_text)
 
+    def __repr__(self):
+        return u'%s - Pos: %s,  Keyword text: %s' % (self.pk, self.pos, self.keyword.keyword_text)
 
 class ArticleSearchObject(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'object_id' )
@@ -310,12 +314,17 @@ class ArticleSearchObject(models.Model):
         app_label='api'
         managed = False
         db_table = 'article_search_objects'
+    def __unicode__(self):
+        return u'%s - Article: %s,  Type: %s' % (self.id, self.article.id, self.type)
+
+    def __repr__(self):
+        return u'%s - Article: %s,  Type: %s' % (self.id, self.article.id, self.type)
 
 
 class ArticleSetting(models.Model):
-    article = models.ForeignKey('Article', db_column='article_id')
-    locale = models.CharField(max_length=5)
-    setting_name = models.CharField(max_length=255)
+    article = models.OneToOneField('Article', db_column='article_id')
+    locale = models.CharField(primary_key = True, max_length=5)
+    setting_name = models.CharField(primary_key = True, max_length=255)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 
@@ -326,6 +335,11 @@ class ArticleSetting(models.Model):
         db_table = 'article_settings'
         unique_together = (('article', 'locale', 'setting_name'),)
 
+    def __unicode__(self):
+        return u'%s - Article: %s,  Setting Name: %s' % (self.pk, self.article.id, self.setting_name)
+
+    def __repr__(self):
+        return u'%s - Article: %s,  Setting Name: %s' % (self.pk, self.article.id, self.setting_name)
 
 class ArticleStage(models.Model):
     stage_id = models.IntegerField(blank=True, null=True)
@@ -337,10 +351,16 @@ class ArticleStage(models.Model):
         managed = False
         db_table = 'article_stages'
 
+    def __unicode__(self):
+        return u'%s - %s' % (self.stage_id, self.stage_name)
+
+    def __repr__(self):
+        return u'%s - %s' % (self.stage_id, self.stage_name)
+
 
 class ArticleStatus(models.Model):
-    article = models.OneToOneField('Article', db_column = 'article_id')
-    id =  models.AutoField(primary_key = True, db_column = 'status_id' )
+    article = models.OneToOneField('Article', db_column = 'article_id', blank=True, null=True)
+    status =  models.IntegerField(blank=True, null=True, db_column = 'status_id' )
     date_updated = models.DateTimeField(blank=True, null=True)
 
     class Meta:
@@ -348,11 +368,16 @@ class ArticleStatus(models.Model):
         app_label='api'
         managed = False
         db_table = 'article_status'
+   
+    def __unicode__(self):
+        return u'%s - Article ID: %s' % (self.id, self.article.id)
 
+    def __repr__(self):
+        return u'%s - Article ID: %s' % (self.id, self.article.id)
 
 class ArticleStatusHistory(models.Model):
-    article = models.ForeignKey('Article', db_column='article_id')
-    status = models.ForeignKey('ArticleStatus', db_column='status_id')
+    article = models.OneToOneField('Article', db_column='article_id', blank=True, null=True)
+    status = models.IntegerField(db_column='status_id', blank=True, null=True)
     date_updated = models.DateTimeField()
 
     class Meta:
@@ -360,12 +385,17 @@ class ArticleStatusHistory(models.Model):
         app_label='api'
         managed = False
         db_table = 'article_status_history'
+   
+    def __unicode__(self):
+        return u' %s - Article ID: %s' % (self.pk, self.article.id)
 
+    def __repr__(self):
+        return u' %s - Article ID: %s' % (self.pk, self.article.id)
 
 class ArticleSuppFileSetting(models.Model):
-    supp = models.ForeignKey('ArticleSupplementaryFile', db_column = 'supp_id')
-    locale = models.CharField(max_length=5)
-    setting_name = models.CharField(max_length=255)
+    supp = models.OneToOneField('ArticleSupplementaryFile', db_column = 'supp_id')
+    locale = models.CharField(max_length=5, primary_key = True)
+    setting_name = models.CharField(max_length=255, primary_key = True)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 
@@ -375,7 +405,12 @@ class ArticleSuppFileSetting(models.Model):
         managed = False
         db_table = 'article_supp_file_settings'
         unique_together = (('supp', 'locale', 'setting_name'),)
+    
+    def __unicode__(self):
+        return u' %s - File ID: %s' % (self.pk, self.supp.id)
 
+    def __repr__(self):
+        return u' %s - File ID: %s' % (self.pk, self.supp.id)
 
 class ArticleSupplementaryFile(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'supp_id' )
@@ -395,6 +430,12 @@ class ArticleSupplementaryFile(models.Model):
         managed = False
         db_table = 'article_supplementary_files'
 
+    def __unicode__(self):
+        return u' %s - Article ID: %s, File: %s' % (self.id, self.article.id, self.file.file_name)
+
+    def __repr__(self):
+        return u' %s - Article ID: %s, File: %s' % (self.id, self.article.id, self.file.file_name)
+
 
 class ArticleXmlGalley(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'xml_galley_id' )
@@ -409,7 +450,12 @@ class ArticleXmlGalley(models.Model):
         app_label='api'
         managed = False
         db_table = 'article_xml_galleys'
+    
+    def __unicode__(self):
+        return u' %s - Article ID: %s, Galley ID: %s' % (self.id, self.article.id, self.galley.id)
 
+    def __repr__(self):
+        return u' %s - Article ID: %s, Galley ID: %s' % (self.id, self.article.id, self.galley.id)
 
 class Article(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'article_id' )
@@ -440,7 +486,12 @@ class Article(models.Model):
         app_label='api'
         managed = False
         db_table = 'articles'
+   
+    def __unicode__(self):
+        return u' %s - User: %s %s, Section: %s' % (self.id, self.user.first_name, self.user.last_name, self.section_id)
 
+    def __repr__(self):
+        return u' %s - User: %s %s, Section: %s' % (self.id, self.user.first_name, self.user.last_name, self.section_id)
 
 class AuthSource(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'auth_id' )
@@ -455,11 +506,16 @@ class AuthSource(models.Model):
         managed = False
         db_table = 'auth_sources'
 
+    def __unicode__(self):
+        return u' %s - Title: %s, settings: %s' % (self.id, self.title, self.settings)
+
+    def __repr__(self):
+        return u' %s - Title: %s, settings: %s' % (self.id, self.title, self.settings)
 
 class AuthorSetting(models.Model):
-    author = models.ForeignKey('Author', db_column = 'author_id')
-    locale = models.CharField(max_length=5)
-    setting_name = models.CharField(max_length=255)
+    author = models.OneToOneField('Author', db_column = 'author_id')
+    locale = models.CharField(max_length=5, primary_key = True)
+    setting_name = models.CharField(max_length=255, primary_key = True)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 
@@ -470,6 +526,11 @@ class AuthorSetting(models.Model):
         db_table = 'author_settings'
         unique_together = (('author', 'locale', 'setting_name'),)
 
+    def __unicode__(self):
+        return u' %s - Author: %s %s, Setting: %s' % (self.pk, self.author.first_name, self.author.last_name, self.setting_name)
+
+    def __repr__(self):
+        return u' %s - Author: %s %s, Setting: %s' % (self.pk, self.author.first_name, self.author.last_name, self.setting_name)
 
 class Author(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'author_id' )
@@ -490,7 +551,12 @@ class Author(models.Model):
         app_label='api'
         managed = False
         db_table = 'authors'
+   
+    def __unicode__(self):
+        return u' %s - %s %s' % (self.id, self.first_name, self.last_name)
 
+    def __repr__(self):
+        return u' %s - %s %s' % (self.id, self.first_name, self.last_name)
 
 class BooksForReview(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'book_id' )
@@ -521,10 +587,15 @@ class BooksForReview(models.Model):
         app_label='api'
         managed = False
         db_table = 'books_for_review'
+   
+    def __unicode__(self):
+        return u' %s - Journal: %s Article: %s' % (self.id, self.journal.id, self.article.id)
 
+    def __repr__(self):
+        return u' %s - Journal: %s Article: %s' % (self.id, self.journal.id, self.article.id)
 
 class BooksForReviewAuthor(models.Model):
-    author = models.OneToOneField('Author', db_column = 'author_id' )
+    author = models.OneToOneField('Author', db_column = 'author_id', primary_key = True)
     book = models.ForeignKey('BooksForReview', db_column = 'book_id')
     seq = models.FloatField()
     first_name = models.CharField(max_length=40)
@@ -536,12 +607,17 @@ class BooksForReviewAuthor(models.Model):
         app_label='api'
         managed = False
         db_table = 'books_for_review_authors'
+   
+    def __unicode__(self):
+        return u' %s - %s %s Book: %s' % (self.pk, self.first_name, self.last_name, self.book.id)
 
+    def __repr__(self):
+        return u' %s - %s %s Book: %s' % (self.pk, self.first_name, self.last_name, self.book.id)
 
 class BooksForReviewSetting(models.Model):
-    book = models.ForeignKey('BooksForReview', db_column = 'book_id')
-    locale = models.CharField(max_length=5)
-    setting_name = models.CharField(max_length=255)
+    book = models.OneToOneField('BooksForReview', db_column = 'book_id', primary_key = True)
+    locale = models.CharField(max_length=5, primary_key = True)
+    setting_name = models.CharField(max_length=255, primary_key = True)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 
@@ -552,6 +628,11 @@ class BooksForReviewSetting(models.Model):
         db_table = 'books_for_review_settings'
         unique_together = (('book', 'locale', 'setting_name'),)
 
+    def __unicode__(self):
+        return u' %s - %s Book: %s' % (self.pk, self.setting_name, self.book.id)
+
+    def __repr__(self):
+        return u' %s - %s Book: %s' % (self.pk, self.setting_name, self.book.id)
 
 class Captcha(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'captcha_id' )
@@ -565,11 +646,17 @@ class Captcha(models.Model):
         managed = False
         db_table = 'captchas'
 
+    def __unicode__(self):
+        return u' %s - Session: %s' % (self.id, self.session_id)
+
+    def __repr__(self):
+        return u' %s - Session: %s' % (self.id, self.session_id)
+
 
 class CitationSetting(models.Model):
-    citation = models.ForeignKey('Citation', db_column = 'citation_id')
-    locale = models.CharField(max_length=5)
-    setting_name = models.CharField(max_length=255)
+    citation = models.OneToOneField('Citation', db_column = 'citation_id', primary_key = True)
+    locale = models.CharField(max_length=5, primary_key = True)
+    setting_name = models.CharField(max_length=255, primary_key = True)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 
@@ -579,15 +666,20 @@ class CitationSetting(models.Model):
         managed = False
         db_table = 'citation_settings'
         unique_together = (('citation', 'locale', 'setting_name'),)
+    
+    def __unicode__(self):
+        return u' %s - Citation: %s' % (self.pk, self.citation.id)
 
+    def __repr__(self):
+        return u' %s - Citation: %s' % (self.pk, self.citation.id)
 
 class Citation(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'citation_id' )
-    assoc_type = models.BigIntegerField()
-    assoc_id = models.BigIntegerField()
+    assoc_type = models.BigIntegerField(primary_key = True)
+    assoc_id = models.BigIntegerField(primary_key = True)
     citation_state = models.BigIntegerField()
     raw_citation = models.TextField(blank=True, null=True)
-    seq = models.BigIntegerField()
+    seq = models.BigIntegerField(unique = True)
     lock_id = models.CharField(max_length=23, blank=True, null=True)
 
     class Meta:
@@ -596,7 +688,12 @@ class Citation(models.Model):
         managed = False
         db_table = 'citations'
         unique_together = (('assoc_type', 'assoc_id', 'seq'),)
+    
+    def __unicode__(self):
+        return u' %s - Assoc (ID: %s, Type: %s), Seq: %s' % (self.id, self.assoc_id, self.assoc_type, self.seq)
 
+    def __repr__(self):
+        return u' %s - Assoc (ID: %s, Type: %s), Seq: %s' % (self.id, self.assoc_id, self.assoc_type, self.seq)
 
 class Collection(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'collection_id' )
