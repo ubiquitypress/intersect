@@ -2267,7 +2267,7 @@ class RtVersion(models.Model):
         return u'%s - Journal: %s Title: %s' % (self.id, self.journal.id, self.title)
 
 class ScheduledTask(models.Model):
-    class_name = models.CharField(unique=True, max_length=255)
+    class_name = models.CharField(unique=True, max_length=255, primary_key = True)
     last_run = models.DateTimeField(blank=True, null=True)
 
     class Meta:
@@ -2276,11 +2276,16 @@ class ScheduledTask(models.Model):
         managed = False
         db_table = 'scheduled_tasks'
 
+    def __unicode__(self):
+        return u'%s' % (self.class_name)
+
+    def __repr__(self):
+        return u'%s' % (self.class_name)
 
 class SectionEditor(models.Model):
-    journal = models.OneToOneField('Journal', db_column='journal_id')
-    section = models.OneToOneField('Section', db_column = 'section_id')
-    user = models.OneToOneField('User', db_column = 'user_id')
+    journal = models.OneToOneField('Journal', db_column='journal_id', primary_key = True)
+    section = models.OneToOneField('Section', db_column = 'section_id', primary_key = True)
+    user = models.OneToOneField('User', db_column = 'user_id', primary_key = True)
     can_edit = models.IntegerField()
     can_review = models.IntegerField()
 
@@ -2291,6 +2296,11 @@ class SectionEditor(models.Model):
         db_table = 'section_editors'
         unique_together = (('journal', 'section', 'user'),)
 
+    def __unicode__(self):
+        return u'Journal: %s Section: %s - User: %s %s' % (self.journal.id, self.section.id, self.user.first_name, self.user.last_name)
+
+    def __repr__(self):
+        return u'Journal: %s Section: %s - User: %s %s' % (self.journal.id, self.section.id, self.user.first_name, self.user.last_name)
 
 class SectionSetting(models.Model):
     section = models.OneToOneField('Section', db_column = 'section_id')
@@ -2306,6 +2316,17 @@ class SectionSetting(models.Model):
         db_table = 'section_settings'
         unique_together = (('section', 'locale', 'setting_name'),)
 
+    def __unicode__(self):
+        if self.locale:
+            return u'Section: %s - Setting: %s (%s)' % (self.section.id, self.setting_name, self.locale)
+        else:
+            return u'Section: %s - Setting: %s' % (self.section.id, self.setting_name)
+
+    def __repr__(self):
+        if self.locale:
+            return u'Section: %s - Setting: %s (%s)' % (self.section.id, self.setting_name, self.locale)
+        else:
+            return u'Section: %s - Setting: %s' % (self.section.id, self.setting_name)
 
 class Section(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'section_id' )
@@ -2328,6 +2349,11 @@ class Section(models.Model):
         managed = False
         db_table = 'sections'
 
+    def __unicode__(self):
+        return u'%s - Journal: %s' % (self.id, self.journal.id)
+
+    def __repr__(self):
+        return u'%s - Journal: %s' % (self.id, self.journal.id)
 
 class Session(models.Model):
     id = models.CharField(primary_key=True, max_length=40, db_column="session_id")
@@ -2345,20 +2371,31 @@ class Session(models.Model):
         managed = False
         db_table = 'sessions'
 
+    def __unicode__(self):
+        if self.user:
+            return u'%s - User: %s %s IP: %s' % (self.id, self.user.first_name, self.user.last_name, self.ip_address)
+        else:
+            return u'%s - IP: %s' % (self.id, self.ip_address)
+
+    def __repr__(self):
+        if self.user:
+            return u'%s - User: %s %s IP: %s' % (self.id, self.user.first_name, self.user.last_name, self.ip_address)
+        else:
+            return u'%s - IP: %s' % (self.id, self.ip_address)
 
 class Signoff(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'signoff_id' )
-    symbolic = models.CharField(max_length=32, primary_key = True)
-    assoc_type = models.BigIntegerField(primary_key = True)
-    assoc_id = models.BigIntegerField(primary_key = True)
+    symbolic = models.CharField(max_length=32, unique = True)
+    assoc_type = models.BigIntegerField(unique = True)
+    assoc_id = models.BigIntegerField(unique = True)
     user = models.OneToOneField('User', db_column = 'user_id')
-    file = models.OneToOneField('IssueFile', db_column='file_id')
-    file_revision = models.BigIntegerField(primary_key = True)
+    file = models.OneToOneField('IssueFile', db_column='file_id',unique = True)
+    file_revision = models.BigIntegerField(unique = True)
     date_notified = models.DateTimeField(blank=True, null=True)
     date_underway = models.DateTimeField(blank=True, null=True)
     date_completed = models.DateTimeField(blank=True, null=True)
     date_acknowledged = models.DateTimeField(blank=True, null=True)
-    user_group = models.OneToOneField('Group', db_column = 'user_group_id')
+    user_group = models.OneToOneField('Group', db_column = 'user_group_id',unique = True)
 
     class Meta:
         verbose_name_plural = 'Signoffs' 
@@ -2367,20 +2404,38 @@ class Signoff(models.Model):
         db_table = 'signoffs'
         unique_together = (('assoc_type', 'assoc_id', 'symbolic', 'user', 'user_group', 'file', 'file_revision'),)
 
+    def __unicode__(self):
+        if self.user:
+            return u'%s - User: %s %s' % (self.id, self.user.first_name, self.user.last_name)
+        else:
+            return u'%s' % (self.id)
+
+    def __repr__(self):
+        if self.user:
+            return u'%s - User: %s %s' % (self.id, self.user.first_name, self.user.last_name)
+        else:
+            return u'%s' % (self.id)
 
 class Site(models.Model):
-    redirect = models.BigIntegerField()
-    primary_locale = models.CharField(max_length=5)
-    min_password_length = models.IntegerField()
-    installed_locales = models.CharField(max_length=255)
-    supported_locales = models.CharField(max_length=255, blank=True, null=True)
-    original_style_file_name = models.CharField(max_length=255, blank=True, null=True)
+    redirect = models.BigIntegerField(primary_key = True)
+    primary_locale = models.CharField(max_length=5, primary_key = True)
+    min_password_length = models.IntegerField(primary_key = True)
+    installed_locales = models.CharField(max_length=255, primary_key = True)
+    supported_locales = models.CharField(max_length=255, blank=True, null=True, unique =True)
+    original_style_file_name = models.CharField(max_length=255, blank=True, null=True, unique =True)
 
     class Meta:
         verbose_name_plural = 'Sites' 
         app_label='api'
         managed = False
         db_table = 'site'
+        unique_together = (('redirect', 'primary_locale', 'min_password_length', 'installed_locales', 'supported_locales', 'original_style_file_name'),)
+
+    def __unicode__(self):
+        return u'Primary locale: %s - Redirect: %s' % (self.primary_locale, self.redirect)
+
+    def __repr__(self):
+        return u'Primary locale: %s - Redirect: %s' % (self.primary_locale, self.redirect)
 
 
 class SiteSetting(models.Model):
@@ -2396,6 +2451,17 @@ class SiteSetting(models.Model):
         db_table = 'site_settings'
         unique_together = (('setting_name', 'locale'),)
 
+    def __unicode__(self):
+        if self.locale:
+            return u'Setting: %s (%s)' % (self.setting_name, self.locale)
+        else:
+            return u'Setting: %s' % (self.setting_name)
+
+    def __repr__(self):
+        if self.locale:
+            return u'Setting: %s (%s)' % (self.setting_name, self.locale)
+        else:
+            return u'Setting: %s' % (self.setting_name)
 
 class StaticPageSetting(models.Model):
     static_page = models.OneToOneField('StaticPage', db_column = 'static_page_id')
@@ -2411,6 +2477,11 @@ class StaticPageSetting(models.Model):
         db_table = 'static_page_settings'
         unique_together = (('static_page', 'locale', 'setting_name'),)
 
+    def __unicode__(self):
+        return u'Page: %s Setting: %s (%s)' % (self.static_page.id, self.setting_name, self.locale)
+
+    def __repr__(self):
+        return u'Page: %s Setting: %s (%s)' % (self.static_page.id, self.setting_name, self.locale)
 
 class StaticPage(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'static_page_id' )
@@ -2423,6 +2494,11 @@ class StaticPage(models.Model):
         managed = False
         db_table = 'static_pages'
 
+    def __unicode__(self):
+        return u'%s - Path: %s, Journal: %s' % (self.id, self.path, self.journal.id)
+
+    def __repr__(self):
+        return u'%s - Path: %s, Journal: %s' % (self.id, self.path, self.journal.id)
 
 class SubscriptionTypeSetting(models.Model):
     type = models.OneToOneField('SubscriptionType', db_column='type_id')
