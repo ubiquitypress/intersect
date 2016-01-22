@@ -862,7 +862,7 @@ class ControlledVocab(models.Model):
         return u' %s - Symbolic: %s, Assoc (ID: %s, Type: %s)' % (self.id, self.symbolic, self.assoc_id, self.assoc_type)
 
 class CustomIssueOrder(models.Model):
-    issue = models.OneToOneField('Issue', db_column = 'issue_id')
+    issue = models.OneToOneField('Issue', db_column = 'issue_id', primary_key = True)
     journal = models.ForeignKey('Journal', db_column='journal_id')
     seq = models.FloatField()
 
@@ -871,11 +871,16 @@ class CustomIssueOrder(models.Model):
         app_label='api'
         managed = False
         db_table = 'custom_issue_orders'
+    
+    def __unicode__(self):
+        return u' Issue: %s - Journal: %s, Seq: %s' % (self.issue.id, self.journal.id, self.seq)
 
+    def __repr__(self):
+        return u' Issue: %s - Journal: %s, Seq: %s' % (self.issue.id, self.journal.id, self.seq)
 
 class CustomSectionOrder(models.Model):
-    issue = models.ForeignKey('Issue', db_column = 'issue_id')
-    section_id = models.BigIntegerField()
+    issue = models.OneToOneField('Issue', db_column = 'issue_id', primary_key = True)
+    section = models.OneToOneField('Section', db_column = 'section_id', unique = True)
     seq = models.FloatField()
 
     class Meta:
@@ -883,8 +888,13 @@ class CustomSectionOrder(models.Model):
         app_label='api'
         managed = False
         db_table = 'custom_section_orders'
-        unique_together = (('issue', 'section_id'),)
+        unique_together = (('issue', 'section'),)
+  
+    def __unicode__(self):
+        return u' Issue: %s - Section: %s, Seq: %s' % (self.issue.id, self.journal.id, self.seq)
 
+    def __repr__(self):
+        return u' Issue: %s - Section: %s, Seq: %s' % (self.issue.id, self.journal.id, self.seq)
 
 class DataObjectTombstoneOaiSetObject(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'object_id' )
@@ -898,11 +908,16 @@ class DataObjectTombstoneOaiSetObject(models.Model):
         managed = False
         db_table = 'data_object_tombstone_oai_set_objects'
 
+    def __unicode__(self):
+        return u' %s - Tombstone: %s, Assoc (ID: %s, Type: %s)' % (self.id, self.tombstone.id, self.assoc_id, self.assoc_type)
+
+    def __repr__(self):
+        return u' %s - Tombstone: %s, Assoc (ID: %s, Type: %s)' % (self.id, self.tombstone.id, self.assoc_id, self.assoc_type)
 
 class DataObjectTombstoneSetting(models.Model):
-    tombstone = models.ForeignKey('DataObjectTombstone', db_column = 'tombstone_id')
-    locale = models.CharField(max_length=5)
-    setting_name = models.CharField(max_length=255)
+    tombstone = models.ForeignKey('DataObjectTombstone', db_column = 'tombstone_id', primary_key = True)
+    locale = models.CharField(max_length=5, unique = True)
+    setting_name = models.CharField(max_length=255, unique = True)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 
@@ -913,6 +928,11 @@ class DataObjectTombstoneSetting(models.Model):
         db_table = 'data_object_tombstone_settings'
         unique_together = (('tombstone', 'locale', 'setting_name'),)
 
+    def __unicode__(self):
+        return u' %s - Tombstone: %s, Setting: %s' % (self.pk, self.tombstone.id, self.setting_name)
+
+    def __repr__(self):
+        return u' %s - Tombstone: %s, Setting: %s' % (self.pk, self.tombstone.id, self.setting_name)
 
 class DataObjectTombstone(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'tombstone_id' )
@@ -928,6 +948,11 @@ class DataObjectTombstone(models.Model):
         managed = False
         db_table = 'data_object_tombstones'
 
+    def __unicode__(self):
+        return u' %s - Data Object: %s, Set Name: %s' % (self.id, self.data_object_id, self.set_name)
+
+    def __repr__(self):
+        return u' %s - Data Object: %s, Set Name: %s' % (self.id, self.data_object_id, self.set_name)
 
 class DataverseFile(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'dvfile_id' )
@@ -942,6 +967,11 @@ class DataverseFile(models.Model):
         managed = False
         db_table = 'dataverse_files'
 
+    def __unicode__(self):
+        return u' %s - Supp: %s, Submission: %s' % (self.id, self.supp_id, self.submission_id)
+
+    def __repr__(self):
+        return u' %s - Supp: %s, Submission: %s' % (self.id, self.supp_id, self.submission_id)
 
 class DataverseStudy(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'study_id' )
@@ -958,6 +988,11 @@ class DataverseStudy(models.Model):
         managed = False
         db_table = 'dataverse_studies'
 
+    def __unicode__(self):
+        return u' %s Submission: %s' % (self.id, self.submission_id)
+
+    def __repr__(self):
+        return u' %s Submission: %s' % (self.id, self.submission_id)
 
 class DraftDecision(models.Model):
     key_val = models.CharField(max_length=45)
@@ -977,6 +1012,11 @@ class DraftDecision(models.Model):
         managed = False
         db_table = 'draft_decisions'
 
+    def __unicode__(self):
+        return u' %s Key val: %s' % (self.pk, self.key_val)
+
+    def __repr__(self):
+        return u' %s Key val: %s' % (self.pk, self.key_val)
 
 class EditAssignment(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'edit_id' )
@@ -994,6 +1034,11 @@ class EditAssignment(models.Model):
         managed = False
         db_table = 'edit_assignments'
 
+    def __unicode__(self):
+        return u' %s Article ID: %s, Editor: %s %s' % (self.id, self.article.id, self.editor.first_name, self.editor.last_name)
+
+    def __repr__(self):
+        return u' %s Article ID: %s, Editor: %s %s' % (self.id, self.article.id, self.editor.first_name, self.editor.last_name)
 
 class EditDecision(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'edit_decision_id' )
@@ -1009,6 +1054,11 @@ class EditDecision(models.Model):
         managed = False
         db_table = 'edit_decisions'
 
+    def __unicode__(self):
+        return u' %s Article ID: %s, Editor: %s %s' % (self.id, self.article.id, self.editor.first_name, self.editor.last_name)
+
+    def __repr__(self):
+        return u' %s Article ID: %s, Editor: %s %s' % (self.id, self.article.id, self.editor.first_name, self.editor.last_name)
 
 class EmailLog(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'log_id' )
@@ -1031,10 +1081,15 @@ class EmailLog(models.Model):
         managed = False
         db_table = 'email_log'
 
+    def __unicode__(self):
+        return u' %s Sender: %s %s Subject: %s' % (self.id, self.sender.first_name, self.sender.last_name, self.subject)
+
+    def __repr__(self):
+        return u' %s Sender: %s %s Subject: %s' % (self.id, self.sender.first_name, self.sender.last_name, self.subject)
 
 class EmailLogUser(models.Model):
-    email_log = models.ForeignKey('EmailLog', db_column = 'email_log_id')
-    user = models.ForeignKey('User', db_column = 'user_id' )
+    email_log = models.OneToOneField('EmailLog', db_column = 'email_log_id', primary_key = True)
+    user = models.OneToOneField('User', db_column = 'user_id', primary_key = True )
 
     class Meta:
         verbose_name_plural = 'EmailLogUsers' 
@@ -1042,7 +1097,12 @@ class EmailLogUser(models.Model):
         managed = False
         db_table = 'email_log_users'
         unique_together = (('email_log', 'user'),)
+  
+    def __unicode__(self):
+        return u' Log: %s Sender: %s %s' % (self.email_log.id, self.user.first_name, self.user.last_name)
 
+    def __repr__(self):
+        return u' Log: %s Sender: %s %s' % (self.email_log.id, self.user.first_name, self.user.last_name)
 
 class EmailTemplate(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'email_id' )
@@ -1058,12 +1118,17 @@ class EmailTemplate(models.Model):
         db_table = 'email_templates'
         unique_together = (('email_key', 'assoc_type', 'assoc_id'),)
 
+    def __unicode__(self):
+        return u' %s, Assoc (ID: %s, Type: %s) - %s' % (self.id, self.assoc_id, self.assoc_type, self.email_key)
+
+    def __repr__(self):
+        return u' %s, Assoc (ID: %s, Type: %s) - %s' % (self.id, self.assoc_id, self.assoc_type, self.email_key)
 
 class EmailTemplatesData(models.Model):
-    email_key = models.CharField(max_length=64)
-    locale = models.CharField(max_length=5)
-    assoc_type = models.BigIntegerField(blank=True, null=True)
-    assoc_id = models.BigIntegerField(blank=True, null=True)
+    email_key = models.CharField(max_length=64, primary_key = True)
+    locale = models.CharField(max_length=5, primary_key = True)
+    assoc_type = models.BigIntegerField(blank=True, null=True, unique = True)
+    assoc_id = models.BigIntegerField(blank=True, null=True, unique = True)
     subject = models.CharField(max_length=120)
     body = models.TextField(blank=True, null=True)
 
@@ -1074,6 +1139,11 @@ class EmailTemplatesData(models.Model):
         db_table = 'email_templates_data'
         unique_together = (('email_key', 'locale', 'assoc_type', 'assoc_id'),)
 
+    def __unicode__(self):
+        return u' %s, Assoc (ID: %s, Type: %s) - Subject: %s' % (self.pk, self.assoc_id, self.assoc_type, self.subject)
+
+    def __repr__(self):
+        return u' %s, Assoc (ID: %s, Type: %s) - Subject: %s' % (self.pk, self.assoc_id, self.assoc_type, self.subject)
 
 class EmailTemplatesDefault(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'email_id' )
@@ -1089,10 +1159,15 @@ class EmailTemplatesDefault(models.Model):
         managed = False
         db_table = 'email_templates_default'
 
+    def __unicode__(self):
+        return u' %s, Email Key: %s' % (self.id, self.email_key)
+
+    def __repr__(self):
+        return u' %s, Email Key: %s' % (self.id, self.email_key)
 
 class EmailTemplatesDefaultData(models.Model):
-    email_key = models.CharField(max_length=64)
-    locale = models.CharField(max_length=5)
+    email_key = models.CharField(max_length=64, primary_key = True)
+    locale = models.CharField(max_length=5, primary_key = True)
     subject = models.CharField(max_length=120)
     body = models.TextField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
@@ -1104,6 +1179,11 @@ class EmailTemplatesDefaultData(models.Model):
         db_table = 'email_templates_default_data'
         unique_together = (('email_key', 'locale'),)
 
+    def __unicode__(self):
+        return u'Locale %s, Email Key: %s' % (self.locale, self.email_key)
+
+    def __repr__(self):
+        return u'Locale %s, Email Key: %s' % (self.locale, self.email_key)
 
 class EventLog(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'log_id' )
@@ -1122,10 +1202,15 @@ class EventLog(models.Model):
         managed = False
         db_table = 'event_log'
 
+    def __unicode__(self):
+        return u'%s -  Assoc (ID: %s, Type: %s), Date: %s' % (self.id, self.assoc_id, self.assoc_type, self.date_logged)
+
+    def __repr__(self):
+        return u'%s -  Assoc (ID: %s, Type: %s), Date: %s' % (self.id, self.assoc_id, self.assoc_type, self.date_logged)
 
 class EventLogSetting(models.Model):
-    event_log = models.ForeignKey('EventLog', db_column = 'log_id' )
-    setting_name = models.CharField(max_length=255)
+    event_log = models.OneToOneField('EventLog', db_column = 'log_id',primary_key = True )
+    setting_name = models.CharField(max_length=255, primary_key = True)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 
@@ -1136,11 +1221,16 @@ class EventLogSetting(models.Model):
         db_table = 'event_log_settings'
         unique_together = (('event_log', 'setting_name'),)
 
+    def __unicode__(self):
+        return u'Setting: %s, Log: %s' % (self.setting_name, self.event_log.id)
+
+    def __repr__(self):
+        return u'Setting: %s, Log: %s' % (self.setting_name, self.event_log.id)
 
 class ExternalFeedSetting(models.Model):
-    feed = models.ForeignKey('ExternalFeed', db_column='feed_id')
-    locale = models.CharField(max_length=5)
-    setting_name = models.CharField(max_length=255)
+    feed = models.OneToOneField('ExternalFeed', db_column='feed_id', primary_key = True)
+    locale = models.CharField(max_length=5, primary_key = True)
+    setting_name = models.CharField(max_length=255, primary_key = True)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 
@@ -1151,6 +1241,11 @@ class ExternalFeedSetting(models.Model):
         db_table = 'external_feed_settings'
         unique_together = (('feed', 'locale', 'setting_name'),)
 
+    def __unicode__(self):
+        return u'Setting: %s, Feed: %s' % (self.setting_name, self.feed.id)
+
+    def __repr__(self):
+        return u'Setting: %s, Feed: %s' % (self.setting_name, self.feed.id)
 
 class ExternalFeed(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'feed_id' )
@@ -1168,6 +1263,11 @@ class ExternalFeed(models.Model):
         managed = False
         db_table = 'external_feeds'
 
+    def __unicode__(self):
+        return u'%s - Journal: %s, Seq: %s' % (self.id, self.journal.id, self.seq)
+
+    def __repr__(self):
+        return u'%s - Journal: %s, Seq: %s' % (self.id, self.journal.id, self.seq)
 
 class FilterGroup(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'filter_group_id' )
@@ -1183,11 +1283,16 @@ class FilterGroup(models.Model):
         managed = False
         db_table = 'filter_groups'
 
+    def __unicode__(self):
+        return u'%s - Name: %s' % (self.id, self.display_name)
+
+    def __repr__(self):
+        return u'%s - Name: %s' % (self.id, self.display_name)
 
 class FilterSetting(models.Model):
-    filter = models.ForeignKey('Filter', db_column = 'filter_id')
-    locale = models.CharField(max_length=5)
-    setting_name = models.CharField(max_length=255)
+    filter = models.ForeignKey('Filter', db_column = 'filter_id', primary_key = True)
+    locale = models.CharField(max_length=5, primary_key = True)
+    setting_name = models.CharField(max_length=255, primary_key = True)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 
@@ -1198,6 +1303,11 @@ class FilterSetting(models.Model):
         db_table = 'filter_settings'
         unique_together = (('filter', 'locale', 'setting_name'),)
 
+    def __unicode__(self):
+        return u'Filter: %s - Setting: %s' % (self.filter.id, self.setting_name)
+
+    def __repr__(self):
+        return u'Filter: %s - Setting: %s' % (self.filter.id, self.setting_name)
 
 class Filter(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'filter_id' )
@@ -1215,6 +1325,11 @@ class Filter(models.Model):
         managed = False
         db_table = 'filters'
 
+    def __unicode__(self):
+        return u'%s - Context: %s, Name: %s' % (self.id, self.context_id, self.display_name)
+
+    def __repr__(self):
+        return u'%s - Context: %s, Name: %s' % (self.id, self.context_id, self.display_name)
 
 class Gift(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'gift_id' )
