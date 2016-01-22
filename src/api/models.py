@@ -323,8 +323,8 @@ class ArticleSearchObject(models.Model):
 
 class ArticleSetting(models.Model):
     article = models.OneToOneField('Article', db_column='article_id')
-    locale = models.CharField(primary_key = True, max_length=5)
-    setting_name = models.CharField(primary_key = True, max_length=255)
+    locale = models.CharField(max_length=5)
+    setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 
@@ -2514,6 +2514,17 @@ class SubscriptionTypeSetting(models.Model):
         db_table = 'subscription_type_settings'
         unique_together = (('type', 'locale', 'setting_name'),)
 
+    def __unicode__(self):
+        if self.locale:
+            return u'Type: %s - Setting: %s (%s)' % (self.type.id, self.setting_name, self.locale)
+        else:
+            return u'Type: %s - Setting: %s' % (self.type.id, self.setting_name)
+
+    def __repr__(self):
+        if self.locale:
+            return u'Type: %s - Setting: %s (%s)' % (self.type.id, self.setting_name, self.locale)
+        else:
+            return u'Type: %s - Setting: %s' % (self.type.id, self.setting_name)
 
 class SubscriptionType(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'type_id' )
@@ -2534,6 +2545,11 @@ class SubscriptionType(models.Model):
         managed = False
         db_table = 'subscription_types'
 
+    def __unicode__(self):
+        return u'%s - Cost: %f, Journal: %s' % (self.id, self.cost, self.journal.id)
+
+    def __repr__(self):
+        return u'%s - Cost: %f, Journal: %s' % (self.id, self.cost, self.journal.id)
 
 class Subscription(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'subscription_id' )
@@ -2552,7 +2568,12 @@ class Subscription(models.Model):
         app_label='api'
         managed = False
         db_table = 'subscriptions'
+   
+    def __unicode__(self):
+        return u'%s - Type: %s, Journal: %s' % (self.id, self.type.id, self.journal.id)
 
+    def __repr__(self):
+        return u'%s - Type: %s, Journal: %s' % (self.id, self.type.id, self.journal.id)
 
 class Taxonomy(models.Model):
     name = models.CharField(max_length=100)
@@ -2565,6 +2586,11 @@ class Taxonomy(models.Model):
         managed = False
         db_table = 'taxonomy'
 
+    def __unicode__(self):
+        return u'%s - Name: %s' % (self.pk, self.name)
+
+    def __repr__(self):
+        return u'%s - Name: %s' % (self.pk, self.name)
 
 class TaxonomyArticle(models.Model):
     taxonomy = models.ForeignKey('Taxonomy', db_column = 'taxonomy_id')
@@ -2575,7 +2601,12 @@ class TaxonomyArticle(models.Model):
         app_label='api'
         managed = False
         db_table = 'taxonomy_article'
+   
+    def __unicode__(self):
+        return u'%s - Taxonomy: %s, Article: %s' % (self.pk, self.taxonomy.name, self.article.id)
 
+    def __repr__(self):
+        return u'%s - Taxonomy: %s, Article: %s' % (self.pk, self.taxonomy.name, self.article.id)
 
 class TaxonomyEditor(models.Model):
     taxonomy = models.ForeignKey('Taxonomy', db_column = 'taxonomy_id')
@@ -2586,7 +2617,12 @@ class TaxonomyEditor(models.Model):
         app_label='api'
         managed = False
         db_table = 'taxonomy_editor'
+   
+    def __unicode__(self):
+        return u'%s - Taxonomy: %s, Editor: %s %s' % (self.pk, self.taxonomy.name, self.user.first_name, self.user.last_name)
 
+    def __repr__(self):
+        return u'%s - Taxonomy: %s, Editor: %s %s' % (self.pk, self.taxonomy.name, self.user.first_name, self.user.last_name)
 
 class TemporaryFile(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'file_id' )
@@ -2602,7 +2638,12 @@ class TemporaryFile(models.Model):
         app_label='api'
         managed = False
         db_table = 'temporary_files'
+    
+    def __unicode__(self):
+        return u'%s - %s, User: %s %s' % (self.id, self.file_name, self.user.first_name, self.user.last_name)
 
+    def __repr__(self):
+        return u'%s - %s, User: %s %s' % (self.id, self.file_name, self.user.first_name, self.user.last_name)
 
 class Thesis(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'thesis_id' )
@@ -2642,7 +2683,12 @@ class Thesis(models.Model):
         app_label='api'
         managed = False
         db_table = 'theses'
+    
+    def __unicode__(self):
+        return u'%s - %s, Journal: %s, University: %s, Degree: %s' % (self.id, self.title, self.journal.id, self.university, self.degree)
 
+    def __repr__(self):
+        return u'%s - %s, Journal: %s, University: %s, Degree: %s' % (self.id, self.title, self.journal.id, self.university, self.degree)
 
 class UsageStatsTemporaryRecord(models.Model):
     assoc_id = models.BigIntegerField()
@@ -2663,23 +2709,28 @@ class UsageStatsTemporaryRecord(models.Model):
 
 
 class UserInterest(models.Model):
-    user = models.ForeignKey('User', db_column = 'user_id' )
-    controlled_vocab_entry_id = models.BigIntegerField()
+    user = models.ForeignKey('User', db_column = 'user_id', primary_key=True)
+    controlled_vocab_entry = models.ForeignKey('ControlledVocabEntry', primary_key=True, db_column ='controlled_vocab_entry_id')
 
     class Meta:
         verbose_name_plural = 'UserInterests' 
         app_label='api'
         managed = False
         db_table = 'user_interests'
-        unique_together = (('user', 'controlled_vocab_entry_id'),)
+        unique_together = (('user', 'controlled_vocab_entry'),)
 
+    def __unicode__(self):
+        return u'%s %s - %s' % (self.user.first_name, self.user.last_name, self.controlled_vocab_entry.id)
+
+    def __repr__(self):
+        return u'%s %s - %s' % (self.user.first_name, self.user.last_name, self.controlled_vocab_entry.id)
 
 class UserSetting(models.Model):
-    user = models.ForeignKey('User', db_column = 'user_id' )
-    locale = models.CharField(max_length=5)
-    setting_name = models.CharField(max_length=255)
-    assoc_type = models.BigIntegerField(blank=True, null=True)
-    assoc_id = models.BigIntegerField(blank=True, null=True)
+    user = models.ForeignKey('User', db_column = 'user_id', primary_key = True )
+    locale = models.CharField(max_length=5, primary_key = True)
+    setting_name = models.CharField(max_length=255, primary_key = True)
+    assoc_type = models.BigIntegerField(blank=True, null=True, unique = True)
+    assoc_id = models.BigIntegerField(blank=True, null=True, unique = True)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 
@@ -2690,6 +2741,11 @@ class UserSetting(models.Model):
         db_table = 'user_settings'
         unique_together = (('user', 'locale', 'setting_name', 'assoc_type', 'assoc_id'),)
 
+    def __unicode__(self):
+        return u'%s %s - %s' % (self.user.first_name, self.user.last_name, self.setting_name)
+
+    def __repr__(self):
+        return u'%s %s - %s' % (self.user.first_name, self.user.last_name, self.setting_name)
 
 class User(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'user_id' )
@@ -2735,14 +2791,14 @@ class User(models.Model):
 
 
 class Version(models.Model):
-    major = models.IntegerField()
-    minor = models.IntegerField()
-    revision = models.IntegerField()
-    build = models.IntegerField()
+    major = models.IntegerField(primary_key = True)
+    minor = models.IntegerField(primary_key = True)
+    revision = models.IntegerField(primary_key = True)
+    build = models.IntegerField(primary_key = True)
     date_installed = models.DateTimeField()
     current = models.IntegerField()
-    product_type = models.CharField(max_length=30, blank=True, null=True)
-    product = models.CharField(max_length=30, blank=True, null=True)
+    product_type = models.CharField(max_length=30, blank=True, null=True, unique = True)
+    product = models.CharField(max_length=30, blank=True, null=True, unique = True)
     product_class_name = models.CharField(max_length=80, blank=True, null=True)
     lazy_load = models.IntegerField()
     sitewide = models.IntegerField()
@@ -2753,3 +2809,9 @@ class Version(models.Model):
         managed = False
         db_table = 'versions'
         unique_together = (('product_type', 'product', 'major', 'minor', 'revision', 'build'),)
+
+    def __unicode__(self):
+        return u'%s - Major: %s, Minor: %s, Build: %s, Revision: %s' % (self.product_type, self.major, self.minor, self.build, self.revision)
+
+    def __repr__(self):
+        return u'%s - Major: %s, Minor: %s, Build: %s, Revision: %s' % (self.product_type, self.major, self.minor, self.build, self.revision)
