@@ -8,7 +8,8 @@
 # Also note: You'll have to insert the output of 'django-admin sqlcustom [app_label]'
 # into your database.
 from __future__ import unicode_literals
-
+from time import strftime
+import datetime
 from django.db import models
 
 
@@ -26,11 +27,17 @@ class AccessKey(models.Model):
         managed = False
         db_table = 'access_keys'
 
+    def __unicode__(self):
+        return u'%s %s - Expiring on : %s' % (self.user.first_name, self.user.last_name, self.expiry_date)
+
+    def __repr__(self):
+        return u'%s %s - Expiring on : %s' % (self.user.first_name, self.user.last_name, self.expiry_date)
+
 
 class AnnouncementSetting(models.Model):
-    announcement = models.ForeignKey('Announcement', db_column='announcement_id')
-    locale = models.CharField(max_length=5)
-    setting_name = models.CharField(max_length=255)
+    announcement = models.OneToOneField('Announcement', db_column='announcement_id')
+    locale = models.CharField(max_length=5, primary_key = True)
+    setting_name = models.CharField(max_length=255, primary_key = True)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 
@@ -41,11 +48,17 @@ class AnnouncementSetting(models.Model):
         db_table = 'announcement_settings'
         unique_together = (('announcement', 'locale', 'setting_name'),)
 
+    def __unicode__(self):
+        return u'Announcement:%s, Locale: %s, Expiring on %s' % (self.announcement.pk, self.locale, self.announcement.date_expire)
+
+    def __repr__(self):
+        return u'Announcement:%s, Locale: %s, Expiring on %s' % (self.announcement.pk, self.locale, self.announcement.date_expire)
+
 
 class AnnouncementTypeSetting(models.Model):
     type = models.OneToOneField('AnnouncementType', db_column='type_id')
-    locale = models.CharField(max_length=5)
-    setting_name = models.CharField(max_length=255)
+    locale = models.CharField(max_length=5, primary_key = True)
+    setting_name = models.CharField(max_length=255, primary_key = True)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 
@@ -55,6 +68,12 @@ class AnnouncementTypeSetting(models.Model):
         managed = False
         db_table = 'announcement_type_settings'
         unique_together = (('type', 'locale', 'setting_name'),)
+
+    def __unicode__(self):
+        return u'Type:%s, Locale: %s, Name: %s' % (self.type.pk, self.locale, self.setting_name)
+
+    def __repr__(self):
+        return u'Type:%s, Locale: %s, Name: %s' % (self.type.pk, self.locale, self.setting_name)
 
 
 class AnnouncementType(models.Model):
@@ -67,6 +86,12 @@ class AnnouncementType(models.Model):
         app_label='api'
         managed = False
         db_table = 'announcement_types'
+
+    def __unicode__(self):
+        return u'Type:%s, Assoc ID: %s' % (self.type.pk, self.assoc_id)
+
+    def __repr__(self):
+        return u'Type:%s, Assoc ID: %s' % (self.type.pk, self.assoc_id)
 
 
 class Announcement(models.Model):
@@ -83,6 +108,11 @@ class Announcement(models.Model):
         managed = False
         db_table = 'announcements'
 
+    def __unicode__(self):
+        return u'%s, Assoc (ID: %s, Type: %s), Expiring on: %s' % (self.id, self.assoc_id, self.assoc_type, self.date_expire)
+
+    def __repr__(self):
+        return u'%s, Assoc (ID: %s, Type: %s), Expiring on: %s' % (self.id, self.assoc_id, self.assoc_type, self.date_expire)
 
 class ArticleComment(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'comment_id' )
@@ -103,6 +133,11 @@ class ArticleComment(models.Model):
         managed = False
         db_table = 'article_comments'
 
+    def __unicode__(self):
+        return u'%s - Article: %s' % (self.id, self.article.id)
+
+    def __repr__(self):
+        return u'%s - Article: %s' % (self.id, self.article.id)
 
 class ArticleEventLog(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'log_id' )
@@ -122,6 +157,11 @@ class ArticleEventLog(models.Model):
         managed = False
         db_table = 'article_event_log'
 
+    def __unicode__(self):
+        return u'%s - Article: %s, Log level: %s. IP: %s' % (self.id, self.article.id,self.log_level,self.ip_address)
+
+    def __repr__(self):
+        return u'%s - Article: %s, Log level: %s. IP: %s' % (self.id, self.article.id,self.log_level,self.ip_address)
 
 class ArticleFile(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'file_id' )
@@ -147,11 +187,16 @@ class ArticleFile(models.Model):
         db_table = 'article_files'
         unique_together = (('id', 'revision'),)
 
+    def __unicode__(self):
+        return u'%s, Name: %s - Article: %s' % (self.id, self.file_name, self.article.id)
+
+    def __repr__(self):
+        return u'%s, Name: %s - Article: %s' % (self.id, self.file_name, self.article.id)
 
 class ArticleGalleySetting(models.Model):
-    galley = models.ForeignKey('ArticleGalley', db_column='galley_id')
-    locale = models.CharField(max_length=5)
-    setting_name = models.CharField(max_length=255)
+    galley = models.OneToOneField('ArticleGalley', db_column='galley_id')
+    locale = models.CharField(max_length=5, primary_key = True)
+    setting_name = models.CharField(max_length=255, primary_key = True)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 
@@ -180,10 +225,15 @@ class ArticleGalley(models.Model):
         managed = False
         db_table = 'article_galleys'
 
+    def __unicode__(self):
+        return u'%s - Article: %s, Label: %s' % (self.id, self.article.id, self.label)
+
+    def __repr__(self):
+        return u'%s - Article: %s, Label: %s' % (self.id, self.article.id, self.label)
 
 class ArticleHtmlGalleyImage(models.Model):
-    galley =  models.ForeignKey('ArticleGalley', db_column='galley_id')
-    file = models.ForeignKey('ArticleFile', db_column='file_id')
+    galley =  models.ForeignKey('ArticleGalley', db_column='galley_id', primary_key = True)
+    file = models.ForeignKey('ArticleFile', db_column='file_id', primary_key = True)
 
     class Meta:
         verbose_name_plural = 'ArticleHtmlGalleyImages' 
@@ -192,6 +242,11 @@ class ArticleHtmlGalleyImage(models.Model):
         db_table = 'article_html_galley_images'
         unique_together = (('galley', 'file'),)
 
+    def __unicode__(self):
+        return u'%s - Galley: %s, File: %s' % (self.pk, self.galley.id, self.file.id)
+
+    def __repr__(self):
+        return u'%s - Galley: %s, File: %s' % (self.pk, self.galley.id, self.file.id)
 
 class ArticleNote(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'note_id' )
@@ -208,7 +263,12 @@ class ArticleNote(models.Model):
         app_label='api'
         managed = False
         db_table = 'article_notes'
+ 
+    def __unicode__(self):
+        return u'%s - Article: %s, Title: %s' % (self.id, self.article.id, self.title)
 
+    def __repr__(self):
+        return u'%s - Article: %s, Title: %s' % (self.id, self.article.id, self.title)
 
 class ArticleSearchKeywordList(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'keyword_id' )
@@ -219,7 +279,12 @@ class ArticleSearchKeywordList(models.Model):
         app_label='api'
         managed = False
         db_table = 'article_search_keyword_list'
+        
+    def __unicode__(self):
+        return u'%s - Keyword text: %s' % (self.id, self.keyword_text)
 
+    def __repr__(self):
+        return u'%s - Keyword text: %s' % (self.id, self.keyword_text)
 
 class ArticleSearchObjectKeyword(models.Model):
     object = models.ForeignKey('ArticleSearchObject', db_column='object_id')
@@ -2086,6 +2151,12 @@ class User(models.Model):
         app_label='api'
         managed = False
         db_table = 'users'
+
+    def __unicode__(self):
+        return u'%s - %s %s' % (self.pk, self.first_name, self.last_name)
+
+    def __repr__(self):
+        return u'%s - %s %s' % (self.pk, self.first_name, self.last_name)
 
 
 class Version(models.Model):
