@@ -24,6 +24,9 @@ router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
 router.register(r'authors', views.AuthorViewSet)
 
+router.register(r'articles', views.ArticleViewSet)
+router.register(r'issues', views.IssueViewSet)
+
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^admin/', include(admin.site.urls)),

@@ -25,3 +25,17 @@ class AuthorViewSet(viewsets.ModelViewSet):
     """
     queryset = Author.objects.all().order_by('-id')
     serializer_class = AuthorSerializer
+
+class ArticleViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = Article.objects.all().order_by('-id')
+    serializer_class = ArticleSerializer
+
+class IssueViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = Issue.objects.all().order_by('-id')
+    serializer_class = IssueSerializer
