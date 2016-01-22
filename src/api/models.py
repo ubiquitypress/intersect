@@ -696,7 +696,7 @@ class Citation(models.Model):
         return u' %s - Assoc (ID: %s, Type: %s), Seq: %s' % (self.id, self.assoc_id, self.assoc_type, self.seq)
 
 class Collection(models.Model):
-    id = models.IntegerField(primary_key = True, db_column = 'collection_id' )
+    id = models.IntegerField(primary_key = True)
     name = models.CharField(max_length=150)
     abbrev = models.CharField(max_length=150)
     short_description = models.TextField(blank=True, null=True)
@@ -713,11 +713,16 @@ class Collection(models.Model):
         app_label='api'
         managed = False
         db_table = 'collection'
+   
+    def __unicode__(self):
+        return u' %s - %s' % (self.id, self.name)
 
+    def __repr__(self):
+        return u' %s - %s' % (self.id, self.name)
 
 class CollectionArticle(models.Model):
-    collection = models.ForeignKey('Collection', db_column = 'collection_id')
-    published_article = models.ForeignKey('Article', db_column='article_id')
+    collection = models.OneToOneField('Collection', db_column = 'collection_id', primary_key=True)
+    published_article = models.OneToOneField('Article', db_column='published_article_id', primary_key=True)
 
     class Meta:
         verbose_name_plural = 'CollectionArticles' 
@@ -725,11 +730,16 @@ class CollectionArticle(models.Model):
         managed = False
         db_table = 'collection_article'
         unique_together = (('collection', 'published_article'),)
+    
+    def __unicode__(self):
+        return u'Published Article: %s' % (self.published_article.id)
 
+    def __repr__(self):
+        return u'Published Article: %s' % (self.published_article.id)
 
 class CollectionUser(models.Model):
-    collection = models.ForeignKey('Collection', db_column = 'collection_id')
-    user = models.ForeignKey('User', db_column = 'user_id' )
+    collection = models.OneToOneField('Collection', db_column = 'collection_id', unique=True)
+    user = models.OneToOneField('User', db_column = 'user_id', primary_key=True )
     role_name = models.CharField(max_length=50)
 
     class Meta:
@@ -738,6 +748,12 @@ class CollectionUser(models.Model):
         managed = False
         db_table = 'collection_user'
         unique_together = (('collection', 'user'),)
+  
+    def __unicode__(self):
+        return u' %s - %s %s' % (self.pk, self.user.first_name, self.user.last_name)
+
+    def __repr__(self):
+        return u' %s - %s %s' % (self.pk, self.user.first_name, self.user.last_name)
 
 
 class Comment(models.Model):
@@ -759,7 +775,12 @@ class Comment(models.Model):
         app_label='api'
         managed = False
         db_table = 'comments'
+  
+    def __unicode__(self):
+        return u' %s - Submission: %s, Title: %s' % (self.id, self.submission_id, self.title)
 
+    def __repr__(self):
+        return u' %s - Submission: %s, Title: %s' % (self.id, self.submission_id, self.title)
 
 class CompletedPayment(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'completed_payment_id' )
@@ -777,7 +798,12 @@ class CompletedPayment(models.Model):
         app_label='api'
         managed = False
         db_table = 'completed_payments'
+  
+    def __unicode__(self):
+        return u' %s - Type: %s, Journal: %s' % (self.id, self.payment_type, self.journal.id)
 
+    def __repr__(self):
+        return u' %s - Type: %s, Journal: %s' % (self.id, self.payment_type, self.journal.id)
 
 class ControlledVocabEntry(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'controlled_vocab_entry_id' )
@@ -790,11 +816,16 @@ class ControlledVocabEntry(models.Model):
         managed = False
         db_table = 'controlled_vocab_entries'
 
+    def __unicode__(self):
+        return u' %s - Vocab: %s, Seq: %s' % (self.id, self.controlled_vocab.id, self.seq)
+
+    def __repr__(self):
+        return u' %s - Vocab: %s, Seq: %s' % (self.id, self.controlled_vocab.id, self.seq)
 
 class ControlledVocabEntrySetting(models.Model):
-    controlled_vocab_entry = models.ForeignKey('ControlledVocabEntry', db_column = 'controlled_vocab_entry_id')
-    locale = models.CharField(max_length=5)
-    setting_name = models.CharField(max_length=255)
+    controlled_vocab_entry = models.OneToOneField('ControlledVocabEntry', db_column = 'controlled_vocab_entry_id',primary_key = True)
+    locale = models.CharField(max_length=5, unique = True)
+    setting_name = models.CharField(max_length=255, unique = True)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 
@@ -804,7 +835,12 @@ class ControlledVocabEntrySetting(models.Model):
         managed = False
         db_table = 'controlled_vocab_entry_settings'
         unique_together = (('controlled_vocab_entry', 'locale', 'setting_name'),)
+    
+    def __unicode__(self):
+        return u' %s - Vocab Entry: %s, Setting: %s' % (self.pk, self.controlled_vocab_entry.id, self.setting_name)
 
+    def __repr__(self):
+        return u' %s - Vocab Entry: %s, Setting: %s' % (self.pk, self.controlled_vocab_entry.id, self.setting_name)
 
 class ControlledVocab(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'controlled_vocab_id' )
@@ -818,7 +854,12 @@ class ControlledVocab(models.Model):
         managed = False
         db_table = 'controlled_vocabs'
         unique_together = (('symbolic', 'assoc_type', 'assoc_id'),)
+  
+    def __unicode__(self):
+        return u' %s - Symbolic: %s, Assoc (ID: %s, Type: %s)' % (self.id, self.symbolic, self.assoc_id, self.assoc_type)
 
+    def __repr__(self):
+        return u' %s - Symbolic: %s, Assoc (ID: %s, Type: %s)' % (self.id, self.symbolic, self.assoc_id, self.assoc_type)
 
 class CustomIssueOrder(models.Model):
     issue = models.OneToOneField('Issue', db_column = 'issue_id')
