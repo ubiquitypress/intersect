@@ -18,6 +18,13 @@ class AuthorSerializer(serializers.HyperlinkedModelSerializer):
         model = Author
         fields = ('id', 'first_name', 'middle_name','last_name','country','email','user_group')
 
+
+class JournalSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Journal
+        fields = ('id', 'path', 'seq','primary_locale','enabled')
+
+
 class ArticleSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Article

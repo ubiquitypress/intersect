@@ -24,6 +24,7 @@ router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
 router.register(r'authors', views.AuthorViewSet)
 
+router.register(r'journals', views.JournalViewSet)
 router.register(r'articles', views.ArticleViewSet)
 router.register(r'issues', views.IssueViewSet)
 
