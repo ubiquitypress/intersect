@@ -6,7 +6,7 @@ from api.models import *
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('url', 'username', 'email')
+        fields = ('id','url', 'username','first_name', 'middle_name','last_name', 'email')
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -30,8 +30,18 @@ class ArticleSerializer(serializers.HyperlinkedModelSerializer):
         model = Article
         fields = ('id', 'journal', 'section_id','user','date_submitted','pages','locale','language')
 
+
+class ArticleSettingSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = ArticleSetting
+        fields = ('article', 'locale', 'setting_name','setting_value','setting_type')
+
 class IssueSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Issue
         fields = ('id', 'journal', 'volume','number','year','published', 'show_volume','show_number','show_year', 'show_title')
 
+class IssueSettingSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = IssueSetting
+        fields = ('issue', 'locale', 'setting_name','setting_value','setting_type')
