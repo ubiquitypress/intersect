@@ -1531,9 +1531,9 @@ class IssueGalley(models.Model):
         return u'%s, Issue: %s, Seq: %s' % (self.id, self.issue.id, self.seq)
 
 class IssueSetting(models.Model):
-    issue = models.OneToOneField('Issue', db_column = 'issue_id', primary_key = True)
-    locale = models.CharField(max_length=5, primary_key = True)
-    setting_name = models.CharField(max_length=255, primary_key = True)
+    issue = models.OneToOneField('Issue', db_column = 'issue_id')
+    locale = models.CharField(max_length=5)
+    setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 

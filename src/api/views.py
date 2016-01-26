@@ -73,8 +73,17 @@ class IssueSettingOneViewSet(generics.ListAPIView):
     def get_queryset(self):
         queryset = IssueSetting.objects.all().order_by('-issue')
         issue = Issue.objects.get(id=int(self.kwargs['issue_id']))
+        print self.kwargs
+        if 'setting' in self.kwargs:
+            setting = self.kwargs['setting']
+        else:
+            setting = setting = self.kwargs['setting']
+        if setting:
+            issue_setting = IssueSetting.objects.filter(issue=issue, setting_name = setting)
+        else:
+            issue_setting = IssueSetting.objects.filter(issue=issue)
         if issue:
-            return IssueSetting.objects.filter(issue=issue)
+            return issue_setting
         else:
             return queryset
 
@@ -86,7 +95,7 @@ class IssueOneViewSet(generics.ListAPIView):
 
     def get_queryset(self):
         queryset = Issue.objects.all().order_by('-id')
-        issue = Issue.objects.filter(id=int(self.kwargs['issue_id']))
+
         if issue:
             return issue
         else:

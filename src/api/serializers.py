@@ -34,7 +34,7 @@ class ArticleSerializer(serializers.HyperlinkedModelSerializer):
 class ArticleSettingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ArticleSetting
-        fields = ('article', 'locale', 'setting_name','setting_value','setting_type')
+        fields = ('pk','article', 'locale', 'setting_name','setting_value','setting_type')
 
 class IssueSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -44,4 +44,4 @@ class IssueSerializer(serializers.HyperlinkedModelSerializer):
 class IssueSettingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = IssueSetting
-        fields = ('issue', 'locale', 'setting_name','setting_value','setting_type')
+        fields = ('pk','issue', 'locale', 'setting_name','setting_value','setting_type')

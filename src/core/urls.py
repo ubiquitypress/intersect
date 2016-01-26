@@ -39,6 +39,7 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'get/issue-settings/(?P<issue_id>.+)/', IssueSettingOneViewSet.as_view()),
     url(r'get/issues/(?P<issue_id>.+)/', IssueOneViewSet.as_view()),
+    url(r'get/setting/(?P<setting>[-\w]+)/issue/(?P<issue_id>.+)/', IssueSettingOneViewSet.as_view()),
     url(r'get/article-settings/(?P<article_id>.+)/', ArticleSettingOneViewSet.as_view()),
     url(r'get/articles/(?P<article_id>.+)/', ArticleOneViewSet.as_view()),
     url(r'get/users/(?P<user_id>.+)/', UserOneViewSet.as_view()),
