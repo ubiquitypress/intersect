@@ -18,9 +18,6 @@ from django.contrib import admin
 from rest_framework import routers
 from api import views
 
-from api.views import IssueSettingOneViewSet, ArticleSettingOneViewSet, IssueOneViewSet, ArticleOneViewSet, UserOneViewSet
-
-
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
@@ -31,6 +28,7 @@ router.register(r'articles', views.ArticleViewSet)
 router.register(r'issues', views.IssueViewSet)
 router.register(r'issue-settings', views.IssueSettingViewSet)
 router.register(r'article-settings', views.ArticleSettingViewSet)
+router.register(r'journal-settings', views.JournalSettingViewSet)
 
 
 urlpatterns = [

@@ -1583,9 +1583,9 @@ class Issue(models.Model):
         return u'%s, Journal: %s' % (self.id, self.journal.id)
 
 class JournalSetting(models.Model):
-    journal = models.OneToOneField('Journal', db_column='journal_id', primary_key = True)
-    locale = models.CharField(max_length=5, primary_key = True)
-    setting_name = models.CharField(max_length=255, primary_key = True)
+    journal = models.OneToOneField('Journal', db_column='journal_id')
+    locale = models.CharField(max_length=5)
+    setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 

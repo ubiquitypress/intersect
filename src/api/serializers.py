@@ -45,3 +45,8 @@ class IssueSettingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = IssueSetting
         fields = ('pk','issue', 'locale', 'setting_name','setting_value','setting_type')
+
+class JournalSettingSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = JournalSetting
+        fields = ('pk','journal', 'locale', 'setting_name','setting_value','setting_type')

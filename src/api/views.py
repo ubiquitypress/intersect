@@ -63,3 +63,10 @@ class IssueSettingViewSet(viewsets.ModelViewSet):
     """
     queryset = IssueSetting.objects.all().order_by('-issue')
     serializer_class = IssueSettingSerializer
+
+class JournalSettingViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = JournalSetting.objects.all().order_by('-journal')
+    serializer_class = JournalSettingSerializer
