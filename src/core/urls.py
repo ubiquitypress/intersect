@@ -16,6 +16,8 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from rest_framework import routers
+from api.views import IssueSettingOneViewSet, JournalSettingOneViewSet, ArticleSettingOneViewSet, UserOneViewSet
+
 from api import views
 
 router = routers.DefaultRouter()
@@ -35,4 +37,8 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'get/issue-settings/(?P<issue_id>.+)/', IssueSettingOneViewSet.as_view()),
+    url(r'get/article-settings/(?P<article_id>.+)/', ArticleSettingOneViewSet.as_view()),
+    url(r'get/journal-settings/(?P<journal_id>.+)/', JournalSettingOneViewSet.as_view()),
+    url(r'get/users/(?P<user_id>.+)/', UserOneViewSet.as_view()),
 ]
