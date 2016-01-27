@@ -142,6 +142,35 @@ class ArticleSettingOneViewSet(generics.ListAPIView):
         else:
             return queryset
 
+class LatestArticleOneViewSet(generics.ListAPIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    serializer_class = ArticleSerializer
+
+    def get_queryset(self):
+        queryset = Article.objects.all().order_by('-id')[:1]
+        return queryset
+
+class LatestIssueOneViewSet(generics.ListAPIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    serializer_class = IssueSerializer
+
+    def get_queryset(self):
+        queryset = Issue.objects.all().order_by('-id')[:1]
+        return queryset
+
+class LatestJournalOneViewSet(generics.ListAPIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    serializer_class = JournalSerializer
+
+    def get_queryset(self):
+        queryset = Journal.objects.all().order_by('-id')[:1]
+        return queryset
 class JournalSettingOneViewSet(generics.ListAPIView):
     """
     API endpoint that allows users to be viewed or edited.

@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from rest_framework import routers
-from api.views import IssueSettingOneViewSet, JournalSettingOneViewSet, ArticleSettingOneViewSet, UserOneViewSet, UpdateIssueSettingOneViewSet, UpdateJournalSettingOneViewSet, UpdateArticleSettingOneViewSet
+from api.views import *
 
 from api import views
 
@@ -44,5 +44,8 @@ urlpatterns = [
     url(r'update/article/setting/(?P<pk>.+)/', UpdateArticleSettingOneViewSet.as_view()),
     url(r'get/article-settings/(?P<article_id>.+)/', ArticleSettingOneViewSet.as_view()),
     url(r'get/journal-settings/(?P<journal_id>.+)/', JournalSettingOneViewSet.as_view()),
+    url(r'get/latest/journal/', LatestJournalOneViewSet.as_view()),
+    url(r'get/latest/issue/', LatestIssueOneViewSet.as_view()),
+    url(r'get/latest/article/', LatestArticleOneViewSet.as_view()),
     url(r'get/users/(?P<user_id>.+)/', UserOneViewSet.as_view()),
 ]
