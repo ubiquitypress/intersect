@@ -2,8 +2,11 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from api.serializers import *
 
+from rest_framework.response import Response
+from rest_framework import status
 from rest_framework import generics
 
+from rest_framework.views import APIView
 from api.models import *
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -199,3 +202,10 @@ class UserOneViewSet(generics.ListAPIView):
             return user
         else:
             return queryset
+
+class heartbeat(APIView):
+
+    def get(self, request, *args, **kw):
+        result={'status':'online'}
+        response = Response(result, status=status.HTTP_200_OK)
+        return response

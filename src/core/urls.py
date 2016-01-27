@@ -36,6 +36,7 @@ router.register(r'journal-settings', views.JournalSettingViewSet)
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^heartbeat/',heartbeat.as_view()),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'get/issue-settings/(?P<issue_id>.+)/', IssueSettingOneViewSet.as_view()),
     url(r'get/setting/(?P<setting>[-\w]+)/issue/(?P<issue_id>.+)/', IssueSettingOneViewSet.as_view()),
