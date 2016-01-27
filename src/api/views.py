@@ -94,6 +94,39 @@ class IssueSettingOneViewSet(generics.ListAPIView):
         else:
             return queryset
 
+class UpdateIssueSettingOneViewSet(generics.RetrieveUpdateAPIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+
+    queryset = IssueSetting.objects.all()
+    serializer_class = IssueSettingSerializer
+
+    def perform_update(self, serializer):
+        serializer.save()
+
+class UpdateJournalSettingOneViewSet(generics.RetrieveUpdateAPIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+
+    queryset = JournalSetting.objects.all()
+    serializer_class = JournalSettingSerializer
+
+    def perform_update(self, serializer):
+        serializer.save()
+
+class UpdateArticleSettingOneViewSet(generics.RetrieveUpdateAPIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+
+    queryset = ArticleSetting.objects.all()
+    serializer_class = ArticleSettingSerializer
+
+    def perform_update(self, serializer):
+        serializer.save()
+
 
 class ArticleSettingOneViewSet(generics.ListAPIView):
     """

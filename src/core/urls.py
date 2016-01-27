@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from rest_framework import routers
-from api.views import IssueSettingOneViewSet, JournalSettingOneViewSet, ArticleSettingOneViewSet, UserOneViewSet
+from api.views import IssueSettingOneViewSet, JournalSettingOneViewSet, ArticleSettingOneViewSet, UserOneViewSet, UpdateIssueSettingOneViewSet, UpdateJournalSettingOneViewSet, UpdateArticleSettingOneViewSet
 
 from api import views
 
@@ -39,6 +39,9 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'get/issue-settings/(?P<issue_id>.+)/', IssueSettingOneViewSet.as_view()),
     url(r'get/setting/(?P<setting>[-\w]+)/issue/(?P<issue_id>.+)/', IssueSettingOneViewSet.as_view()),
+    url(r'update/issue/setting/(?P<pk>.+)/', UpdateIssueSettingOneViewSet.as_view()),
+    url(r'update/journal/setting/(?P<pk>.+)/', UpdateJournalSettingOneViewSet.as_view()),
+    url(r'update/article/setting/(?P<pk>.+)/', UpdateArticleSettingOneViewSet.as_view()),
     url(r'get/article-settings/(?P<article_id>.+)/', ArticleSettingOneViewSet.as_view()),
     url(r'get/journal-settings/(?P<journal_id>.+)/', JournalSettingOneViewSet.as_view()),
     url(r'get/users/(?P<user_id>.+)/', UserOneViewSet.as_view()),
