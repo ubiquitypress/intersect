@@ -84,7 +84,7 @@ class IssueSettingOneViewSet(generics.ListAPIView):
         if 'setting' in self.kwargs:
             setting = self.kwargs['setting']
         else:
-            setting = setting = self.kwargs['setting']
+            setting = None
         if setting:
             issue_setting = IssueSetting.objects.filter(issue=issue, setting_name = setting)
         else:
