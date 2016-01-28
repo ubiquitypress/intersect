@@ -5,3 +5,4 @@ Intersect is an API for Open Journal Systems, written in Python with Django.
 - Issue Settings : id (auto_increment, primary key)
 - Journal Settings : id (auto_increment, primary key)
 - UsageStatsTemporaryRecord : id (auto_increment, primary key)
+- user_profiles table : foreignkey ids :intersect_user (auth_users) [PK] + journal (Journals) + user (users)

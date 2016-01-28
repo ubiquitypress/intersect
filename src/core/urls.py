@@ -31,6 +31,7 @@ router.register(r'issues', views.IssueViewSet)
 router.register(r'issue-settings', views.IssueSettingViewSet)
 router.register(r'article-settings', views.ArticleSettingViewSet)
 router.register(r'journal-settings', views.JournalSettingViewSet)
+router.register(r'profiles', views.ProfileViewSet)
 
 
 urlpatterns = [

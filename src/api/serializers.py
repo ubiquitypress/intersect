@@ -6,7 +6,7 @@ from api.models import *
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('id','url', 'username','first_name', 'middle_name','last_name', 'email')
+        fields = ('id','url', 'username','password','first_name', 'middle_name','last_name', 'email','date_registered', 'date_last_login', 'disabled')
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -50,3 +50,8 @@ class JournalSettingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = JournalSetting
         fields = ('pk','journal', 'locale', 'setting_name','setting_value','setting_type')
+
+class ProfileSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ('intersect_user','user', 'journal')

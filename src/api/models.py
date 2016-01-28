@@ -11,7 +11,7 @@ from __future__ import unicode_literals
 from time import strftime
 import datetime
 from django.db import models
-
+from django.contrib.auth.models import User
 
 class AccessKey(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'access_key_id' )
@@ -2746,6 +2746,25 @@ class UserSetting(models.Model):
 
     def __repr__(self):
         return u'%s %s - %s' % (self.user.first_name, self.user.last_name, self.setting_name)
+
+class Profile(models.Model):
+    intersect_user = models.ForeignKey(User, db_column = 'intersect_user_id', primary_key = True, related_name = "profile_intersecct" )
+    user = models.ForeignKey('User', db_column = 'user_id', related_name = "profile_user" )
+    journal = models.ForeignKey('Journal', db_column = 'journal_id', related_name = "profile_journal")
+
+    class Meta:
+        verbose_name_plural = 'Profiles' 
+        app_label='api'
+        managed = False
+        db_table = 'user_profiles'
+        unique_together = (('user', 'journal', 'intersect_user'),)
+
+    def __unicode__(self):
+        return u'%s - %s %s (%s)' % (self.intersect_user.username, self.user.first_name, self.user.last_name, self.journal.path)
+
+    def __repr__(self):
+        return u'%s - %s %s (%s)' % (self.intersect_user.username, self.user.first_name, self.user.last_name, self.journal.path)
+
 
 class User(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'user_id' )
