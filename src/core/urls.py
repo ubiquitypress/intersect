@@ -48,6 +48,7 @@ urlpatterns = [
     url(r'get/journal-settings/(?P<journal_id>.+)/', JournalSettingOneViewSet.as_view()),
     url(r'get/latest/journal/', LatestJournalOneViewSet.as_view()),
     url(r'get/latest/issue/', LatestIssueOneViewSet.as_view()),
+    url(r'get/user_id/', user_id.as_view()),
     url(r'get/latest/article/', LatestArticleOneViewSet.as_view()),
     url(r'get/users/(?P<user_id>.+)/', UserOneViewSet.as_view()),
 ]

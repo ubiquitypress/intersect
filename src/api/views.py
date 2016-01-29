@@ -216,3 +216,10 @@ class heartbeat(APIView):
         result={'status':'online'}
         response = Response(result, status=status.HTTP_200_OK)
         return response
+
+class user_id(APIView):
+
+    def get(self, request, *args, **kw):
+        result={'id': request.user.pk }
+        response = Response(result, status=status.HTTP_200_OK)
+        return response
