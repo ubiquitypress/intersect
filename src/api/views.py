@@ -154,8 +154,16 @@ class ArticleSettingOneViewSet(generics.ListAPIView):
     def get_queryset(self):
         queryset = ArticleSetting.objects.all().order_by('article')
         article = get_object_or_404(Article, id=int(self.kwargs['article_id']))
+        if 'setting' in self.kwargs:
+            setting = self.kwargs['setting']
+        else:
+            setting = None
+        if setting:
+            article_setting = ArticleSetting.objects.filter(article=article, setting_name = setting)
+        else:
+            article_setting = ArticleSetting.objects.filter(article=article)
         if article:
-            return ArticleSetting.objects.filter(article=article)
+            return article_setting
         else:
             return queryset
 
