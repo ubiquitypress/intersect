@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 from rest_framework import viewsets
 from api.serializers import *
 import json
@@ -96,7 +96,7 @@ class IssueSettingOneViewSet(generics.ListAPIView):
 
     def get_queryset(self):
         queryset = IssueSetting.objects.all().order_by('issue')
-        issue = Issue.objects.get(id=int(self.kwargs['issue_id']))
+        issue = get_object_or_404(Issue, id=int(self.kwargs['issue_id']))
         print self.kwargs
         if 'setting' in self.kwargs:
             setting = self.kwargs['setting']
@@ -153,7 +153,7 @@ class ArticleSettingOneViewSet(generics.ListAPIView):
 
     def get_queryset(self):
         queryset = ArticleSetting.objects.all().order_by('article')
-        article = Article.objects.get(id=int(self.kwargs['article_id']))
+        article = get_object_or_404(Article, id=int(self.kwargs['article_id']))
         if article:
             return ArticleSetting.objects.filter(article=article)
         else:
@@ -196,7 +196,7 @@ class JournalSettingOneViewSet(generics.ListAPIView):
 
     def get_queryset(self):
         queryset = JournalSetting.objects.all().order_by('journal')
-        journal = Journal.objects.get(id=int(self.kwargs['journal_id']))
+        journal = get_object_or_404(Journal, id=int(self.kwargs['journal_id']))
         if journal:
             return JournalSetting.objects.filter(journal=journal)
         else:
@@ -225,7 +225,7 @@ class PublishedArtilesOneViewSet(APIView):
 
     def get(self, request, *args, **kw):
         queryset = PublishedArticle.objects.all().order_by('id')
-        issue = Issue.objects.get(id=int(self.kwargs['issue_id']))       
+        issue = get_object_or_404(Issue, id=int(self.kwargs['issue_id']))       
         published_articles = PublishedArticle.objects.filter(issue=issue)
         list_articles = ""
         for id,art in enumerate(published_articles):

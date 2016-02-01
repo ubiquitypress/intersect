@@ -28,7 +28,7 @@ class JournalSerializer(serializers.HyperlinkedModelSerializer):
 class ArticleSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Article
-        fields = ('id', 'journal', 'section_id','user','date_submitted','pages','locale','language')
+        fields = ('id', 'journal', 'section_id','user','date_submitted','pages','locale','language','status','submission_progress','current_round','fast_tracked','hide_author','comments_status')
 
 class PublishedArticleSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
