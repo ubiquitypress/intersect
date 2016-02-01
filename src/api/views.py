@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from api.serializers import *
-
+import json
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import generics
@@ -51,6 +51,13 @@ class ArticleViewSet(viewsets.ModelViewSet):
     """
     queryset = Article.objects.all().order_by('-id')
     serializer_class = ArticleSerializer
+
+class PublishedArticleViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = PublishedArticle.objects.all().order_by('-id')
+    serializer_class = PublishedArticleSerializer
 
 class ArticleSettingViewSet(viewsets.ModelViewSet):
     """
@@ -207,6 +214,32 @@ class UserOneViewSet(generics.ListAPIView):
         user = User.objects.filter(id=int(self.kwargs['user_id']))
         if user:
             return user
+        else:
+            return queryset
+
+class PublishedArtilesOneViewSet(APIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    serializer_class = PublishedArticleSerializer
+
+    def get(self, request, *args, **kw):
+        queryset = PublishedArticle.objects.all().order_by('id')
+        issue = Issue.objects.get(id=int(self.kwargs['issue_id']))       
+        published_articles = PublishedArticle.objects.filter(issue=issue)
+        list_articles = ""
+        for id,art in enumerate(published_articles):
+            list_articles=list_articles+str(art.article.id)
+            if not id == len(published_articles)-1:
+               list_articles=list_articles+"," 
+            
+        print published_articles
+        result={'articles':list_articles}
+
+        response = Response(result, status=status.HTTP_200_OK)
+        print result
+        if issue:
+            return response
         else:
             return queryset
 

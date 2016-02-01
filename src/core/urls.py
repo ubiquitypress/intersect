@@ -27,6 +27,7 @@ router.register(r'authors', views.AuthorViewSet)
 
 router.register(r'journals', views.JournalViewSet)
 router.register(r'articles', views.ArticleViewSet)
+router.register(r'published-articles', views.PublishedArticleViewSet)
 router.register(r'issues', views.IssueViewSet)
 router.register(r'issue-settings', views.IssueSettingViewSet)
 router.register(r'article-settings', views.ArticleSettingViewSet)
@@ -40,6 +41,7 @@ urlpatterns = [
     url(r'^heartbeat/',heartbeat.as_view()),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'get/issue-settings/(?P<issue_id>.+)/', IssueSettingOneViewSet.as_view()),
+    url(r'get/published-articles/(?P<issue_id>.+)/', PublishedArtilesOneViewSet.as_view()),
     url(r'get/setting/(?P<setting>[-\w]+)/issue/(?P<issue_id>.+)/', IssueSettingOneViewSet.as_view()),
     url(r'update/issue/setting/(?P<pk>.+)/', UpdateIssueSettingOneViewSet.as_view()),
     url(r'update/journal/setting/(?P<pk>.+)/', UpdateJournalSettingOneViewSet.as_view()),

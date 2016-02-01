@@ -30,6 +30,10 @@ class ArticleSerializer(serializers.HyperlinkedModelSerializer):
         model = Article
         fields = ('id', 'journal', 'section_id','user','date_submitted','pages','locale','language')
 
+class PublishedArticleSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = PublishedArticle
+        fields = ('id','issue','article','date_published')
 
 class ArticleSettingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -39,7 +43,7 @@ class ArticleSettingSerializer(serializers.HyperlinkedModelSerializer):
 class IssueSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Issue
-        fields = ('id', 'journal', 'volume','number','year','published', 'show_volume','show_number','show_year', 'show_title',"current","access_status")
+        fields = ('id', 'journal', 'volume','number','year','published', 'show_volume','show_number','show_year', 'show_title',"current","access_status","date_published")
 
 class IssueSettingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
