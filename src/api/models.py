@@ -534,7 +534,7 @@ class AuthorSetting(models.Model):
 
 class Author(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'author_id' )
-    submission_id = models.BigIntegerField()
+    article = models.ForeignKey('Article', db_column='submission_id')
     primary_contact = models.IntegerField()
     seq = models.FloatField()
     first_name = models.CharField(max_length=40)
