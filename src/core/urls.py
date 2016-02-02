@@ -45,6 +45,7 @@ urlpatterns = [
     url(r'get/issue-settings/(?P<issue_id>.+)/', IssueSettingOneViewSet.as_view()),
     url(r'get/published-articles/(?P<issue_id>.+)/', PublishedArticlesOneViewSet.as_view()),
     url(r'get/setting/(?P<setting>[-\w]+)/issue/(?P<issue_id>.+)/', IssueSettingOneViewSet.as_view()),
+    url(r'get/setting/(?P<setting>[-\w]+)/author/(?P<author_id>.+)/', AuthorSettingOneViewSet.as_view()),
     url(r'get/setting/(?P<setting>[-\w]+)/article/(?P<article_id>.+)/', ArticleSettingOneViewSet.as_view()),
     url(r'update/issue/setting/(?P<pk>.+)/', UpdateIssueSettingOneViewSet.as_view()),
     url(r'update/journal/setting/(?P<pk>.+)/', UpdateJournalSettingOneViewSet.as_view()),

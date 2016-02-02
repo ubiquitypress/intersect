@@ -126,6 +126,31 @@ class IssueSettingOneViewSet(generics.ListAPIView):
         else:
             return queryset
 
+
+class AuthorSettingOneViewSet(generics.ListAPIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    serializer_class = AuthorSettingSerializer
+
+    def get_queryset(self):
+        queryset = AuthorSetting.objects.all().order_by('author')
+        author = get_object_or_404(Author, id=int(self.kwargs['author_id']))
+        print self.kwargs
+        if 'setting' in self.kwargs:
+            setting = self.kwargs['setting']
+        else:
+            setting = None
+        if setting:
+            author_setting = AuthorSetting.objects.filter(author=author, setting_name = setting)
+        else:
+            author_setting = AuthorSetting.objects.filter(author=author)
+        if author:
+            return author_setting
+        else:
+            return queryset
+
+
 class UpdateIssueSettingOneViewSet(generics.RetrieveUpdateAPIView):
     """
     API endpoint that allows users to be viewed or edited.

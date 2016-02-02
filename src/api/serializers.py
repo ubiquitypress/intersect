@@ -16,7 +16,7 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 class AuthorSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Author
-        fields = ('id','article', 'first_name', 'middle_name','last_name','country','email','url','user_group')
+        fields = ('id','seq','primary_contact','article', 'first_name', 'middle_name','last_name','country','email','url','user_group')
 
 
 class JournalSerializer(serializers.HyperlinkedModelSerializer):
