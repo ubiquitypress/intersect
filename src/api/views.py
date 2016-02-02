@@ -16,6 +16,21 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('-date_registered')
     serializer_class = UserSerializer
 
+class AuthorViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = Author.objects.all().order_by('-id')
+    serializer_class = AuthorSerializer
+
+class AuthorSettingViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = AuthorSetting.objects.all().order_by('-author')
+    serializer_class = AuthorSettingSerializer
+
+
 class ProfileViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.

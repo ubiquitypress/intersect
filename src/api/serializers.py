@@ -16,7 +16,7 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 class AuthorSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Author
-        fields = ('id', 'first_name', 'middle_name','last_name','country','email','user_group')
+        fields = ('id', 'first_name', 'middle_name','last_name','country','email','url','user_group')
 
 
 class JournalSerializer(serializers.HyperlinkedModelSerializer):
@@ -49,6 +49,11 @@ class IssueSettingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = IssueSetting
         fields = ('pk','issue', 'locale', 'setting_name','setting_value','setting_type')
+
+class AuthorSettingSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = AuthorSetting
+        fields = ('pk','author', 'locale', 'setting_name','setting_value','setting_type')
 
 class JournalSettingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
