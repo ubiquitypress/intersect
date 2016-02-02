@@ -33,7 +33,7 @@ class ArticleSerializer(serializers.HyperlinkedModelSerializer):
 class PublishedArticleSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = PublishedArticle
-        fields = ('id','issue','article','date_published')
+        fields = ('id', 'article', 'issue','date_published','seq','access_status')
 
 class ArticleSettingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

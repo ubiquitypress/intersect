@@ -5,7 +5,7 @@ import json
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import generics
-
+from django.core import serializers
 from rest_framework.views import APIView
 from api.models import *
 
@@ -167,6 +167,7 @@ class ArticleSettingOneViewSet(generics.ListAPIView):
         else:
             return queryset
 
+
 class LatestArticleOneViewSet(generics.ListAPIView):
     """
     API endpoint that allows users to be viewed or edited.
@@ -225,7 +226,7 @@ class UserOneViewSet(generics.ListAPIView):
         else:
             return queryset
 
-class PublishedArtilesOneViewSet(APIView):
+class PublishedArticlesOneViewSet(APIView):
     """
     API endpoint that allows users to be viewed or edited.
     """
@@ -250,6 +251,29 @@ class PublishedArtilesOneViewSet(APIView):
             return response
         else:
             return queryset
+class PublishedArticleOneViewSet(APIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    serializer_class = PublishedArticleSerializer
+
+    def get(self, request, *args, **kw):
+        queryset = PublishedArticle.objects.all().order_by('article')
+        article = get_object_or_404(Article, id=int(self.kwargs['article_id']))
+        print article
+        article_published = get_object_or_404(PublishedArticle, article=article)
+        result={
+        'id':article_published.id,
+        'article':article_published.article.id,
+        'issue':article_published.issue.id,
+        'date_published':str(article_published.date_published)[:10],
+        'seq':article_published.seq,
+        'access_status':article_published.access_status}
+        if article:
+
+            return Response(result, status=status.HTTP_200_OK)
+        else:
+            return Response(serializers.serialize('json',  queryset ), status=status.HTTP_404_NOT_FOUND)
 
 class heartbeat(APIView):
 
