@@ -251,6 +251,7 @@ class PublishedArticlesOneViewSet(APIView):
             return response
         else:
             return queryset
+            
 class PublishedArticleOneViewSet(APIView):
     """
     API endpoint that allows users to be viewed or edited.
