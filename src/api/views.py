@@ -213,6 +213,35 @@ class LatestAuthorOneViewSet(generics.ListAPIView):
         queryset = Author.objects.all().order_by('-id')[:1]
         return queryset
 
+class UniqueAuthorsOneViewSet(APIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    serializer_class = AuthorSerializer
+
+    def get(self, request, *args, **kw):
+        emails = Author.objects.all().values_list('email', flat=True).distinct()
+  
+        list_of_authors=[{} for t in range(0,emails.count()) ]   
+        t=0
+        for email in emails:
+            author = Author.objects.filter(email = str(email))[:1][0]
+            list_of_authors[t] = {
+            'first_name':author.first_name,
+            'middle_name':author.middle_name,
+            'last_name':author.last_name,
+            'email':author.email,
+            'country':author.country
+            }
+            t=t+1  
+        response = Response(list_of_authors, status=status.HTTP_200_OK)
+        print list_of_authors
+        if list_of_authors:
+            return response
+        else:
+            return queryset
+    
+        return emails
 class LatestJournalOneViewSet(generics.ListAPIView):
     """
     API endpoint that allows users to be viewed or edited.
