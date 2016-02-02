@@ -203,6 +203,16 @@ class LatestIssueOneViewSet(generics.ListAPIView):
         queryset = Issue.objects.all().order_by('-id')[:1]
         return queryset
 
+class LatestAuthorOneViewSet(generics.ListAPIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    serializer_class = AuthorSerializer
+
+    def get_queryset(self):
+        queryset = Author.objects.all().order_by('-id')[:1]
+        return queryset
+
 class LatestJournalOneViewSet(generics.ListAPIView):
     """
     API endpoint that allows users to be viewed or edited.
@@ -266,7 +276,32 @@ class PublishedArticlesOneViewSet(APIView):
             return response
         else:
             return queryset
+
+class AuthorsArticleOneViewSet(APIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    serializer_class = AuthorSerializer
+
+    def get(self, request, *args, **kw):
+        queryset = Author.objects.all().order_by('id')
+        article = get_object_or_404(Article, id=int(self.kwargs['article_id']))       
+        authors = Author.objects.filter(article=article)
+        list_authors = ""
+        for id,art in enumerate(authors):
+            list_authors=list_authors+str(art.id)
+            if not id == len(authors)-1:
+               list_authors=list_authors+"," 
             
+        print authors
+        result={'authors':list_authors}
+
+        response = Response(result, status=status.HTTP_200_OK)
+        print result
+        if article:
+            return response
+        else:
+            return queryset            
 class PublishedArticleOneViewSet(APIView):
     """
     API endpoint that allows users to be viewed or edited.
