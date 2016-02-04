@@ -347,7 +347,8 @@ class AuthorsArticleOneViewSet(APIView):
             if not id == len(authors)-1:
                list_authors=list_authors+"," 
             
-        print authors
+        print len(authors)
+        print list_authors
         result={'authors':list_authors}
 
         response = Response(result, status=status.HTTP_200_OK)
@@ -355,7 +356,36 @@ class AuthorsArticleOneViewSet(APIView):
         if article:
             return response
         else:
-            return queryset            
+            return queryset
+class AuthorsIssueOneViewSet(APIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    serializer_class = AuthorSerializer
+
+    def get(self, request, *args, **kw):
+        queryset = Author.objects.all().order_by('id')
+        issue = get_object_or_404(Issue, id=int(self.kwargs['issue_id']))
+        published_articles = PublishedArticle.objects.filter(issue=issue)
+        list_authors = []
+        list_articles = []
+        for record in published_articles:   
+            authors = Author.objects.filter(article=record.article)
+            if authors:
+                list_articles.append(record.article.id)
+            for id,art in enumerate(authors):
+                list_authors.append(art.id)
+                
+            print len(authors)
+            print list_authors
+        result={'authors':list_authors,'articles':list_articles}
+
+        response = Response(result, status=status.HTTP_200_OK)
+        print result
+        if issue:
+            return response
+        else:
+            return queryset         
 class PublishedArticleOneViewSet(APIView):
     """
     API endpoint that allows users to be viewed or edited.
