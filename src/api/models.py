@@ -514,8 +514,8 @@ class AuthSource(models.Model):
 
 class AuthorSetting(models.Model):
     author = models.OneToOneField('Author', db_column = 'author_id')
-    locale = models.CharField(max_length=5, primary_key = True)
-    setting_name = models.CharField(max_length=255, primary_key = True)
+    locale = models.CharField(max_length=5)
+    setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 
