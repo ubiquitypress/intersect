@@ -7,7 +7,17 @@ from rest_framework import status
 from rest_framework import generics
 from django.core import serializers
 from rest_framework.views import APIView
+
+from rest_framework.parsers import *
 from api.models import *
+
+from django.utils import timezone
+import mimetypes as mime
+from uuid import uuid4
+import os
+
+from django.shortcuts import Http404
+from django.conf import settings
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -423,3 +433,51 @@ class user_id(APIView):
         result={'id': request.user.pk }
         response = Response(result, status=status.HTTP_200_OK)
         return response
+
+def handle_file(file,article,kind, owner, label=None):
+
+    original_filename = str(file._get_name())
+    filename = str(uuid4()) + str(os.path.splitext(original_filename)[1])
+    folder_structure = os.path.join(settings.BASE_DIR, 'files', 'article', str(article.id))
+
+    if not os.path.exists(folder_structure):
+        os.makedirs(folder_structure)
+
+    path = os.path.join(folder_structure, str(filename))
+    fd = open(path, 'wb')
+    for chunk in file.chunks():
+        fd.write(chunk)
+    fd.close()
+
+    file_mime = mime.guess_type(filename)
+
+    try:
+        file_mime = file_mime[0]
+    except IndexError:
+        file_mime = 'unknown'
+
+    if not file_mime:
+        file_mime = 'unknown'
+
+    new_file = File(
+        mime_type=file_mime,
+        original_filename=original_filename,
+        uuid_filename=filename,
+        stage_uploaded=1,
+        kind=kind,
+        label=label,
+        owner=owner
+    )
+    new_file.save()
+
+    return new_file
+
+class FileUploadView(APIView):
+    parser_classes = (FormParser, MultiPartParser,)
+
+    def post(self, request,format=None,*args, **kw):
+        file_obj = request.FILES['file']
+
+        article = get_object_or_404(Article, id=int(self.kwargs['article_id']))
+        handle_file(file_obj,article,"ArticleFile",request.user)
+        return Response(status=204)

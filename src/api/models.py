@@ -13,6 +13,53 @@ import datetime
 from django.db import models
 from django.contrib.auth.models import User
 
+
+class File(models.Model):
+    mime_type = models.CharField(max_length=50)
+    original_filename = models.CharField(max_length=1000)
+    uuid_filename = models.CharField(max_length=100)
+    label = models.CharField(max_length=200, null=True, blank=True)
+    description = models.CharField(max_length=1000, null=True, blank=True)
+    date_uploaded = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+    stage_uploaded = models.IntegerField()
+    kind = models.CharField(max_length=100)
+    sequence = models.IntegerField(default=1)
+    owner = models.ForeignKey(User)
+
+    def truncated_filename(self):
+        name, extension = os.path.splitext(self.original_filename)
+        file_name=''
+        if len(name)>14:
+            file_name=name[:14]+'...'+' '+extension
+        else:
+            file_name=name+extension
+
+        return file_name
+    def truncated_filename_long(self):
+        name, extension = os.path.splitext(self.original_filename)
+        file_name=''
+        if len(name)>32:
+            file_name=name[:32]+'...'+' '+extension
+        else:
+            file_name=name+extension
+
+        return file_name    
+
+    def truncated_label(self):
+        name = str(self.label)
+        if len(name)>=22:
+            name = name[:22]+'...'
+        return name
+
+    def __unicode__(self):
+        return u'%s' % self.original_filename
+
+    def __repr__(self):
+        return u'%s' % self.original_filename
+
+    class Meta:
+        ordering = ('sequence', '-kind')
 class AccessKey(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'access_key_id' )
     context = models.CharField(max_length=40)

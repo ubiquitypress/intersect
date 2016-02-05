@@ -62,4 +62,5 @@ urlpatterns = [
     url(r'get/user_id/', user_id.as_view()),
     url(r'get/latest/article/', LatestArticleOneViewSet.as_view()),
     url(r'get/users/(?P<user_id>.+)/', UserOneViewSet.as_view()),
+    url(r'upload/file/(?P<article_id>.+)/', FileUploadView.as_view()),
 ]
