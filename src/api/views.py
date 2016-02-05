@@ -193,7 +193,12 @@ class UpdateIssueSettingOneViewSet(generics.RetrieveUpdateAPIView):
     serializer_class = IssueSettingSerializer
 
     def perform_update(self, serializer):
-        serializer.save()
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            print serializer.errors
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UpdateJournalSettingOneViewSet(generics.RetrieveUpdateAPIView):
     """
@@ -204,7 +209,12 @@ class UpdateJournalSettingOneViewSet(generics.RetrieveUpdateAPIView):
     serializer_class = JournalSettingSerializer
 
     def perform_update(self, serializer):
-        serializer.save()
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            print serializer.errors
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UpdateArticleSettingOneViewSet(generics.RetrieveUpdateAPIView):
     """
@@ -215,8 +225,28 @@ class UpdateArticleSettingOneViewSet(generics.RetrieveUpdateAPIView):
     serializer_class = ArticleSettingSerializer
 
     def perform_update(self, serializer):
-        serializer.save()
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            print serializer.errors
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+class UpdateAuthorSettingOneViewSet(generics.RetrieveUpdateAPIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
 
+    queryset = AuthorSetting.objects.all()
+    serializer_class = AuthorSettingSerializer
+
+    def perform_update(self, serializer):
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            print serializer.errors
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ArticleSettingOneViewSet(generics.ListAPIView):
     """

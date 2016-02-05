@@ -52,6 +52,7 @@ urlpatterns = [
     url(r'update/issue/setting/(?P<pk>.+)/', UpdateIssueSettingOneViewSet.as_view()),
     url(r'update/journal/setting/(?P<pk>.+)/', UpdateJournalSettingOneViewSet.as_view()),
     url(r'update/article/setting/(?P<pk>.+)/', UpdateArticleSettingOneViewSet.as_view()),
+    url(r'update/author/setting/(?P<pk>.+)/', UpdateAuthorSettingOneViewSet.as_view()),
     url(r'get/article-settings/(?P<article_id>.+)/', ArticleSettingOneViewSet.as_view()),
     url(r'get/article/published/(?P<article_id>.+)/', PublishedArticleOneViewSet.as_view()),
     url(r'get/article/authors/(?P<article_id>.+)/', AuthorsArticleOneViewSet.as_view()),
