@@ -539,4 +539,4 @@ def serve_file(request, article, file_id):
         #log.add_log_entry(book=book, user=request.user, kind='file', message='File %s downloaded.' % _file.original_filename, short_name='Download')
         return response
     except IOError:
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        return Response(status=404)
