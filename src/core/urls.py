@@ -66,6 +66,7 @@ urlpatterns = [
     url(r'get/latest/article/', LatestArticleOneViewSet.as_view()),
     url(r'get/users/(?P<user_id>.+)/', UserOneViewSet.as_view()),
     url(r'upload/file/(?P<article_id>.+)/', FileUploadView.as_view()),
+    url(r'upload/specific/file/(?P<article_id>\d+)/(?P<file_id>\d+)/', FileUploadView.as_view()),
     url(r'download/file/(?P<article_id>.+)/(?P<file_id>.+)/', FileDownloadView.as_view()),
     url(r'delete/file/(?P<file_id>.+)/', DeleteFileViewSet.as_view()),
 ]

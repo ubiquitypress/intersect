@@ -467,7 +467,7 @@ class user_id(APIView):
         response = Response(result, status=status.HTTP_200_OK)
         return response
 
-def handle_file(file,article,kind, owner, label=None):
+def handle_file(file,article,kind, owner, label=None, specific_id=None):
 
     original_filename = str(file._get_name())
     filename = str(uuid4()) + str(os.path.splitext(original_filename)[1])
@@ -507,16 +507,27 @@ def handle_file(file,article,kind, owner, label=None):
         )
 
     new_article_file.save()
-
-    new_file = File(
-        mime_type=file_mime,
-        original_filename=original_filename,
-        uuid_filename=filename,
-        stage_uploaded=1,
-        kind=kind,
-        label=label,
-        owner=owner,
-    )
+    if specific_id:
+        new_file = File(
+            pk = specific_id,
+            mime_type=file_mime,
+            original_filename=original_filename,
+            uuid_filename=filename,
+            stage_uploaded=1,
+            kind=kind,
+            label=label,
+            owner=owner,
+        )
+    else:
+        new_file = File(
+            mime_type=file_mime,
+            original_filename=original_filename,
+            uuid_filename=filename,
+            stage_uploaded=1,
+            kind=kind,
+            label=label,
+            owner=owner,
+        )
 
     new_file.save()
     new_file.article_file = new_article_file.id
@@ -529,9 +540,17 @@ class FileUploadView(APIView):
 
     def post(self, request,format=None,*args, **kw):
         file_obj = request.FILES['file']
-
+        print self.kwargs
         article = get_object_or_404(Article, id=int(self.kwargs['article_id']))
-        handle_file(file_obj,article,"ArticleFile",request.user)
+        file_id=self.kwargs['file_id']
+        if file_id:
+            id = int(file_id)
+        else:
+            id = -1
+        if id != -1:
+            handle_file(file_obj,article,"ArticleFile",request.user,specific_id=id)
+        else:
+            handle_file(file_obj,article,"ArticleFile",request.user)
         return Response(status=204)
 
 class FileDownloadView(APIView):
