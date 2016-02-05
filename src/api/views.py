@@ -9,14 +9,16 @@ from rest_framework.generics import DestroyAPIView
 from django.core import serializers
 from rest_framework.views import APIView
 
+from django.http import HttpResponseRedirect, Http404, HttpResponse, StreamingHttpResponse
 from rest_framework.parsers import *
 from api.models import *
-
+from django.core.servers.basehttp import FileWrapper
 from django.utils import timezone
 import mimetypes as mime
 from uuid import uuid4
 import os
 
+import mimetypes
 from django.shortcuts import Http404
 from django.conf import settings
 
@@ -512,3 +514,29 @@ class FileUploadView(APIView):
         article = get_object_or_404(Article, id=int(self.kwargs['article_id']))
         handle_file(file_obj,article,"ArticleFile",request.user)
         return Response(status=204)
+
+class FileDownloadView(APIView):
+    parser_classes = (FormParser, MultiPartParser,)
+
+    def get(self,request,*args, **kw):
+
+        article = get_object_or_404(Article, id=int(self.kwargs['article_id']))
+
+        file = get_object_or_404(File, id=int(self.kwargs['file_id']))
+        
+
+        return serve_file(request,article,file.pk)
+
+def serve_file(request, article, file_id):
+    _file = get_object_or_404(File, pk=file_id)
+    file_path = os.path.join(settings.BASE_DIR, 'files', 'article', str(article.id), _file.uuid_filename)
+
+    try:
+        fsock = open(file_path, 'rb')
+        mimetype = mimetypes.guess_type(file_path)
+        response = HttpResponse(FileWrapper(fsock), content_type=mimetype)
+        response['Content-Disposition'] = "attachment; filename=%s" % (_file.original_filename)
+        #log.add_log_entry(book=book, user=request.user, kind='file', message='File %s downloaded.' % _file.original_filename, short_name='Download')
+        return response
+    except IOError:
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
