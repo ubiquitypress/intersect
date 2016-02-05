@@ -5,6 +5,7 @@ import json
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import generics
+from rest_framework.generics import DestroyAPIView
 from django.core import serializers
 from rest_framework.views import APIView
 
@@ -70,6 +71,19 @@ class JournalViewSet(viewsets.ModelViewSet):
     queryset = Journal.objects.all().order_by('-id')
     serializer_class = JournalSerializer
 
+class DeleteFileViewSet(DestroyAPIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = File.objects.all().order_by('-pk')
+    serializer_class = FileSerializer
+
+    def delete(self, request, format=None, *args, **kw):
+        file = get_object_or_404(File, id=int(self.kwargs['file_id']))
+        file.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 class ArticleViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
@@ -90,6 +104,13 @@ class ArticleSettingViewSet(viewsets.ModelViewSet):
     """
     queryset = ArticleSetting.objects.all().order_by('-id')
     serializer_class = ArticleSettingSerializer
+
+class FileViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = File.objects.all().order_by('-pk')
+    serializer_class = FileSerializer
 
 
 class IssueViewSet(viewsets.ModelViewSet):
@@ -236,6 +257,16 @@ class LatestIssueOneViewSet(generics.ListAPIView):
 
     def get_queryset(self):
         queryset = Issue.objects.all().order_by('-id')[:1]
+        return queryset
+
+class LatestFileOneViewSet(generics.ListAPIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    serializer_class = FileSerializer
+
+    def get_queryset(self):
+        queryset = File.objects.all().order_by('-pk')[:1]
         return queryset
 
 class LatestAuthorOneViewSet(generics.ListAPIView):

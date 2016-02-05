@@ -45,6 +45,11 @@ class IssueSerializer(serializers.HyperlinkedModelSerializer):
         model = Issue
         fields = ('id', 'journal', 'volume','number','year','published', 'show_volume','show_number','show_year', 'show_title',"current","access_status","date_published")
 
+class FileSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = File
+        fields = ('pk', 'owner', 'original_filename','label')
+
 class IssueSettingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = IssueSetting

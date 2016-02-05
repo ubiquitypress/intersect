@@ -35,6 +35,8 @@ router.register(r'issue-settings', views.IssueSettingViewSet)
 router.register(r'article-settings', views.ArticleSettingViewSet)
 router.register(r'journal-settings', views.JournalSettingViewSet)
 router.register(r'profiles', views.ProfileViewSet)
+router.register(r'files', views.FileViewSet)
+
 
 
 urlpatterns = [
@@ -57,10 +59,13 @@ urlpatterns = [
     url(r'get/journal-settings/(?P<journal_id>.+)/', JournalSettingOneViewSet.as_view()),
     url(r'get/latest/journal/', LatestJournalOneViewSet.as_view()),
     url(r'get/latest/issue/', LatestIssueOneViewSet.as_view()),
+    url(r'get/latest/file/', LatestFileOneViewSet.as_view()),
     url(r'get/latest/author/', LatestAuthorOneViewSet.as_view()),
     url(r'get/unique/authors/', UniqueAuthorsOneViewSet.as_view()),
     url(r'get/user_id/', user_id.as_view()),
     url(r'get/latest/article/', LatestArticleOneViewSet.as_view()),
     url(r'get/users/(?P<user_id>.+)/', UserOneViewSet.as_view()),
     url(r'upload/file/(?P<article_id>.+)/', FileUploadView.as_view()),
+    url(r'download/file/(?P<article_id>.+)/(?P<file_id>.+)/', FileUploadView.as_view()),
+    url(r'delete/file/(?P<file_id>.+)/', DeleteFileViewSet.as_view()),
 ]
