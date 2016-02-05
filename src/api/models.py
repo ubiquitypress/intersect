@@ -26,6 +26,8 @@ class File(models.Model):
     kind = models.CharField(max_length=100)
     sequence = models.IntegerField(default=1)
     owner = models.ForeignKey(User)
+    article_file = models.IntegerField(default=-1)
+    issue_file = models.IntegerField(default=-1)
 
     def truncated_filename(self):
         name, extension = os.path.splitext(self.original_filename)
@@ -211,7 +213,7 @@ class ArticleEventLog(models.Model):
         return u'%s - Article: %s, Log level: %s. IP: %s' % (self.id, self.article.id,self.log_level,self.ip_address)
 
 class ArticleFile(models.Model):
-    id = models.IntegerField(primary_key = True, db_column = 'file_id' )
+    id = models.AutoField(primary_key = True, db_column = 'file_id' )
     revision = models.BigIntegerField()
     source_file = models.ForeignKey('ArticleFile', blank=True, null=True, db_column='source_file_id')
     source_revision = models.BigIntegerField(blank=True, null=True)
@@ -1515,7 +1517,7 @@ class InstitutionalSubscription(models.Model):
         return u'%s, Subscription: %s, Institution: %s' % (self.id, self.subscription_id, self.institution_name)
 
 class IssueFile(models.Model):
-    id = models.IntegerField(primary_key = True, db_column = 'file_id' )
+    id = models.AutoField(primary_key = True, db_column = 'file_id' )
     issue = models.ForeignKey('Issue', db_column = 'issue_id')
     file_name = models.CharField(max_length=90)
     file_type = models.CharField(max_length=255)

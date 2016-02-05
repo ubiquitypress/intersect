@@ -27,6 +27,8 @@ class Migration(migrations.Migration):
                 ('stage_uploaded', models.IntegerField()),
                 ('kind', models.CharField(max_length=100)),
                 ('sequence', models.IntegerField(default=1)),
+                ('article_file', models.IntegerField(default=-1)),
+                ('issue_file', models.IntegerField(default=-1)),
                 ('owner', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
             options={

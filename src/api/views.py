@@ -492,6 +492,22 @@ def handle_file(file,article,kind, owner, label=None):
     if not file_mime:
         file_mime = 'unknown'
 
+    new_article_file = ArticleFile (
+        article = article,
+        file_name=original_filename,
+        file_type = file_mime,
+        file_size = os.path.getsize(path),
+        revision = 1,
+        round = 1,
+        file_stage = 1,
+        date_uploaded=timezone.now(),
+        date_modified=timezone.now(),
+        original_file_name=original_filename,
+
+        )
+
+    new_article_file.save()
+
     new_file = File(
         mime_type=file_mime,
         original_filename=original_filename,
@@ -499,10 +515,13 @@ def handle_file(file,article,kind, owner, label=None):
         stage_uploaded=1,
         kind=kind,
         label=label,
-        owner=owner
+        owner=owner,
     )
-    new_file.save()
 
+    new_file.save()
+    new_file.article_file = new_article_file.id
+    print new_file.article_file
+    new_file.save()
     return new_file
 
 class FileUploadView(APIView):
