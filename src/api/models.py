@@ -371,7 +371,7 @@ class ArticleSearchObject(models.Model):
 
 
 class ArticleSetting(models.Model):
-    article = models.OneToOneField('Article', db_column='article_id')
+    article = models.ForeignKey('Article', db_column='article_id')
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
@@ -562,7 +562,7 @@ class AuthSource(models.Model):
         return u' %s - Title: %s, settings: %s' % (self.id, self.title, self.settings)
 
 class AuthorSetting(models.Model):
-    author = models.OneToOneField('Author', db_column = 'author_id')
+    author = models.ForeignKey('Author', db_column = 'author_id')
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
@@ -1632,7 +1632,7 @@ class Issue(models.Model):
         return u'%s, Journal: %s' % (self.id, self.journal.id)
 
 class JournalSetting(models.Model):
-    journal = models.OneToOneField('Journal', db_column='journal_id')
+    journal = models.ForeignKey('Journal', db_column='journal_id')
     locale = models.CharField(max_length=5)
     setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)

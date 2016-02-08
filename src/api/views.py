@@ -220,18 +220,36 @@ class UpdateArticleSettingOneViewSet(generics.RetrieveUpdateAPIView):
     """
     API endpoint that allows users to be viewed or edited.
     """
-
     queryset = ArticleSetting.objects.all()
     serializer_class = ArticleSettingSerializer
 
-    def perform_update(self, serializer):
-        if serializer.is_valid():
+    def perform_update(self,request, serializer):
+
+        print serializer.data
+        if not serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         else:
             print serializer.errors
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+
+class GetArticleSettingOneViewSet(generics.ListAPIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+
+    serializer_class = ArticleSettingSerializer
+
+    def get_queryset(self):
+        queryset = ArticleSetting.objects.all().order_by('article')
+       
+        article_setting = ArticleSetting.objects.filter(pk=int(self.kwargs['pk']))
+
+        if article_setting:
+            return article_setting
+        else:
+            return queryset
+       
 class UpdateAuthorSettingOneViewSet(generics.RetrieveUpdateAPIView):
     """
     API endpoint that allows users to be viewed or edited.
