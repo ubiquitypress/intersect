@@ -396,6 +396,36 @@ class UserOneViewSet(generics.ListAPIView):
         else:
             return queryset
 
+class ArticleFilesOneViewSet(APIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    serializer_class = PublishedArticleSerializer
+
+    def get(self, request, *args, **kw):
+        queryset = PublishedArticle.objects.all().order_by('id')
+        article = get_object_or_404(Article, id=int(self.kwargs['article_id']))       
+        article_files = ArticleFile.objects.filter(article=article)
+        list_files = ""
+        for id,art in enumerate(article_files):
+            print art.id
+            try:
+                file = File.objects.get(article_file=art.id)
+                list_files=list_files+str(file.pk)
+                if not id == len(article_files)-1:
+                   list_files=list_files+"," 
+            except File.DoesNotExist:
+                pass;
+            
+        print article_files
+        result={'files':list_files}
+        response = Response(result, status=status.HTTP_200_OK)
+        print result
+        if article:
+            return response
+        else:
+            return queryset
+
 class PublishedArticlesOneViewSet(APIView):
     """
     API endpoint that allows users to be viewed or edited.
