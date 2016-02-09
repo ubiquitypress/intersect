@@ -49,7 +49,7 @@ urlpatterns = [
     url(r'get/files/(?P<article_id>.+)/', ArticleFilesOneViewSet.as_view()),
     url(r'get/setting/(?P<setting>[-\w]+)/issue/(?P<issue_id>.+)/', IssueSettingOneViewSet.as_view()),
     url(r'get/setting/(?P<setting>[-\w]+)/author/(?P<author_id>.+)/', AuthorSettingOneViewSet.as_view()),
-    url(r'get/setting/(?P<setting>[-\w]+)/article/(?P<article_id>.+)/', ArticleSettingOneViewSet.as_view()),
+    url(r'get/setting/(?P<setting>[-\w:]+)/article/(?P<article_id>.+)/', ArticleSettingOneViewSet.as_view()),
     url(r'update/issue/setting/(?P<pk>.+)/', UpdateIssueSettingOneViewSet.as_view()),
     url(r'update/journal/setting/(?P<pk>.+)/', UpdateJournalSettingOneViewSet.as_view()),
     url(r'update/article/setting/(?P<pk>.+)/', UpdateArticleSettingOneViewSet.as_view()),
