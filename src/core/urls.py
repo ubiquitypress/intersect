@@ -60,6 +60,8 @@ urlpatterns = [
     url(r'get/article/authors/(?P<article_id>.+)/', AuthorsArticleOneViewSet.as_view()),
     url(r'get/issue/authors/(?P<issue_id>.+)/', AuthorsIssueOneViewSet.as_view()),
     url(r'get/journal-settings/(?P<journal_id>.+)/', JournalSettingOneViewSet.as_view()),
+
+    url(r'get/author-settings/(?P<author_id>.+)/', AuthorAllSettingOneViewSet.as_view()),
     url(r'get/latest/journal/', LatestJournalOneViewSet.as_view()),
     url(r'get/latest/issue/', LatestIssueOneViewSet.as_view()),
     url(r'get/latest/file/', LatestFileOneViewSet.as_view()),

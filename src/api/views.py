@@ -367,6 +367,7 @@ class LatestJournalOneViewSet(generics.ListAPIView):
     def get_queryset(self):
         queryset = Journal.objects.all().order_by('-id')[:1]
         return queryset
+
 class JournalSettingOneViewSet(generics.ListAPIView):
     """
     API endpoint that allows users to be viewed or edited.
@@ -381,6 +382,19 @@ class JournalSettingOneViewSet(generics.ListAPIView):
         else:
             return queryset
 
+class AuthorAllSettingOneViewSet(generics.ListAPIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    serializer_class = AuthorSettingSerializer
+
+    def get_queryset(self):
+        queryset = AuthorSetting.objects.all().order_by('author')
+        author = get_object_or_404(Author, id=int(self.kwargs['author_id']))
+        if author:
+            return AuthorSetting.objects.filter(author=author)
+        else:
+            return queryset
 
 class UserOneViewSet(generics.ListAPIView):
     """
