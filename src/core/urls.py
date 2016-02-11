@@ -50,6 +50,8 @@ urlpatterns = [
     url(r'get/setting/(?P<setting>[-\w:]+)/issue/(?P<issue_id>.+)/', IssueSettingOneViewSet.as_view()),
     url(r'get/setting/(?P<setting>[-\w:]+)/author/(?P<author_id>.+)/', AuthorSettingOneViewSet.as_view()),
     url(r'get/setting/(?P<setting>[-\w:]+)/article/(?P<article_id>.+)/', ArticleSettingOneViewSet.as_view()),
+    url(r'get/setting/(?P<setting>[-\w:]+)/journal/(?P<journal_id>.+)/', JournalSpecificSettingViewSet.as_view()),
+    
     url(r'update/issue/setting/(?P<pk>.+)/', UpdateIssueSettingOneViewSet.as_view()),
     url(r'update/journal/setting/(?P<pk>.+)/', UpdateJournalSettingOneViewSet.as_view()),
     url(r'update/article/setting/(?P<pk>.+)/', UpdateArticleSettingOneViewSet.as_view()),
@@ -69,6 +71,7 @@ urlpatterns = [
     url(r'get/unique/authors/', UniqueAuthorsOneViewSet.as_view()),
     url(r'get/user_id/', user_id.as_view()),
     url(r'get/latest/article/', LatestArticleOneViewSet.as_view()),
+    url(r'get/latest/published-article/', LatestPublishedArticleOneViewSet.as_view()),
     url(r'get/users/(?P<user_id>.+)/', UserOneViewSet.as_view()),
     url(r'upload/file/(?P<article_id>.+)/', FileUploadView.as_view()),
     url(r'upload/specific/file/(?P<article_id>\d+)/(?P<file_id>\d+)/', FileUploadView.as_view()),

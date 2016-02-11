@@ -288,6 +288,27 @@ class ArticleSettingOneViewSet(generics.ListAPIView):
         else:
             return queryset
 
+class JournalSpecificSettingViewSet(generics.ListAPIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    serializer_class = JournalSettingSerializer
+
+    def get_queryset(self):
+        queryset = JournalSetting.objects.all().order_by('journal')
+        journal = get_object_or_404(Journal, id=int(self.kwargs['journal_id']))
+        if 'setting' in self.kwargs:
+            setting = self.kwargs['setting']
+        else:
+            setting = None
+        if setting:
+            journal_setting = JournalSetting.objects.filter(journal=journal, setting_name = setting)
+        else:
+            journal_setting = JournalSetting.objects.filter(journal=journal)
+        if journal:
+            return journal_setting
+        else:
+            return Response(serializers.serialize('json',  queryset ), status=status.HTTP_404_NOT_FOUND)
 
 class LatestArticleOneViewSet(generics.ListAPIView):
     """
@@ -297,6 +318,16 @@ class LatestArticleOneViewSet(generics.ListAPIView):
 
     def get_queryset(self):
         queryset = Article.objects.all().order_by('-id')[:1]
+        return queryset
+
+class LatestPublishedArticleOneViewSet(generics.ListAPIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    serializer_class = PublishedArticleSerializer
+
+    def get_queryset(self):
+        queryset = PublishedArticle.objects.all().order_by('-id')[:1]
         return queryset
 
 class LatestIssueOneViewSet(generics.ListAPIView):
@@ -608,6 +639,7 @@ def handle_file(file,article,kind, owner, label=None, specific_id=None):
             stage_uploaded=1,
             kind=kind,
             label=label,
+            date_uploaded = timezone.now(),
             owner=owner,
         )
     else:
@@ -618,6 +650,7 @@ def handle_file(file,article,kind, owner, label=None, specific_id=None):
             stage_uploaded=1,
             kind=kind,
             label=label,
+            date_uploaded = timezone.now(),
             owner=owner,
         )
 
