@@ -151,6 +151,7 @@ class IssueSettingOneViewSet(generics.ListAPIView):
         else:
             setting = None
         if setting:
+            issue_setting = get_object_or_404(IssueSetting, issue=issue, setting_name = setting)
             issue_setting = IssueSetting.objects.filter(issue=issue, setting_name = setting)
         else:
             issue_setting = IssueSetting.objects.filter(issue=issue)
@@ -175,6 +176,7 @@ class AuthorSettingOneViewSet(generics.ListAPIView):
         else:
             setting = None
         if setting:
+            author_setting = get_object_or_404(AuthorSetting, author=author, setting_name = setting)
             author_setting = AuthorSetting.objects.filter(author=author, setting_name = setting)
         else:
             author_setting = AuthorSetting.objects.filter(author=author)
@@ -280,6 +282,7 @@ class ArticleSettingOneViewSet(generics.ListAPIView):
         else:
             setting = None
         if setting:
+            article_setting = get_object_or_404(ArticleSetting, article=article, setting_name = setting)
             article_setting = ArticleSetting.objects.filter(article=article, setting_name = setting)
         else:
             article_setting = ArticleSetting.objects.filter(article=article)
@@ -302,7 +305,9 @@ class JournalSpecificSettingViewSet(generics.ListAPIView):
         else:
             setting = None
         if setting:
+            journal_setting = get_object_or_404(JournalSetting,journal=journal, setting_name = setting)
             journal_setting = JournalSetting.objects.filter(journal=journal, setting_name = setting)
+   
         else:
             journal_setting = JournalSetting.objects.filter(journal=journal)
         if journal:
@@ -515,6 +520,30 @@ class PublishedArticlesOneViewSet(APIView):
         response = Response(result, status=status.HTTP_200_OK)
         print result
         if issue:
+            return response
+        else:
+            return queryset
+
+class ListIssuesViewSet(APIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    serializer_class = IssueSerializer
+
+    def get(self, request, *args, **kw):
+        issues = Issue.objects.all().order_by('id')    
+        list_issues = ""
+        for id,issue in enumerate(issues):
+            list_issues=list_issues+str(issue.id)
+            if not id == len(issues)-1:
+               list_issues=list_issues+"," 
+            
+        print issues
+        result={'issues':list_issues}
+
+        response = Response(result, status=status.HTTP_200_OK)
+        print result
+        if issues:
             return response
         else:
             return queryset
