@@ -67,6 +67,7 @@ urlpatterns = [
     url(r'get/latest/journal/', LatestJournalOneViewSet.as_view()),
     url(r'get/latest/issue/', LatestIssueOneViewSet.as_view()),
     url(r'get/latest/file/', LatestFileOneViewSet.as_view()),
+    url(r'get/total/count/', TotalViewSet.as_view()),
     url(r'get/latest/author/', LatestAuthorOneViewSet.as_view()),
     url(r'get/unique/authors/', UniqueAuthorsOneViewSet.as_view()),
     url(r'get/user_id/', user_id.as_view()),

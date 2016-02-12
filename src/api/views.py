@@ -389,6 +389,28 @@ class UniqueAuthorsOneViewSet(APIView):
             return queryset
     
         return emails
+
+class TotalViewSet(APIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+  
+    def get(self, request, *args, **kw):
+        authors = Author.objects.all().count()
+        articles = Article.objects.all().count()
+        issues = Issue.objects.all().count()
+  
+      
+        total = {
+            'articles':articles,
+            'authors':authors,
+            'issues':issues,
+            }
+        response = Response(total, status=status.HTTP_200_OK)
+        print total
+        if total:
+            return response
+            
 class LatestJournalOneViewSet(generics.ListAPIView):
     """
     API endpoint that allows users to be viewed or edited.
