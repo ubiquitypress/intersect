@@ -667,10 +667,39 @@ class AuthorsIssueAppViewSet(APIView):
 
         response = Response(result, status=status.HTTP_200_OK)
         print result
-        if issue:
+        if published_articles and list_authors:
             return response
         else:
-            return queryset         
+            return Response(result, status=status.HTTP_404_NOT_FOUND)     
+
+class OneAuthorsIssueAppViewSet(APIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    serializer_class = AuthorSerializer
+
+    def get(self, request, *args, **kw):
+        queryset = Author.objects.all().order_by('id')
+        author = get_object_or_404(Author, id=int(self.kwargs['author_id']))
+        author_dict = model_to_dict(author)   
+        list_settings = []
+        list_setting_names = ["biography","orcid","twitter","department","affiliation"]
+        for name in list_setting_names:
+            setting = AuthorSetting.objects.filter(author=author, setting_name = name)
+            if setting:
+                list_settings.append(model_to_dict(setting[0]))
+        author_dict['settings'] = list_settings
+                
+  
+        result=author_dict
+
+        response = Response(result, status=status.HTTP_200_OK)
+        print result
+        if author:
+            return response
+        else:
+            return Response(result, status=status.HTTP_404_NOT_FOUND)     
+
 class PublishedArticleOneViewSet(APIView):
     """
     API endpoint that allows users to be viewed or edited.
