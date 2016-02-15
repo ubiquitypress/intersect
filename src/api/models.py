@@ -2352,9 +2352,9 @@ class SectionEditor(models.Model):
         return u'Journal: %s Section: %s - User: %s %s' % (self.journal.id, self.section.id, self.user.first_name, self.user.last_name)
 
 class SectionSetting(models.Model):
-    section = models.OneToOneField('Section', db_column = 'section_id')
-    locale = models.CharField(max_length=5, primary_key = True)
-    setting_name = models.CharField(max_length=255, primary_key = True)
+    section = models.ForeignKey('Section', db_column = 'section_id')
+    locale = models.CharField(max_length=5)
+    setting_name = models.CharField(max_length=255)
     setting_value = models.TextField(blank=True, null=True)
     setting_type = models.CharField(max_length=6)
 

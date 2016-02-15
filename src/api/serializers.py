@@ -61,6 +61,11 @@ class IssueSettingSerializer(serializers.HyperlinkedModelSerializer):
         model = IssueSetting
         fields = ('pk','issue', 'locale', 'setting_name','setting_value','setting_type')
 
+class SectionSettingSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = SectionSetting
+        fields = ('pk','section', 'locale', 'setting_name','setting_value','setting_type')
+
 class AuthorSettingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = AuthorSetting

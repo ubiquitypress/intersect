@@ -143,6 +143,13 @@ class JournalSettingViewSet(viewsets.ModelViewSet):
     queryset = JournalSetting.objects.all().order_by('-journal')
     serializer_class = JournalSettingSerializer
 
+class SectionSettingViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = SectionSetting.objects.all().order_by('-section')
+    serializer_class = SectionSettingSerializer
+
 class IssueSettingOneViewSet(generics.ListAPIView):
     """
     API endpoint that allows users to be viewed or edited.
@@ -527,7 +534,7 @@ class SectionsOneViewSet(APIView):
             return Response(result, status=status.HTTP_200_OK)
         else:
             return Response(result, status=status.HTTP_404_NOT_FOUND)   
-            
+
 class UserOneViewSet(generics.ListAPIView):
     """
     API endpoint that allows users to be viewed or edited.
