@@ -290,6 +290,7 @@ class ArticleSettingOneViewSet(generics.ListAPIView):
             return article_setting
         else:
             return queryset
+
 class ArticleSettingAppViewSet(APIView):
     """
     API endpoint that allows users to be viewed or edited.
@@ -620,6 +621,45 @@ class AuthorsIssueOneViewSet(APIView):
                 list_articles.append(record.article.id)
             for id,art in enumerate(authors):
                 list_authors.append(art.id)
+                
+            print len(authors)
+            print list_authors
+        result={'authors':list_authors,'articles':list_articles}
+
+        response = Response(result, status=status.HTTP_200_OK)
+        print result
+        if issue:
+            return response
+        else:
+            return queryset
+class AuthorsIssueAppViewSet(APIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    serializer_class = AuthorSerializer
+
+    def get(self, request, *args, **kw):
+        queryset = Author.objects.all().order_by('id')
+        issue = get_object_or_404(Issue, id=int(self.kwargs['issue_id']))
+        published_articles = PublishedArticle.objects.filter(issue=issue)
+        list_authors = []
+        list_articles = []
+        for record in published_articles:   
+            authors = Author.objects.filter(article=record.article)
+            if authors:
+                list_articles.append(record.article.id)
+            for id,art in enumerate(authors):
+                
+                art_dict = model_to_dict(art)
+                
+                list_settings = {}
+                list_setting_names = ["biography","orcid","twitter","department","affiliation"]
+                for name in list_setting_names:
+                   setting = AuthorSetting.objects.filter(author=art, setting_name = name)
+                   if setting:
+                      list_settings[setting[0].setting_name]=model_to_dict(setting[0])
+                art_dict['settings'] = list_settings
+                list_authors.append(art_dict)
                 
             print len(authors)
             print list_authors
