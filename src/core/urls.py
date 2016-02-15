@@ -59,6 +59,7 @@ urlpatterns = [
     url(r'get/article/setting/(?P<pk>.+)/', GetArticleSettingOneViewSet.as_view()),
     url(r'update/author/setting/(?P<pk>.+)/', UpdateAuthorSettingOneViewSet.as_view()),
     url(r'get/article-settings/(?P<article_id>.+)/', ArticleSettingOneViewSet.as_view()),
+    url(r'app/article-settings/(?P<article_id>.+)/', ArticleSettingAppViewSet.as_view()),
     url(r'get/article/published/(?P<article_id>.+)/', PublishedArticleOneViewSet.as_view()),
     url(r'get/article/authors/(?P<article_id>.+)/', AuthorsArticleOneViewSet.as_view()),
     url(r'get/issue/authors/(?P<issue_id>.+)/', AuthorsIssueOneViewSet.as_view()),

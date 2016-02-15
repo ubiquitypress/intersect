@@ -17,7 +17,7 @@ from django.utils import timezone
 import mimetypes as mime
 from uuid import uuid4
 import os
-
+from django.forms.models import model_to_dict
 import mimetypes
 from django.shortcuts import Http404
 from django.conf import settings
@@ -288,6 +288,34 @@ class ArticleSettingOneViewSet(generics.ListAPIView):
             article_setting = ArticleSetting.objects.filter(article=article)
         if article:
             return article_setting
+        else:
+            return queryset
+class ArticleSettingAppViewSet(APIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    serializer_class = ArticleSettingSerializer
+
+    def get(self, request, *args, **kw):
+        queryset = ArticleSetting.objects.all().order_by('article')
+        article = get_object_or_404(Article, id=int(self.kwargs['article_id']))
+        article_settings = ArticleSetting.objects.filter(article=article)
+        list_settings = []
+        list_setting_names = ["title","abstract","pub-id::doi","competingInterests","funding"]
+        for name in list_setting_names:
+            setting = ArticleSetting.objects.filter(article=article, setting_name = name)
+            if setting:
+                list_settings.append(model_to_dict(setting[0]))
+        article_dict = model_to_dict(article)
+        article_dict["date_submitted"] = str(article.date_submitted)
+        article_dict["last_modified"] = str(article.last_modified)
+        article_dict["date_status_modified"] = str(article.date_status_modified)
+        print json.dumps(article_dict)
+        result = {'settings':list_settings,'article':article_dict}
+
+        response = Response(result, status=status.HTTP_200_OK)
+        if article:
+            return response
         else:
             return queryset
 
