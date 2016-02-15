@@ -36,6 +36,8 @@ router.register(r'article-settings', views.ArticleSettingViewSet)
 router.register(r'journal-settings', views.JournalSettingViewSet)
 router.register(r'profiles', views.ProfileViewSet)
 router.register(r'files', views.FileViewSet)
+router.register(r'sections', views.SectionViewSet)
+
 
 
 
@@ -69,11 +71,13 @@ urlpatterns = [
     url(r'get/journal-settings/(?P<journal_id>.+)/', JournalSettingOneViewSet.as_view()),
 
     url(r'get/author-settings/(?P<author_id>.+)/', AuthorAllSettingOneViewSet.as_view()),
+    url(r'get/sections/(?P<journal_id>.+)/', SectionsOneViewSet.as_view()),
     url(r'get/latest/journal/', LatestJournalOneViewSet.as_view()),
     url(r'get/latest/issue/', LatestIssueOneViewSet.as_view()),
     url(r'get/latest/file/', LatestFileOneViewSet.as_view()),
     url(r'get/total/count/', TotalViewSet.as_view()),
     url(r'get/latest/author/', LatestAuthorOneViewSet.as_view()),
+    url(r'get/latest/section/', LatestSectionOneViewSet.as_view()),
     url(r'get/unique/authors/', UniqueAuthorsOneViewSet.as_view()),
     url(r'get/user_id/', user_id.as_view()),
     url(r'get/latest/article/', LatestArticleOneViewSet.as_view()),

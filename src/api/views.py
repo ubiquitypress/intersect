@@ -29,6 +29,13 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('-date_registered')
     serializer_class = UserSerializer
 
+class SectionViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = Section.objects.all().order_by('-id')
+    serializer_class = SectionSerializer
+
 class AuthorViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
@@ -394,6 +401,16 @@ class LatestAuthorOneViewSet(generics.ListAPIView):
         queryset = Author.objects.all().order_by('-id')[:1]
         return queryset
 
+class LatestSectionOneViewSet(generics.ListAPIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    serializer_class = SectionSerializer
+
+    def get_queryset(self):
+        queryset = Section.objects.all().order_by('-id')[:1]
+        return queryset
+
 class UniqueAuthorsOneViewSet(APIView):
     """
     API endpoint that allows users to be viewed or edited.
@@ -483,6 +500,34 @@ class AuthorAllSettingOneViewSet(generics.ListAPIView):
         else:
             return queryset
 
+class SectionsOneViewSet(APIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    serializer_class = SectionSerializer
+
+    def get(self, request, *args, **kw):
+        queryset = Section.objects.all().order_by('id')
+        journal = get_object_or_404(Journal, id=int(self.kwargs['journal_id']))
+        list_sections = []
+        sections = Section.objects.filter(journal=journal)
+        for section in sections:
+            section_dict = model_to_dict(section)
+            setting = SectionSetting.objects.filter(section = section, setting_name = "title")
+            if setting:
+                section_dict['title'] = setting[0].setting_value
+            else:
+                section_dict['title'] = " "
+
+            list_sections.append(section_dict)
+        print list_sections
+
+        result = {"sections":list_sections}
+        if sections:
+            return Response(result, status=status.HTTP_200_OK)
+        else:
+            return Response(result, status=status.HTTP_404_NOT_FOUND)   
+            
 class UserOneViewSet(generics.ListAPIView):
     """
     API endpoint that allows users to be viewed or edited.
