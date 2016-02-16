@@ -124,6 +124,61 @@ class ArticlePlusViewSet(generics.ListAPIView):
         print doi
         article = request.data['article']
         print article
+        current_article = None
+        if article:
+            current_article = get_object_or_404(Article,id = int(article))
+        print current_article
+
+        if abstract:
+            setting = ArticleSetting.objects.filter(article = current_article, setting_name= "abstract")
+            if setting:
+                current_abstract = setting[0]
+                print current_abstract.id
+                current_abstract.setting_value = abstract
+                current_abstract.save()
+            else:
+                current_abstract = ArticleSetting(article = current_article,setting_name= "abstract",setting_value= abstract, locale="en_US",setting_type="string")
+                current_abstract.save()
+        if title:
+            setting = ArticleSetting.objects.filter(article = current_article, setting_name= "title")
+            if setting:
+                current_title= setting[0]
+                print current_title.id
+                current_title.setting_value = title
+                current_title.save()
+            else:
+                current_title = ArticleSetting(article = current_article,setting_name= "title",setting_value= title, locale="en_US",setting_type="string")
+                current_title.save()
+        if competingInterests:
+            setting = ArticleSetting.objects.filter(article = current_article, setting_name= "competingInterests")
+            if setting:
+                current_competingInterests = setting[0]
+                print current_competingInterests.id
+                current_competingInterests.setting_value = competingInterests
+                current_competingInterests.save()
+            else:
+                current_competingInterests = ArticleSetting(article = current_article,setting_name= "competingInterests",setting_value= competingInterests, locale="en_US",setting_type="string")
+                current_competingInterests.save()
+        if funding:
+            setting = ArticleSetting.objects.filter(article = current_article, setting_name= "funding")
+            if setting:
+                current_funding= setting[0]
+                print current_funding.id
+                current_funding.setting_value = funding
+                current_funding.save()
+            else:
+                current_funding = ArticleSetting(article = current_article,setting_name= "funding",setting_value= funding, locale="en_US",setting_type="string")
+                current_funding.save()
+        if doi:
+            setting = ArticleSetting.objects.filter(article = current_article, setting_name= "pub-id::doi")
+            if setting:
+                current_doi = setting[0]
+                print current_doi.id
+                current_doi.setting_value = doi
+                current_doi.save()
+            else:
+                current_doi = ArticleSetting(article = current_article,setting_name= "pub-id::doi",setting_value= doi, locale="en_US",setting_type="string")
+                current_doi.save()
 
         return Response({'detail':"can only update"},status=status.HTTP_200_OK)
 
