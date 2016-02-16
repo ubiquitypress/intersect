@@ -74,6 +74,7 @@ urlpatterns = [
     url(r'get/author-settings/(?P<author_id>.+)/', AuthorAllSettingOneViewSet.as_view()),
     url(r'get/sections/(?P<journal_id>.+)/', SectionsOneViewSet.as_view()),
     url(r'get/latest/journal/', LatestJournalOneViewSet.as_view()),
+    url(r'custom/articles/', ArticlePlusViewSet.as_view()),
     url(r'get/latest/issue/', LatestIssueOneViewSet.as_view()),
     url(r'get/latest/file/', LatestFileOneViewSet.as_view()),
     url(r'get/total/count/', TotalViewSet.as_view()),

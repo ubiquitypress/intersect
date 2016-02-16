@@ -92,13 +92,41 @@ class DeleteFileViewSet(DestroyAPIView):
         file.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
 class ArticleViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
     queryset = Article.objects.all().order_by('-id')
     serializer_class = ArticleSerializer
+
+class ArticlePlusViewSet(generics.ListAPIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    serializer_class = ArticleAllSettingsSerializer
+
+    def get(self, request, *args, **kw):
+        return Response({'detail':"can only update"},status=status.HTTP_200_OK)
+    def put(self, request, *args, **kw):
+
+        print request.data
+
+        abstract = request.data['abstract']
+        print abstract
+        title = request.data['title']
+        print title
+        competingInterests = request.data['competing_interests']
+        print competingInterests
+
+        funding = request.data['funding']
+        print funding
+        doi = request.data['doi']
+        print doi
+        article = request.data['article']
+        print article
+
+        return Response({'detail':"can only update"},status=status.HTTP_200_OK)
+
 
 class PublishedArticleViewSet(viewsets.ModelViewSet):
     """
