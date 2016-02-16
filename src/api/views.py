@@ -417,6 +417,23 @@ class UpdateArticleSettingOneViewSet(generics.RetrieveUpdateAPIView):
             print serializer.errors
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class UpdateSectionSettingOneViewSet(generics.RetrieveUpdateAPIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = SectionSetting.objects.all()
+    serializer_class = SectionSettingSerializer
+
+    def perform_update(self,request, serializer):
+
+        print serializer.data
+        if not serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            print serializer.errors
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class GetArticleSettingOneViewSet(generics.ListAPIView):
     """
     API endpoint that allows users to be viewed or edited.
@@ -532,6 +549,30 @@ class JournalSpecificSettingViewSet(generics.ListAPIView):
             journal_setting = JournalSetting.objects.filter(journal=journal)
         if journal:
             return journal_setting
+        else:
+            return Response(serializers.serialize('json',  queryset ), status=status.HTTP_404_NOT_FOUND)
+
+class SectionSpecificSettingViewSet(generics.ListAPIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    serializer_class = SectionSettingSerializer
+
+    def get_queryset(self):
+        queryset = SectionSetting.objects.all().order_by('section')
+        section = get_object_or_404(Section, id=int(self.kwargs['section_id']))
+        if 'setting' in self.kwargs:
+            setting = self.kwargs['setting']
+        else:
+            setting = None
+        if setting:
+            section_setting = get_object_or_404(SectionSetting,section=section, setting_name = setting)
+            section_setting = SectionSetting.objects.filter(section=section, setting_name = setting)
+   
+        else:
+            section_setting = SectionSetting.objects.filter(section=section)
+        if section:
+            return section_setting
         else:
             return Response(serializers.serialize('json',  queryset ), status=status.HTTP_404_NOT_FOUND)
 

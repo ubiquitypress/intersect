@@ -55,10 +55,13 @@ urlpatterns = [
     url(r'get/setting/(?P<setting>[-\w:]+)/author/(?P<author_id>.+)/', AuthorSettingOneViewSet.as_view()),
     url(r'get/setting/(?P<setting>[-\w:]+)/article/(?P<article_id>.+)/', ArticleSettingOneViewSet.as_view()),
     url(r'get/setting/(?P<setting>[-\w:]+)/journal/(?P<journal_id>.+)/', JournalSpecificSettingViewSet.as_view()),
+    url(r'get/setting/(?P<setting>[-\w:]+)/section/(?P<section_id>.+)/', SectionSpecificSettingViewSet.as_view()),
     
     url(r'update/issue/setting/(?P<pk>.+)/', UpdateIssueSettingOneViewSet.as_view()),
     url(r'update/journal/setting/(?P<pk>.+)/', UpdateJournalSettingOneViewSet.as_view()),
     url(r'update/article/setting/(?P<pk>.+)/', UpdateArticleSettingOneViewSet.as_view()),
+    url(r'update/section/setting/(?P<pk>.+)/', UpdateArticleSettingOneViewSet.as_view()),
+
     url(r'get/article/setting/(?P<pk>.+)/', GetArticleSettingOneViewSet.as_view()),
     url(r'update/author/setting/(?P<pk>.+)/', UpdateAuthorSettingOneViewSet.as_view()),
     url(r'get/article-settings/(?P<article_id>.+)/', ArticleSettingOneViewSet.as_view()),
