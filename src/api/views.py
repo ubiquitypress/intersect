@@ -182,6 +182,91 @@ class ArticlePlusViewSet(generics.ListAPIView):
 
         return Response({'detail':"can only update"},status=status.HTTP_200_OK)
 
+class AuthorPlusViewSet(generics.ListAPIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    serializer_class = AuthorAllSettingsSerializer
+
+    def get(self, request, *args, **kw):
+        return Response({'detail':"can only update"},status=status.HTTP_200_OK)
+    def put(self, request, *args, **kw):
+
+        print request.data
+
+        affiliation = request.data['affiliation']
+        print affiliation
+        biography = request.data['biography']
+        print biography
+        orcid = request.data['orcid']
+        print orcid
+
+        twitter = request.data['twitter']
+        print twitter
+        department = request.data['department']
+        print department
+        author = request.data['author']
+        print author
+        current_author = None
+        if author:
+            current_author = get_object_or_404(Author,id = int(author))
+        print current_author
+
+        if affiliation:
+            setting = AuthorSetting.objects.filter(author = current_author, setting_name= "affiliation")
+            if setting:
+                current_affiliation = setting[0]
+                print current_affiliation.id
+                current_affiliation.setting_value = affiliation
+                current_affiliation.save()
+            else:
+                current_affiliation = AuthorSetting(author = current_author,setting_name= "affiliation",setting_value= affiliation, locale="en_US",setting_type="string")
+                current_affiliation.save()
+        if biography:
+            setting = AuthorSetting.objects.filter(author = current_author, setting_name= "biography")
+            if setting:
+                current_biography = setting[0]
+                print current_biography.id
+                current_biography.setting_value = biography
+                current_biography.save()
+            else:
+                current_biography = AuthorSetting(author = current_author,setting_name= "biography",setting_value= biography, locale="en_US",setting_type="string")
+                current_biography.save()
+        if orcid:
+            setting = AuthorSetting.objects.filter(author = current_author, setting_name= "orcid")
+            if setting:
+                current_orcid = setting[0]
+                print current_orcid.id
+                current_orcid.setting_value = orcid
+                current_orcid.save()
+            else:
+                current_orcid = AuthorSetting(author = current_author,setting_name= "orcid",setting_value= orcid, locale="en_US",setting_type="string")
+                current_orcid.save()
+        if twitter:
+            setting = AuthorSetting.objects.filter(author = current_author, setting_name= "twitter")
+            if setting:
+                current_twitter = setting[0]
+                print current_twitter.id
+                current_twitter.setting_value = twitter
+                current_twitter.save()
+            else:
+                current_twitter = AuthorSetting(author = current_author,setting_name= "twitter",setting_value= twitter, locale="en_US",setting_type="string")
+                current_twitter.save()
+        if department:
+            setting = AuthorSetting.objects.filter(author = current_author, setting_name= "department")
+            if setting:
+                current_department = setting[0]
+                print current_department.id
+                current_department.setting_value = department
+                current_department.save()
+            else:
+                current_department = AuthorSetting(author = current_author,setting_name= "department",setting_value= department, locale="en_US",setting_type="string")
+                current_department.save()
+      
+
+        return Response({'detail':"can only update"},status=status.HTTP_200_OK)
+
+
 
 class PublishedArticleViewSet(viewsets.ModelViewSet):
     """
@@ -408,6 +493,15 @@ class ArticleSettingAppViewSet(APIView):
         article_dict["date_submitted"] = str(article.date_submitted)
         article_dict["last_modified"] = str(article.last_modified)
         article_dict["date_status_modified"] = str(article.date_status_modified)
+        if article:
+            published_articles = PublishedArticle.objects.filter(article = article)
+            if published_articles:
+                published_article = published_articles[0]
+                article_dict["date_published"] = str(published_article.date_published)
+                article_dict["published_pk"] = published_article.id
+            else:
+                article_dict["date_published"] = None
+                article_dict["published_pk"] =  None
         print json.dumps(article_dict)
         result = {'settings':list_settings,'article':article_dict}
 

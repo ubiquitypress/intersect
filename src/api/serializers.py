@@ -37,6 +37,14 @@ class ArticleAllSettingsSerializer(serializers.Serializer):
     abstract = serializers.CharField()
     article = serializers.IntegerField()
 
+class AuthorAllSettingsSerializer(serializers.Serializer):
+    biography = serializers.CharField()
+    orcid = serializers.CharField()
+    twitter = serializers.CharField()
+    department = serializers.CharField()
+    affiliation = serializers.CharField()
+    author = serializers.IntegerField()
+
 class ArticleSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Article
