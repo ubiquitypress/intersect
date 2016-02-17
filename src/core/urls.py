@@ -60,7 +60,7 @@ urlpatterns = [
     url(r'update/issue/setting/(?P<pk>.+)/', UpdateIssueSettingOneViewSet.as_view()),
     url(r'update/journal/setting/(?P<pk>.+)/', UpdateJournalSettingOneViewSet.as_view()),
     url(r'update/article/setting/(?P<pk>.+)/', UpdateArticleSettingOneViewSet.as_view()),
-    url(r'update/section/setting/(?P<pk>.+)/', UpdateArticleSettingOneViewSet.as_view()),
+    url(r'update/section/setting/(?P<pk>.+)/', UpdateSectionSettingOneViewSet.as_view()),
 
     url(r'get/article/setting/(?P<pk>.+)/', GetArticleSettingOneViewSet.as_view()),
     url(r'update/author/setting/(?P<pk>.+)/', UpdateAuthorSettingOneViewSet.as_view()),

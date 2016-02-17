@@ -109,11 +109,11 @@ class ArticlePlusViewSet(generics.ListAPIView):
         return Response({'detail':"can only update"},status=status.HTTP_200_OK)
     def put(self, request, *args, **kw):
 
-        print request.data
+        print self.request.data
 
-        abstract = request.data['abstract']
+        abstract = self.request.data['abstract']
         print abstract
-        title = request.data['title']
+        title = self.request.data['title']
         print title
         competingInterests = request.data['competing_interests']
         print competingInterests
@@ -407,9 +407,10 @@ class UpdateArticleSettingOneViewSet(generics.RetrieveUpdateAPIView):
     queryset = ArticleSetting.objects.all()
     serializer_class = ArticleSettingSerializer
 
-    def perform_update(self,request, serializer):
+    def perform_update(self, serializer):
 
         print serializer.data
+        print self.request.data
         if not serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -424,10 +425,11 @@ class UpdateSectionSettingOneViewSet(generics.RetrieveUpdateAPIView):
     queryset = SectionSetting.objects.all()
     serializer_class = SectionSettingSerializer
 
-    def perform_update(self,request, serializer):
+    def perform_update(self, serializer):
 
         print serializer.data
-        if not serializer.is_valid():
+        print self.request.data
+        if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         else:
