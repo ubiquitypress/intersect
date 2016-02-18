@@ -505,6 +505,35 @@ class ArticleXmlGalley(models.Model):
 
     def __repr__(self):
         return u' %s - Article ID: %s, Galley ID: %s' % (self.id, self.article.id, self.galley.id)
+class DeletedArticle(models.Model):
+    id = models.IntegerField(primary_key = True)
+    locale = models.CharField(max_length=5, blank=True, null=True)
+    user = models.ForeignKey('User')
+    journal = models.ForeignKey('Journal')
+    section_id = models.BigIntegerField(blank=True, null=True)
+    language = models.CharField(max_length=10, blank=True, null=True)
+    comments_to_ed = models.TextField(blank=True, null=True)
+    citations = models.TextField(blank=True, null=True)
+    date_submitted = models.DateTimeField(blank=True, null=True)
+    last_modified = models.DateTimeField(blank=True, null=True)
+    date_status_modified = models.DateTimeField(blank=True, null=True)
+    status = models.IntegerField()
+    submission_progress = models.IntegerField()
+    current_round = models.IntegerField()
+    submission_file_id = models.BigIntegerField(blank=True, null=True)
+    revised_file_id = models.BigIntegerField(blank=True, null=True)
+    review_file_id = models.BigIntegerField(blank=True, null=True)
+    editor_file_id = models.BigIntegerField(blank=True, null=True)
+    pages = models.CharField(max_length=255, blank=True, null=True)
+    fast_tracked = models.IntegerField()
+    hide_author = models.IntegerField()
+    comments_status = models.IntegerField()
+   
+    def __unicode__(self):
+        return u' %s - User: %s %s, Section: %s' % (self.id, self.user.first_name, self.user.last_name, self.section_id)
+
+    def __repr__(self):
+        return u' %s - User: %s %s, Section: %s' % (self.id, self.user.first_name, self.user.last_name, self.section_id)
 
 class Article(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'article_id' )
@@ -535,7 +564,14 @@ class Article(models.Model):
         app_label='api'
         managed = False
         db_table = 'articles'
-   
+
+    def is_deleted(self):
+        deleted=False
+        delete_article = DeletedArticle.objects.filter(id=self.id)
+        if delete_article:
+            deleted=True
+        return deleted
+
     def __unicode__(self):
         return u' %s - User: %s %s, Section: %s' % (self.id, self.user.first_name, self.user.last_name, self.section_id)
 

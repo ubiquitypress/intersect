@@ -46,8 +46,17 @@ class AuthorAllSettingsSerializer(serializers.Serializer):
     author = serializers.IntegerField()
 
 class ArticleSerializer(serializers.HyperlinkedModelSerializer):
+
+    delete = serializers.BooleanField(source='is_deleted')
+
     class Meta:
         model = Article
+        fields = ('id', 'journal', 'section_id','user','date_submitted','pages','locale','language','status','submission_progress','current_round','fast_tracked','hide_author','comments_status','last_modified','delete')
+
+class DeletedArticleSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = DeletedArticle
         fields = ('id', 'journal', 'section_id','user','date_submitted','pages','locale','language','status','submission_progress','current_round','fast_tracked','hide_author','comments_status','last_modified')
 
 class PublishedArticleSerializer(serializers.HyperlinkedModelSerializer):
