@@ -825,19 +825,23 @@ class PublishedArticlesOneViewSet(APIView):
         published_articles = PublishedArticle.objects.filter(issue=issue)
         list_articles = ""
         for id,art in enumerate(published_articles):
-            list_articles=list_articles+str(art.article.id)
-            if not id == len(published_articles)-1:
-               list_articles=list_articles+"," 
+            if not art.article.is_deleted():
+                list_articles=list_articles+str(art.article.id)
+                if not id == len(published_articles)-1:
+                   list_articles=list_articles+"," 
             
         print published_articles
         result={'articles':list_articles}
 
         response = Response(result, status=status.HTTP_200_OK)
         print result
-        if issue:
+        if not issue.is_deleted():
             return response
         else:
-            return queryset
+            result = {'detail':'issue is deleted'}
+
+            response = Response(result, status=status.HTTP_404_NOT_FOUND)
+            return response
 
 class ListIssuesViewSet(APIView):
     """
