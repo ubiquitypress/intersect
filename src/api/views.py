@@ -98,7 +98,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
     """
     queryset = Article.objects.all().order_by('-id')
     serializer_class = ArticleSerializer
-    
+
 class DeletedArticleViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
@@ -303,6 +303,13 @@ class IssueViewSet(viewsets.ModelViewSet):
     """
     queryset = Issue.objects.all().order_by('-id')
     serializer_class = IssueSerializer
+
+class DeletedIssueViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = DeletedIssue.objects.all().order_by('-id')
+    serializer_class = DeletedIssueSerializer
 
 class IssueSettingViewSet(viewsets.ModelViewSet):
     """

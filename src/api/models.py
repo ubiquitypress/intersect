@@ -1634,7 +1634,32 @@ class IssueSetting(models.Model):
 
     def __repr__(self):
         return u'%s, Issue: %s, Setting: %s' % (self.pk, self.issue.id, self.setting_name)
+        
+class DeletedIssue(models.Model):
+    id = models.IntegerField(primary_key = True)
+    journal = models.ForeignKey('Journal')
+    volume = models.SmallIntegerField(blank=True, null=True)
+    number = models.CharField(max_length=10, blank=True, null=True)
+    year = models.SmallIntegerField(blank=True, null=True)
+    published = models.IntegerField()
+    current = models.IntegerField()
+    date_published = models.DateTimeField(blank=True, null=True)
+    date_notified = models.DateTimeField(blank=True, null=True)
+    access_status = models.IntegerField()
+    open_access_date = models.DateTimeField(blank=True, null=True)
+    show_volume = models.IntegerField()
+    show_number = models.IntegerField()
+    show_year = models.IntegerField()
+    show_title = models.IntegerField()
+    style_file_name = models.CharField(max_length=90, blank=True, null=True)
+    original_style_file_name = models.CharField(max_length=255, blank=True, null=True)
+    last_modified = models.DateTimeField(blank=True, null=True)
 
+    def __unicode__(self):
+        return u'%s, Journal: %s' % (self.id, self.journal.id)
+
+    def __repr__(self):
+        return u'%s, Journal: %s' % (self.id, self.journal.id)
 class Issue(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'issue_id' )
     journal = models.ForeignKey('Journal', db_column='journal_id')
@@ -1660,6 +1685,13 @@ class Issue(models.Model):
         app_label='api'
         managed = False
         db_table = 'issues'
+
+    def is_deleted(self):
+        deleted=False
+        delete_issue = DeletedIssue.objects.filter(id=self.id)
+        if delete_issue:
+            deleted=True
+        return deleted
 
     def __unicode__(self):
         return u'%s, Journal: %s' % (self.id, self.journal.id)
