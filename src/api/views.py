@@ -168,6 +168,7 @@ class DeleteIssueViewSet(DestroyAPIView):
                     )
                 new_author.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
 class DeleteArticleViewSet(DestroyAPIView):
     """
     API endpoint that allows users to be viewed or edited.
@@ -219,6 +220,34 @@ class DeleteArticleViewSet(DestroyAPIView):
                 suffix = author.suffix,
                 )
             new_author.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+       
+class DeleteSectionViewSet(DestroyAPIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = Section.objects.all().order_by('-id')
+    serializer_class = SectionSerializer
+
+    def delete(self, request, format=None, *args, **kw):
+        section = get_object_or_404(Section, id=int(self.kwargs['section_id']))
+        deleted_section =  DeletedSection(
+            id = section.id,
+            journal = section.journal,
+            review_form = section.review_form,
+            seq = section.seq,
+            editor_restricted = section.editor_restricted,
+            meta_indexed = section.meta_indexed,
+            meta_reviewed = section.meta_reviewed,
+            abstracts_not_required = section.abstracts_not_required,
+            hide_title = section.hide_title,
+            hide_author = section.hide_author,
+            hide_about = section.hide_about,
+            disable_comments = section.disable_comments,
+            abstract_word_count = section.abstract_word_count,
+            )
+        deleted_section.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class DeleteFileViewSet(DestroyAPIView):

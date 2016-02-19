@@ -100,5 +100,5 @@ urlpatterns = [
     url(r'delete/file/(?P<file_id>.+)/', DeleteFileViewSet.as_view()),
     url(r'delete/article/(?P<article_id>.+)/', DeleteArticleViewSet.as_view()),
     url(r'delete/issue/(?P<issue_id>.+)/', DeleteIssueViewSet.as_view()),
-    url(r'delete/section/(?P<section_id>.+)/', DeleteIssueViewSet.as_view()),
+    url(r'delete/section/(?P<section_id>.+)/', DeleteSectionViewSet.as_view()),
 ]
