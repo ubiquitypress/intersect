@@ -465,7 +465,7 @@ class SectionSettingViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
-    queryset = SectionSetting.objects.all().order_by('-section')
+    queryset = SectionSetting.objects.all().order_by('-id')
     serializer_class = SectionSettingSerializer
 
 class IssueSettingOneViewSet(generics.ListAPIView):
