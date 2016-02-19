@@ -90,6 +90,8 @@ class DeleteIssueViewSet(DestroyAPIView):
     def delete(self, request, format=None, *args, **kw):
         issue = get_object_or_404(Issue, id=int(self.kwargs['issue_id']))
         articles = PublishedArticle.objects.filter(issue=issue)
+        print "deleting issues"
+        print articles
         deleted_issue = DeletedIssue(
             id = issue.id,
             journal = issue.journal,
@@ -111,8 +113,11 @@ class DeleteIssueViewSet(DestroyAPIView):
             last_modified = issue.last_modified
         )
         deleted_issue.save()
+        print deleted_issue
         for published_article in articles:
+            print published_article.article
             article = published_article.article
+            print article
             deleted_article =  DeletedArticle(
                 id = article.id,
                 locale = article.locale, 
@@ -138,7 +143,7 @@ class DeleteIssueViewSet(DestroyAPIView):
                 comments_status = article.comments_status
                 )
             deleted_article.save()
-            authors = DeletedAuthor.objects.filter(article = article)
+            authors = Author.objects.filter(article = article)
             for author in authors:
                 new_author = DeletedAuthor(
                     id = author.id,
@@ -989,9 +994,10 @@ class ListIssuesViewSet(APIView):
         issues = Issue.objects.all().order_by('id')    
         list_issues = ""
         for id,issue in enumerate(issues):
-            list_issues=list_issues+str(issue.id)
-            if not id == len(issues)-1:
-               list_issues=list_issues+"," 
+            if not issue.is_deleted():
+                list_issues=list_issues+str(issue.id)
+                if not id == len(issues)-1:
+                   list_issues=list_issues+"," 
             
         print issues
         result={'issues':list_issues}
