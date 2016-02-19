@@ -195,7 +195,7 @@ class DeleteArticleViewSet(DestroyAPIView):
             comments_status = article.comments_status
             )
         deleted_article.save()
-        authors = DeletedAuthor.objects.filter(article = article)
+        authors = Author.objects.filter(article = article)
         for author in authors:
             new_author = DeletedAuthor(
                 id = author.id,
