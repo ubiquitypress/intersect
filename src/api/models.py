@@ -572,6 +572,13 @@ class Article(models.Model):
             deleted=True
         return deleted
 
+    def is_published(self):
+        published=False
+        published_article = PublishedArticle.objects.filter(article__id=self.id)
+        if published_article:
+            published=True
+        return published
+
     def __unicode__(self):
         return u' %s - User: %s %s, Section: %s' % (self.id, self.user.first_name, self.user.last_name, self.section_id)
 

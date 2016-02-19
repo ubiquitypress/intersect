@@ -53,6 +53,7 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'get/issue-settings/(?P<issue_id>.+)/', IssueSettingOneViewSet.as_view()),
     url(r'get/published-articles/(?P<issue_id>.+)/', PublishedArticlesOneViewSet.as_view()),
+    url(r'get/articles/', UnPublishedArticlesOneViewSet.as_view()),
     url(r'get/issue-ids/', ListIssuesViewSet.as_view()),
     url(r'get/files/(?P<article_id>.+)/', ArticleFilesOneViewSet.as_view()),
     url(r'get/setting/(?P<setting>[-\w:]+)/issue/(?P<issue_id>.+)/', IssueSettingOneViewSet.as_view()),

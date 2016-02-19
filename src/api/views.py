@@ -1025,7 +1025,42 @@ class PublishedArticlesOneViewSet(APIView):
 
             response = Response(result, status=status.HTTP_404_NOT_FOUND)
             return response
+class UnPublishedArticlesOneViewSet(APIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    serializer_class = PublishedArticleSerializer
 
+    def get(self, request, *args, **kw):
+        queryset = Article.objects.all().order_by('id') 
+        articles = Article.objects.all()
+        list_articles = ""
+
+        published = ""
+        for id,art in enumerate(articles):
+            if not art.is_published():
+                list_articles=list_articles+str(art.id)
+                if not id == len(articles)-1:
+                   list_articles=list_articles+"," 
+            else:
+                published=published+str(art.id)
+                if not id == len(articles)-1:
+                   published=published+","
+
+            
+        print articles
+        result={'unpublished_articles':list_articles,'published_articles':published}
+
+        response = Response(result, status=status.HTTP_200_OK)
+        print result
+
+        if articles:
+            return response
+        else:
+            result = {'detail':'no unpublished article found.'}
+
+            response = Response(result, status=status.HTTP_404_NOT_FOUND)
+            return response
 class ListIssuesViewSet(APIView):
     """
     API endpoint that allows users to be viewed or edited.
