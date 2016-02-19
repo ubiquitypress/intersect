@@ -30,6 +30,7 @@ router.register(r'authors', views.AuthorViewSet)
 router.register(r'author-settings', views.AuthorSettingViewSet)
 router.register(r'articles', views.ArticleViewSet)
 router.register(r'deleted-articles', views.DeletedArticleViewSet)
+router.register(r'deleted-authors', views.DeletedAuthorViewSet)
 router.register(r'deleted-issues', views.DeletedIssueViewSet)
 router.register(r'published-articles', views.PublishedArticleViewSet)
 router.register(r'issues', views.IssueViewSet)
@@ -94,5 +95,7 @@ urlpatterns = [
     url(r'upload/file/(?P<article_id>.+)/', FileUploadView.as_view()),
     url(r'upload/specific/file/(?P<article_id>\d+)/(?P<file_id>\d+)/', FileUploadView.as_view()),
     url(r'download/file/(?P<article_id>.+)/(?P<file_id>.+)/', FileDownloadView.as_view()),
+    #delete
     url(r'delete/file/(?P<file_id>.+)/', DeleteFileViewSet.as_view()),
+    url(r'delete/article/(?P<article_id>.+)/', DeleteArticleViewSet.as_view()),
 ]

@@ -80,6 +80,59 @@ class JournalViewSet(viewsets.ModelViewSet):
     queryset = Journal.objects.all().order_by('-id')
     serializer_class = JournalSerializer
 
+class DeleteArticleViewSet(DestroyAPIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = Article.objects.all().order_by('-id')
+    serializer_class = ArticleSerializer
+
+    def delete(self, request, format=None, *args, **kw):
+        article = get_object_or_404(Article, id=int(self.kwargs['article_id']))
+        deleted_article =  DeletedArticle(
+            id = article.id,
+            locale = article.locale, 
+            user = article.user,
+            journal = article.journal,
+            section_id = article.section_id,
+            language = article.language,
+            comments_to_ed = article.comments_to_ed,
+            citations = article.citations,
+            date_submitted = article.date_submitted,
+            last_modified = article.last_modified,
+            date_status_modified = article.date_status_modified,
+            status = article.status,
+            submission_progress = article.submission_progress,
+            current_round = article.current_round,
+            submission_file_id = article.submission_file_id,
+            revised_file_id = article.revised_file_id,
+            review_file_id = article.review_file_id,
+            editor_file_id = article.editor_file_id,
+            pages = article.pages,
+            fast_tracked = article.fast_tracked,
+            hide_author = article.hide_author,
+            comments_status = article.comments_status
+            )
+        deleted_article.save()
+        authors = DeletedAuthor.objects.filter(article = article)
+        for author in authors:
+            new_author = DeletedAuthor(
+                id = author.id,
+                deleted_article = deleted_article,
+                primary_contact = author.primary_contact,
+                seq = author.seq,
+                first_name = author.first_name,
+                middle_name = author.middle_name,
+                last_name = author.last_name,
+                country = author.country,
+                email = author.email,
+                url = author.url,
+                user_group = author.user_group,
+                suffix = author.suffix,
+                )
+            new_author.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 class DeleteFileViewSet(DestroyAPIView):
     """
     API endpoint that allows users to be viewed or edited.
@@ -105,6 +158,13 @@ class DeletedArticleViewSet(viewsets.ModelViewSet):
     """
     queryset = DeletedArticle.objects.all().order_by('-id')
     serializer_class = DeletedArticleSerializer
+
+class DeletedAuthorViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = DeletedAuthor.objects.all().order_by('-id')
+    serializer_class = DeletedAuthorSerializer
 
 class ArticlePlusViewSet(generics.ListAPIView):
     """

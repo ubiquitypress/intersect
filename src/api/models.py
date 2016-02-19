@@ -636,6 +636,33 @@ class Author(models.Model):
         app_label='api'
         managed = False
         db_table = 'authors'
+
+    def is_deleted(self):
+        deleted=False
+        delete_issue = DeletedAuthor.objects.filter(id=self.id)
+        if delete_issue:
+            deleted=True
+        return deleted   
+
+    def __unicode__(self):
+        return u' %s - %s %s' % (self.id, self.first_name, self.last_name)
+
+    def __repr__(self):
+        return u' %s - %s %s' % (self.id, self.first_name, self.last_name)
+
+class DeletedAuthor(models.Model):
+    id = models.IntegerField(primary_key = True)
+    deleted_article = models.ForeignKey('DeletedArticle')
+    primary_contact = models.IntegerField()
+    seq = models.FloatField()
+    first_name = models.CharField(max_length=40)
+    middle_name = models.CharField(max_length=40, blank=True, null=True)
+    last_name = models.CharField(max_length=90)
+    country = models.CharField(max_length=90, blank=True, null=True)
+    email = models.CharField(max_length=90)
+    url = models.CharField(max_length=255, blank=True, null=True)
+    user_group = models.ForeignKey('Group', blank=True, null=True)
+    suffix = models.CharField(max_length=40, blank=True, null=True)
    
     def __unicode__(self):
         return u' %s - %s %s' % (self.id, self.first_name, self.last_name)

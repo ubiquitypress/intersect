@@ -14,9 +14,18 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'assoc_type', 'assoc_id','publish_email','seq')
 
 class AuthorSerializer(serializers.HyperlinkedModelSerializer):
+    
+    deleted = serializers.BooleanField(source='is_deleted')
+    
     class Meta:
         model = Author
-        fields = ('id','seq','primary_contact','article', 'first_name', 'middle_name','last_name','country','email','url','user_group')
+        fields = ('id','seq','primary_contact','article', 'first_name', 'middle_name','last_name','country','email','url','user_group','deleted')
+
+class DeletedAuthorSerializer(serializers.HyperlinkedModelSerializer):
+ 
+     class Meta:
+        model = DeletedAuthor
+        fields = ('id','seq','primary_contact','deleted_article', 'first_name', 'middle_name','last_name','country','email','url','user_group')
 
 
 class JournalSerializer(serializers.HyperlinkedModelSerializer):
