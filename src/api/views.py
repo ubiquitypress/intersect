@@ -235,7 +235,6 @@ class DeleteSectionViewSet(DestroyAPIView):
         deleted_section =  DeletedSection(
             id = section.id,
             journal = section.journal,
-            review_form = section.review_form,
             seq = section.seq,
             editor_restricted = section.editor_restricted,
             meta_indexed = section.meta_indexed,
@@ -248,6 +247,12 @@ class DeleteSectionViewSet(DestroyAPIView):
             abstract_word_count = section.abstract_word_count,
             )
         deleted_section.save()
+        try:
+            if section.review_form:
+                deleted_section.review_form = section.review_form
+            deleted_section.save()
+        except ReviewForm.DoesNotExist:
+            print "review form does not exist"
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class DeleteFileViewSet(DestroyAPIView):
@@ -930,15 +935,16 @@ class SectionsOneViewSet(APIView):
         list_sections = []
         sections = Section.objects.filter(journal=journal)
         for section in sections:
-            section_dict = model_to_dict(section)
-            setting = SectionSetting.objects.filter(section = section, setting_name = "title")
-            if setting:
-                section_dict['title'] = setting[0].setting_value
-            else:
-                section_dict['title'] = " "
+            if not section.is_deleted():
+                section_dict = model_to_dict(section)
+                setting = SectionSetting.objects.filter(section = section, setting_name = "title")
+                if setting:
+                    section_dict['title'] = setting[0].setting_value
+                else:
+                    section_dict['title'] = " "
 
-            list_sections.append(section_dict)
-        print list_sections
+                list_sections.append(section_dict)
+            print list_sections
 
         result = {"sections":list_sections}
         if sections:
