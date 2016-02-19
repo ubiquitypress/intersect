@@ -80,6 +80,82 @@ class JournalViewSet(viewsets.ModelViewSet):
     queryset = Journal.objects.all().order_by('-id')
     serializer_class = JournalSerializer
 
+class DeleteIssueViewSet(DestroyAPIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = Issue.objects.all().order_by('-id')
+    serializer_class = IssueSerializer
+
+    def delete(self, request, format=None, *args, **kw):
+        issue = get_object_or_404(Issue, id=int(self.kwargs['issue_id']))
+        articles = PublishedArticle.objects.filter(issue=issue)
+        deleted_issue = DeletedIssue(
+            id = issue.id,
+            journal = issue.journal,
+            volume = issue.volume,
+            number = issue.number,
+            year = issue.year,
+            published = issue.published,
+            current = issue.current,
+            date_published = issue.date_published,
+            date_notified = issue.date_notified,
+            access_status = issue.access_status,
+            open_access_date = issue.open_access_date,
+            show_volume = issue.show_volume,
+            show_number = issue.show_number,
+            show_year = issue.show_year,
+            show_title = issue.show_title,
+            style_file_name = issue.style_file_name,
+            original_style_file_name = issue.original_style_file_name,
+            last_modified = issue.last_modified
+        )
+        deleted_issue.save()
+        for published_article in articles:
+            article = published_article.article
+            deleted_article =  DeletedArticle(
+                id = article.id,
+                locale = article.locale, 
+                user = article.user,
+                journal = article.journal,
+                section_id = article.section_id,
+                language = article.language,
+                comments_to_ed = article.comments_to_ed,
+                citations = article.citations,
+                date_submitted = article.date_submitted,
+                last_modified = article.last_modified,
+                date_status_modified = article.date_status_modified,
+                status = article.status,
+                submission_progress = article.submission_progress,
+                current_round = article.current_round,
+                submission_file_id = article.submission_file_id,
+                revised_file_id = article.revised_file_id,
+                review_file_id = article.review_file_id,
+                editor_file_id = article.editor_file_id,
+                pages = article.pages,
+                fast_tracked = article.fast_tracked,
+                hide_author = article.hide_author,
+                comments_status = article.comments_status
+                )
+            deleted_article.save()
+            authors = DeletedAuthor.objects.filter(article = article)
+            for author in authors:
+                new_author = DeletedAuthor(
+                    id = author.id,
+                    deleted_article = deleted_article,
+                    primary_contact = author.primary_contact,
+                    seq = author.seq,
+                    first_name = author.first_name,
+                    middle_name = author.middle_name,
+                    last_name = author.last_name,
+                    country = author.country,
+                    email = author.email,
+                    url = author.url,
+                    user_group = author.user_group,
+                    suffix = author.suffix,
+                    )
+                new_author.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 class DeleteArticleViewSet(DestroyAPIView):
     """
     API endpoint that allows users to be viewed or edited.
