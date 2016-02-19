@@ -36,6 +36,13 @@ class SectionViewSet(viewsets.ModelViewSet):
     queryset = Section.objects.all().order_by('-id')
     serializer_class = SectionSerializer
 
+class DeletedSectionViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = DeletedSection.objects.all().order_by('-id')
+    serializer_class = DeletedSectionSerializer
+
 class AuthorViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.

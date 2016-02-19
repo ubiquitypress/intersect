@@ -34,6 +34,14 @@ class JournalSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'path', 'seq','primary_locale','enabled')
 
 class SectionSerializer(serializers.HyperlinkedModelSerializer):
+
+    deleted = serializers.BooleanField(source='is_deleted')
+
+    class Meta:
+        model = Section
+        fields = ('id', 'journal', 'seq','editor_restricted','meta_indexed','meta_reviewed','abstracts_not_required','hide_title','hide_author','hide_about','disable_comments','abstract_word_count','deleted')
+
+class DeletedSectionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Section
         fields = ('id', 'journal', 'seq','editor_restricted','meta_indexed','meta_reviewed','abstracts_not_required','hide_title','hide_author','hide_about','disable_comments','abstract_word_count')

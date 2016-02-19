@@ -32,6 +32,7 @@ router.register(r'articles', views.ArticleViewSet)
 router.register(r'deleted-articles', views.DeletedArticleViewSet)
 router.register(r'deleted-authors', views.DeletedAuthorViewSet)
 router.register(r'deleted-issues', views.DeletedIssueViewSet)
+router.register(r'deleted-sections', views.DeletedSectionViewSet)
 router.register(r'published-articles', views.PublishedArticleViewSet)
 router.register(r'issues', views.IssueViewSet)
 router.register(r'issue-settings', views.IssueSettingViewSet)
@@ -99,4 +100,5 @@ urlpatterns = [
     url(r'delete/file/(?P<file_id>.+)/', DeleteFileViewSet.as_view()),
     url(r'delete/article/(?P<article_id>.+)/', DeleteArticleViewSet.as_view()),
     url(r'delete/issue/(?P<issue_id>.+)/', DeleteIssueViewSet.as_view()),
+    url(r'delete/section/(?P<section_id>.+)/', DeleteIssueViewSet.as_view()),
 ]

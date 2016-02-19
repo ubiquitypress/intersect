@@ -2493,11 +2493,40 @@ class Section(models.Model):
         managed = False
         db_table = 'sections'
 
+    def is_deleted(self):
+        deleted=False
+        delete_section = DeletedSection.objects.filter(id=self.id)
+        if delete_section:
+            deleted=True
+        return deleted
+
     def __unicode__(self):
         return u'%s - Journal: %s' % (self.id, self.journal.id)
 
     def __repr__(self):
         return u'%s - Journal: %s' % (self.id, self.journal.id)
+
+class DeletedSection(models.Model):
+    id = models.IntegerField(primary_key = True)
+    journal = models.ForeignKey('Journal')
+    review_form = models.ForeignKey('ReviewForm', blank=True, null=True)
+    seq = models.FloatField(default=0.0)
+    editor_restricted = models.IntegerField(default=0)
+    meta_indexed = models.IntegerField(default=0)
+    meta_reviewed = models.IntegerField(default=0)
+    abstracts_not_required = models.IntegerField(default=0)
+    hide_title = models.IntegerField(default=0)
+    hide_author = models.IntegerField(default=0)
+    hide_about = models.IntegerField(default=0)
+    disable_comments = models.IntegerField(default=0)
+    abstract_word_count = models.BigIntegerField(blank=True, null=True)
+
+    def __unicode__(self):
+        return u'%s - Journal: %s' % (self.id, self.journal.id)
+
+    def __repr__(self):
+        return u'%s - Journal: %s' % (self.id, self.journal.id)
+
 
 class Session(models.Model):
     id = models.CharField(primary_key=True, max_length=40, db_column="session_id")
