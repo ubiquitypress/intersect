@@ -82,6 +82,14 @@ class PublishedArticleSerializer(serializers.HyperlinkedModelSerializer):
         model = PublishedArticle
         fields = ('id', 'article', 'issue','date_published','seq','access_status')
 
+class UnPublishedArticleSerializer(serializers.HyperlinkedModelSerializer):
+
+    id = serializers.IntegerField(source='pk')
+    
+    class Meta:
+        model = PublishedArticle
+        fields = ('id', 'article', 'issue','seq','access_status')
+
 class ArticleSettingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ArticleSetting

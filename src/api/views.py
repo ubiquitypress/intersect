@@ -464,6 +464,13 @@ class PublishedArticleViewSet(viewsets.ModelViewSet):
     queryset = PublishedArticle.objects.all().order_by('-id')
     serializer_class = PublishedArticleSerializer
 
+class UnPublishedArticleViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = UnPublishedArticle.objects.all().order_by('-pk')
+    serializer_class = UnPublishedArticleSerializer
+
 class ArticleSettingViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.

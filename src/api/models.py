@@ -2072,6 +2072,19 @@ class Process(models.Model):
     def __repr__(self):
         return u'%s Type: %s' % (self.process_id, self.process_type)
 
+class UnPublishedArticle(models.Model):
+    article = models.ForeignKey('Article')
+    issue = models.ForeignKey('Issue', db_column = 'issue_id')
+    seq = models.FloatField()
+    access_status = models.IntegerField()
+
+    def __unicode__(self):
+        return u'%s Article: %s Issue: %s' % (self.id, self.article.id, self.issue.id)
+
+    def __repr__(self):
+        return u'%s Article: %s Issue: %s' % (self.id, self.article.id, self.issue.id)
+
+
 class PublishedArticle(models.Model):
     id = models.IntegerField(primary_key = True, db_column = 'published_article_id' )
     article = models.OneToOneField('Article')
