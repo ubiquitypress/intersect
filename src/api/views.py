@@ -1046,13 +1046,19 @@ class UnPublishedArticlesOneViewSet(APIView):
         published = ""
         for id,art in enumerate(articles):
             if not art.is_published():
-                list_articles=list_articles+str(art.id)
-                if not id == len(articles)-1:
-                   list_articles=list_articles+"," 
+                title = ArticleSetting.objects.filter(article=art, setting_name = "title")
+                abstract = ArticleSetting.objects.filter(article=art, setting_name = "abstract")
+                if title and abstract and art.date_submitted and art.pages:
+                    list_articles=list_articles+str(art.id)
+                    if not id == len(articles)-1:
+                       list_articles=list_articles+"," 
             else:
-                published=published+str(art.id)
-                if not id == len(articles)-1:
-                   published=published+","
+                title = ArticleSetting.objects.filter(article=art, setting_name = "title")
+                abstract = ArticleSetting.objects.filter(article=art, setting_name = "abstract")
+                if title and abstract and art.date_submitted and art.pages:
+                    published=published+str(art.id)
+                    if not id == len(articles)-1:
+                       published=published+","
 
             
         print articles
