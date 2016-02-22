@@ -471,6 +471,8 @@ class UnPublishedArticleViewSet(viewsets.ModelViewSet):
     queryset = UnPublishedArticle.objects.all().order_by('-pk')
     serializer_class = UnPublishedArticleSerializer
 
+
+
 class ArticleSettingViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
@@ -723,7 +725,8 @@ class ArticleSettingAppViewSet(APIView):
                 article_dict["published_pk"] = published_article.id
             else:
                 article_dict["date_published"] = None
-                article_dict["published_pk"] =  None
+                article_dict["published_pk"] =  -1
+                article_dict["unpublished_pk"] =  article.unpublished_pk()
         print json.dumps(article_dict)
         result = {'settings':list_settings,'article':article_dict}
 
@@ -1012,16 +1015,22 @@ class PublishedArticlesOneViewSet(APIView):
     def get(self, request, *args, **kw):
         queryset = PublishedArticle.objects.all().order_by('id')
         issue = get_object_or_404(Issue, id=int(self.kwargs['issue_id']))       
-        published_articles = PublishedArticle.objects.filter(issue=issue)
+        published_articles = PublishedArticle.objects.filter(issue=issue)      
+        unpublished_articles = UnPublishedArticle.objects.filter(issue=issue)
         list_articles = ""
+        list_unpublished_articles = ""
         for id,art in enumerate(published_articles):
             if not art.article.is_deleted():
                 list_articles=list_articles+str(art.article.id)
                 if not id == len(published_articles)-1:
                    list_articles=list_articles+"," 
-            
+        for id,art in enumerate(unpublished_articles):
+            if not art.article.is_deleted():
+                list_unpublished_articles=list_unpublished_articles+str(art.article.id)
+                if not id == len(unpublished_articles)-1:
+                   list_unpublished_articles=list_unpublished_articles+"," 
         print published_articles
-        result={'articles':list_articles}
+        result={'articles':list_articles,'unpublished':list_unpublished_articles}
 
         response = Response(result, status=status.HTTP_200_OK)
         print result
@@ -1049,9 +1058,11 @@ class UnPublishedArticlesOneViewSet(APIView):
                 title = ArticleSetting.objects.filter(article=art, setting_name = "title")
                 abstract = ArticleSetting.objects.filter(article=art, setting_name = "abstract")
                 if title and abstract and art.date_submitted and art.pages:
-                    list_articles=list_articles+str(art.id)
-                    if not id == len(articles)-1:
-                       list_articles=list_articles+"," 
+                    unpub = UnPublishedArticle.objects.filter(article = art)
+                    if not unpub:
+                        list_articles=list_articles+str(art.id)
+                        if not id == len(articles)-1:
+                           list_articles=list_articles+"," 
             else:
                 title = ArticleSetting.objects.filter(article=art, setting_name = "title")
                 abstract = ArticleSetting.objects.filter(article=art, setting_name = "abstract")
@@ -1114,6 +1125,32 @@ class AuthorsArticleOneViewSet(APIView):
             list_authors=list_authors+str(art.id)
             if not id == len(authors)-1:
                list_authors=list_authors+"," 
+            
+        print len(authors)
+        print list_authors
+        result={'authors':list_authors}
+
+        response = Response(result, status=status.HTTP_200_OK)
+        print result
+        if article:
+            return response
+        else:
+            return queryset
+class AllAuthorsArticleOneViewSet(APIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    serializer_class = AuthorSerializer
+
+    def get(self, request, *args, **kw):
+        queryset = Author.objects.all().order_by('id')
+        article = get_object_or_404(Article, id=int(self.kwargs['article_id']))
+        list_authors = []
+         
+        authors = Author.objects.filter(article=article)
+        if authors:
+            for id,art in enumerate(authors):
+                list_authors.append(art.id)
             
         print len(authors)
         print list_authors
@@ -1245,6 +1282,30 @@ class PublishedArticleOneViewSet(APIView):
             return Response(result, status=status.HTTP_200_OK)
         else:
             return Response(serializers.serialize('json',  queryset ), status=status.HTTP_404_NOT_FOUND)
+
+class UnPublishedArticleOneViewSet(APIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    serializer_class = PublishedArticleSerializer
+
+    def get(self, request, *args, **kw):
+        queryset = PublishedArticle.objects.all().order_by('article')
+        article = get_object_or_404(Article, id=int(self.kwargs['article_id']))
+        print article
+        article_published = get_object_or_404(UnPublishedArticle, article=article)
+        result={
+        'id':article_published.pk,
+        'article':article_published.article.id,
+        'issue':article_published.issue.id,
+        'seq':article_published.seq,
+        'access_status':article_published.access_status}
+        if article:
+
+            return Response(result, status=status.HTTP_200_OK)
+        else:
+            return Response(serializers.serialize('json',  queryset ), status=status.HTTP_404_NOT_FOUND)
+
 
 class heartbeat(APIView):
 

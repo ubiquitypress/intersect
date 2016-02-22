@@ -69,7 +69,7 @@ class ArticleSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Article
-        fields = ('id', 'journal', 'section_id','user','date_submitted','pages','locale','language','status','submission_progress','current_round','fast_tracked','hide_author','comments_status','last_modified','deleted','published')
+        fields = ('id', 'journal', 'section_id','user','date_submitted','pages','locale','language','status','submission_progress','current_round','fast_tracked','hide_author','comments_status','last_modified','deleted','published','published_pk','unpublished_pk')
 
 class DeletedArticleSerializer(serializers.HyperlinkedModelSerializer):
 
@@ -84,11 +84,9 @@ class PublishedArticleSerializer(serializers.HyperlinkedModelSerializer):
 
 class UnPublishedArticleSerializer(serializers.HyperlinkedModelSerializer):
 
-    id = serializers.IntegerField(source='pk')
-    
     class Meta:
-        model = PublishedArticle
-        fields = ('id', 'article', 'issue','seq','access_status')
+        model = UnPublishedArticle
+        fields = ('pk', 'article', 'issue','seq','access_status')
 
 class ArticleSettingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

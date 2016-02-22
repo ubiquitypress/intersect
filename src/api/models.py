@@ -579,6 +579,20 @@ class Article(models.Model):
             published=True
         return published
 
+    def published_pk(self):
+        published_article = PublishedArticle.objects.filter(article__id=self.id)
+        if published_article:
+            return published_article[0].id
+        else:
+            return -1
+
+    def unpublished_pk(self):
+        unpublished_article = UnPublishedArticle.objects.filter(article__id=self.id)
+        if unpublished_article:
+            return unpublished_article[0].id
+        else:
+            return -1
+
     def __unicode__(self):
         return u' %s - User: %s %s, Section: %s' % (self.id, self.user.first_name, self.user.last_name, self.section_id)
 
@@ -2073,6 +2087,8 @@ class Process(models.Model):
         return u'%s Type: %s' % (self.process_id, self.process_type)
 
 class UnPublishedArticle(models.Model):
+
+    id = models.AutoField(primary_key = True)
     article = models.ForeignKey('Article')
     issue = models.ForeignKey('Issue', db_column = 'issue_id')
     seq = models.FloatField()
