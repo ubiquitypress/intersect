@@ -1,5 +1,12 @@
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+
 # intersect
+
 Intersect is an API for Open Journal Systems, written in Python with Django.
+
 # Table Alterations
 - Article Settings : id (auto_increment, primary key)
 - Issue Settings : id (auto_increment, primary key)
@@ -10,8 +17,9 @@ Intersect is an API for Open Journal Systems, written in Python with Django.
 - user_profiles table : foreignkey ids :intersect_user (auth_users) [PK] + journal (Journals) + user (users)
 
 
+--------------------------------------------------------------------------
 SQL COMMANDS FOR TABLE ALTERATIONS:
-
+--------------------------------------------------------------------------
 
   ALTER TABLE issue_settings add `id` int(11) unsigned NOT NULL AUTO_INCREMENT, ADD CONSTRAINT PRIMARY KEY (`id`);
 
@@ -24,7 +32,9 @@ SQL COMMANDS FOR TABLE ALTERATIONS:
   ALTER TABLE author_settings add `id` int(11) unsigned NOT NULL AUTO_INCREMENT, ADD CONSTRAINT PRIMARY KEY (`id`);
 
 
+--------------------------------------------------------------------------
   SQL IF TABLES ARE NOT CREATED:
+--------------------------------------------------------------------------
 
 CREATE TABLE `api_deletedarticle` (
   `id` int(11) NOT NULL,
