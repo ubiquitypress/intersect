@@ -34,8 +34,8 @@ class Migration(migrations.Migration):
                 ('fast_tracked', models.IntegerField()),
                 ('hide_author', models.IntegerField()),
                 ('comments_status', models.IntegerField()),
-                ('journal', models.ForeignKey(to='api.Journal')),
-                ('user', models.ForeignKey(to='api.User')),
+                ('journal', models.BigIntegerField()),
+                ('user', models.BigIntegerField()),
             ],
         ),
     ]

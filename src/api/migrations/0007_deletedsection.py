@@ -25,8 +25,8 @@ class Migration(migrations.Migration):
                 ('hide_about', models.IntegerField(default=0)),
                 ('disable_comments', models.IntegerField(default=0)),
                 ('abstract_word_count', models.BigIntegerField(null=True, blank=True)),
-                ('journal', models.ForeignKey(to='api.Journal')),
-                ('review_form', models.ForeignKey(blank=True, to='api.ReviewForm', null=True)),
+                ('journal', models.BigIntegerField()),
+                ('review_form', models.BigIntegerField(blank=True, null=True)),
             ],
         ),
     ]

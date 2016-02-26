@@ -24,8 +24,8 @@ class Migration(migrations.Migration):
                 ('email', models.CharField(max_length=90)),
                 ('url', models.CharField(max_length=255, null=True, blank=True)),
                 ('suffix', models.CharField(max_length=40, null=True, blank=True)),
-                ('deleted_article', models.ForeignKey(to='api.DeletedArticle')),
-                ('user_group', models.ForeignKey(blank=True, to='api.Group', null=True)),
+                ('deleted_article', models.BigIntegerField()),
+                ('user_group',models.BigIntegerField(blank=True, null=True)),
             ],
         ),
     ]

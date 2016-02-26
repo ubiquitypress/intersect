@@ -18,7 +18,6 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'user_profiles',
-                'managed': False,
                 'verbose_name_plural': 'Profiles',
             },
         ),

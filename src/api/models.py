@@ -508,8 +508,8 @@ class ArticleXmlGalley(models.Model):
 class DeletedArticle(models.Model):
     id = models.IntegerField(primary_key = True)
     locale = models.CharField(max_length=5, blank=True, null=True)
-    user = models.ForeignKey('User')
-    journal = models.ForeignKey('Journal')
+    user =models.BigIntegerField()
+    journal = models.BigIntegerField()
     section_id = models.BigIntegerField(blank=True, null=True)
     language = models.CharField(max_length=10, blank=True, null=True)
     comments_to_ed = models.TextField(blank=True, null=True)
@@ -1685,7 +1685,7 @@ class IssueSetting(models.Model):
         
 class DeletedIssue(models.Model):
     id = models.IntegerField(primary_key = True)
-    journal = models.ForeignKey('Journal')
+    journal = models.BigIntegerField()
     volume = models.SmallIntegerField(blank=True, null=True)
     number = models.CharField(max_length=10, blank=True, null=True)
     year = models.SmallIntegerField(blank=True, null=True)

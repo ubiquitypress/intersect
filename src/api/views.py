@@ -101,7 +101,7 @@ class DeleteIssueViewSet(DestroyAPIView):
         print articles
         deleted_issue = DeletedIssue(
             id = issue.id,
-            journal = issue.journal,
+            journal = issue.journal.id,
             volume = issue.volume,
             number = issue.number,
             year = issue.year,
@@ -128,8 +128,8 @@ class DeleteIssueViewSet(DestroyAPIView):
             deleted_article =  DeletedArticle(
                 id = article.id,
                 locale = article.locale, 
-                user = article.user,
-                journal = article.journal,
+                user = article.user.id,
+                journal = article.journal.id,
                 section_id = article.section_id,
                 language = article.language,
                 comments_to_ed = article.comments_to_ed,
@@ -154,7 +154,7 @@ class DeleteIssueViewSet(DestroyAPIView):
             for author in authors:
                 new_author = DeletedAuthor(
                     id = author.id,
-                    deleted_article = deleted_article,
+                    deleted_article = deleted_article.id,
                     primary_contact = author.primary_contact,
                     seq = author.seq,
                     first_name = author.first_name,
@@ -163,7 +163,7 @@ class DeleteIssueViewSet(DestroyAPIView):
                     country = author.country,
                     email = author.email,
                     url = author.url,
-                    user_group = author.user_group,
+                    user_group = author.user_group.id,
                     suffix = author.suffix,
                     )
                 new_author.save()
@@ -234,7 +234,7 @@ class DeleteSectionViewSet(DestroyAPIView):
         section = get_object_or_404(Section, id=int(self.kwargs['section_id']))
         deleted_section =  DeletedSection(
             id = section.id,
-            journal = section.journal,
+            journal = section.journal.id,
             seq = section.seq,
             editor_restricted = section.editor_restricted,
             meta_indexed = section.meta_indexed,
@@ -249,7 +249,7 @@ class DeleteSectionViewSet(DestroyAPIView):
         deleted_section.save()
         try:
             if section.review_form:
-                deleted_section.review_form = section.review_form
+                deleted_section.review_form = section.review_form.id
             deleted_section.save()
         except ReviewForm.DoesNotExist:
             print "review form does not exist"

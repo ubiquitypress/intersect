@@ -94,7 +94,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ojs_sta_intersect',
+        'NAME': 'ojs_sta',
         'USER': 'root',
         'PASSWORD': 'root',
         'HOST': '127.0.0.1',

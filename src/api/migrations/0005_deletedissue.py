@@ -31,7 +31,7 @@ class Migration(migrations.Migration):
                 ('style_file_name', models.CharField(max_length=90, null=True, blank=True)),
                 ('original_style_file_name', models.CharField(max_length=255, null=True, blank=True)),
                 ('last_modified', models.DateTimeField(null=True, blank=True)),
-                ('journal', models.ForeignKey(to='api.Journal')),
+                ('journal', models.BigIntegerField()),
             ],
         ),
     ]

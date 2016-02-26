@@ -17,8 +17,8 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('seq', models.FloatField()),
                 ('access_status', models.IntegerField()),
-                ('article', models.OneToOneField(to='api.Article')),
-                ('issue', models.ForeignKey(to='api.Issue', db_column='issue_id')),
+                ('article', models.BigIntegerField(db_column='article_id')),
+                ('issue',models.BigIntegerField(db_column='issue_id')),
             ],
         ),
     ]

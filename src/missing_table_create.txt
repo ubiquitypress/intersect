@@ -1,0 +1,100 @@
+CREATE TABLE `user_profiles` (
+  `user_id` int(11) NOT NULL,
+  `journal_id` int(11) NOT NULL,
+  `intersect_user_id` int(11) NOT NULL,
+  PRIMARY KEY (`intersect_user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `api_deletedarticle` (
+  `id` int(11) NOT NULL,
+  `locale` varchar(5) DEFAULT NULL,
+  `section_id` bigint(20) DEFAULT NULL,
+  `language` varchar(10) DEFAULT NULL,
+  `comments_to_ed` longtext,
+  `citations` longtext,
+  `date_submitted` datetime(6) DEFAULT NULL,
+  `last_modified` datetime(6) DEFAULT NULL,
+  `date_status_modified` datetime(6) DEFAULT NULL,
+  `status` int(11) NOT NULL,
+  `submission_progress` int(11) NOT NULL,
+  `current_round` int(11) NOT NULL,
+  `submission_file_id` bigint(20) DEFAULT NULL,
+  `revised_file_id` bigint(20) DEFAULT NULL,
+  `review_file_id` bigint(20) DEFAULT NULL,
+  `editor_file_id` bigint(20) DEFAULT NULL,
+  `pages` varchar(255) DEFAULT NULL,
+  `fast_tracked` int(11) NOT NULL,
+  `hide_author` int(11) NOT NULL,
+  `comments_status` int(11) NOT NULL,
+  `journal_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `api_deletedauthor` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `deleted_article_id` bigint(20) NOT NULL,
+  `primary_contact` tinyint(4) NOT NULL DEFAULT '0',
+  `seq` double NOT NULL DEFAULT '0',
+  `first_name` varchar(40) NOT NULL,
+  `middle_name` varchar(40) DEFAULT NULL,
+  `last_name` varchar(90) NOT NULL,
+  `country` varchar(90) DEFAULT NULL,
+  `email` varchar(90) NOT NULL,
+  `url` varchar(255) DEFAULT NULL,
+  `user_group_id` bigint(20) DEFAULT NULL,
+  `suffix` varchar(40) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `authors_submission_id` (`deleted_article_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `api_deletedissue` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `journal_id` bigint(20) NOT NULL,
+  `volume` smallint(6) DEFAULT NULL,
+  `number` varchar(10) DEFAULT NULL,
+  `year` smallint(6) DEFAULT NULL,
+  `published` tinyint(4) NOT NULL DEFAULT '0',
+  `current` tinyint(4) NOT NULL DEFAULT '0',
+  `date_published` datetime DEFAULT NULL,
+  `date_notified` datetime DEFAULT NULL,
+  `access_status` tinyint(4) NOT NULL DEFAULT '1',
+  `open_access_date` datetime DEFAULT NULL,
+  `show_volume` tinyint(4) NOT NULL DEFAULT '0',
+  `show_number` tinyint(4) NOT NULL DEFAULT '0',
+  `show_year` tinyint(4) NOT NULL DEFAULT '0',
+  `show_title` tinyint(4) NOT NULL DEFAULT '0',
+  `style_file_name` varchar(90) DEFAULT NULL,
+  `original_style_file_name` varchar(255) DEFAULT NULL,
+  `last_modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `issues_journal_id` (`journal_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `api_deletedsection` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `journal_id` bigint(20) NOT NULL,
+  `review_form_id` bigint(20) DEFAULT NULL,
+  `seq` double NOT NULL DEFAULT '0',
+  `editor_restricted` tinyint(4) NOT NULL DEFAULT '0',
+  `meta_indexed` tinyint(4) NOT NULL DEFAULT '0',
+  `meta_reviewed` tinyint(4) NOT NULL DEFAULT '1',
+  `abstracts_not_required` tinyint(4) NOT NULL DEFAULT '0',
+  `hide_title` tinyint(4) NOT NULL DEFAULT '0',
+  `hide_author` tinyint(4) NOT NULL DEFAULT '0',
+  `hide_about` tinyint(4) NOT NULL DEFAULT '0',
+  `disable_comments` tinyint(4) NOT NULL DEFAULT '0',
+  `abstract_word_count` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `sections_journal_id` (`journal_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `api_unpublishedarticle` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `seq` double NOT NULL,
+  `access_status` int(11) NOT NULL,
+  `article_id` int(11) NOT NULL,
+  `issue_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `article_id` (`article_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
