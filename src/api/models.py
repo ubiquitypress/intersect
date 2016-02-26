@@ -2957,9 +2957,9 @@ class UserSetting(models.Model):
         return u'%s %s - %s' % (self.user.first_name, self.user.last_name, self.setting_name)
 
 class Profile(models.Model):
-    intersect_user = models.ForeignKey(User, db_column = 'intersect_user_id', primary_key = True, related_name = "profile_intersecct" )
-    user = models.ForeignKey('User', db_column = 'user_id', related_name = "profile_user" )
-    journal = models.ForeignKey('Journal', db_column = 'journal_id', related_name = "profile_journal")
+    intersect_user = models.BigIntegerField(db_column = 'intersect_user_id', primary_key = True)
+    user = models.BigIntegerField(db_column = 'user_id')
+    journal = models.BigIntegerField(db_column = 'journal_id')
 
     class Meta:
         verbose_name_plural = 'Profiles' 
