@@ -31,17 +31,6 @@ SQL COMMANDS FOR TABLE ALTERATIONS:
 
   ALTER TABLE author_settings add `id` int(11) unsigned NOT NULL AUTO_INCREMENT, ADD CONSTRAINT PRIMARY KEY (`id`);
 
--- Same commands with schema 'ojs_db'
-
-  ALTER TABLE ojs_db.issue_settings add `id` int(11) unsigned NOT NULL AUTO_INCREMENT, ADD CONSTRAINT PRIMARY KEY (`id`);
-
-  ALTER TABLE ojs_db.section_settings add `id` int(11) unsigned NOT NULL AUTO_INCREMENT, ADD CONSTRAINT PRIMARY KEY (`id`);
-
-  ALTER TABLE ojs_db.article_settings add `id` int(11) unsigned NOT NULL AUTO_INCREMENT, ADD CONSTRAINT PRIMARY KEY (`id`);
-
-  ALTER TABLE ojs_db.journal_settings add `id` int(11) unsigned NOT NULL AUTO_INCREMENT, ADD CONSTRAINT PRIMARY KEY (`id`);
-
-  ALTER TABLE ojs_db.author_settings add `id` int(11) unsigned NOT NULL AUTO_INCREMENT, ADD CONSTRAINT PRIMARY KEY (`id`);
 
 --------------------------------------------------------------------------
   SQL IF TABLES ARE NOT CREATED:
