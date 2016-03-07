@@ -2969,10 +2969,10 @@ class Profile(models.Model):
         unique_together = (('user', 'journal', 'intersect_user'),)
 
     def __unicode__(self):
-        return u'%s - %s %s (%s)' % (self.intersect_user.username, self.user.first_name, self.user.last_name, self.journal.path)
+        return u'%s - %s (%s)' % (self.intersect_user, self.user, self.journal)
 
     def __repr__(self):
-        return u'%s - %s %s (%s)' % (self.intersect_user.username, self.user.first_name, self.user.last_name, self.journal.path)
+        return u'%s - %s (%s)' % (self.intersect_user, self.user, self.journal)
 
 
 class User(models.Model):
