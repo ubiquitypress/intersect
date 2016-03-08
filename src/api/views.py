@@ -1325,7 +1325,7 @@ def handle_file(file,article,kind, owner, label=None, specific_id=None):
 
     original_filename = str(file._get_name())
     filename = str(uuid4()) + str(os.path.splitext(original_filename)[1])
-    folder_structure = os.path.join(settings.BASE_DIR, 'files', 'article', str(article.id))
+    folder_structure = os.path.join(settings.BASE_DIR, 'files', 'articles', str(article.id),'public')
 
     if not os.path.exists(folder_structure):
         os.makedirs(folder_structure)
@@ -1423,7 +1423,7 @@ class FileDownloadView(APIView):
 
 def serve_file(request, article, file_id):
     _file = get_object_or_404(File, pk=file_id)
-    file_path = os.path.join(settings.BASE_DIR, 'files', 'article', str(article.id), _file.uuid_filename)
+    file_path = os.path.join(settings.BASE_DIR, 'files', 'articles', str(article.id), 'public', _file.uuid_filename)
 
     try:
         fsock = open(file_path, 'rb')
