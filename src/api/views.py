@@ -1348,7 +1348,7 @@ def handle_file(file,article,kind, owner, label=None, specific_id=None):
 
     new_article_file = ArticleFile (
         article = article,
-        file_name=original_filename,
+        file_name=filename,
         file_type = file_mime,
         file_size = os.path.getsize(path),
         revision = 1,
