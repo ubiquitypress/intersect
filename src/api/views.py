@@ -319,7 +319,7 @@ class ArticlePlusViewSet(generics.ListAPIView):
         print current_article
 
         if abstract:
-            setting = ArticleSetting.objects.filter(article = current_article, setting_name= "abstract")
+            setting = ArticleSetting.objects.filter(article = current_article, setting_name= "abstract", locale = 'en_US')
             if setting:
                 current_abstract = setting[0]
                 print current_abstract.id
@@ -329,7 +329,7 @@ class ArticlePlusViewSet(generics.ListAPIView):
                 current_abstract = ArticleSetting(article = current_article,setting_name= "abstract",setting_value= abstract, locale="en_US",setting_type="string")
                 current_abstract.save()
         if title:
-            setting = ArticleSetting.objects.filter(article = current_article, setting_name= "title")
+            setting = ArticleSetting.objects.filter(article = current_article, setting_name= "title", locale = 'en_US')
             if setting:
                 current_title= setting[0]
                 print current_title.id
@@ -339,7 +339,7 @@ class ArticlePlusViewSet(generics.ListAPIView):
                 current_title = ArticleSetting(article = current_article,setting_name= "title",setting_value= title, locale="en_US",setting_type="string")
                 current_title.save()
         if competingInterests:
-            setting = ArticleSetting.objects.filter(article = current_article, setting_name= "competingInterests")
+            setting = ArticleSetting.objects.filter(article = current_article, setting_name= "competingInterests", locale = 'en_US')
             if setting:
                 current_competingInterests = setting[0]
                 print current_competingInterests.id
@@ -349,7 +349,7 @@ class ArticlePlusViewSet(generics.ListAPIView):
                 current_competingInterests = ArticleSetting(article = current_article,setting_name= "competingInterests",setting_value= competingInterests, locale="en_US",setting_type="string")
                 current_competingInterests.save()
         if funding:
-            setting = ArticleSetting.objects.filter(article = current_article, setting_name= "funding")
+            setting = ArticleSetting.objects.filter(article = current_article, setting_name= "funding", locale = 'en_US')
             if setting:
                 current_funding= setting[0]
                 print current_funding.id
@@ -359,7 +359,7 @@ class ArticlePlusViewSet(generics.ListAPIView):
                 current_funding = ArticleSetting(article = current_article,setting_name= "funding",setting_value= funding, locale="en_US",setting_type="string")
                 current_funding.save()
         if doi:
-            setting = ArticleSetting.objects.filter(article = current_article, setting_name= "pub-id::doi")
+            setting = ArticleSetting.objects.filter(article = current_article, setting_name= "pub-id::doi", locale = 'en_US')
             if setting:
                 current_doi = setting[0]
                 print current_doi.id
@@ -402,7 +402,7 @@ class AuthorPlusViewSet(generics.ListAPIView):
         print current_author
 
         if affiliation:
-            setting = AuthorSetting.objects.filter(author = current_author, setting_name= "affiliation")
+            setting = AuthorSetting.objects.filter(author = current_author, setting_name= "affiliation", locale = 'en_US')
             if setting:
                 current_affiliation = setting[0]
                 print current_affiliation.id
@@ -412,7 +412,7 @@ class AuthorPlusViewSet(generics.ListAPIView):
                 current_affiliation = AuthorSetting(author = current_author,setting_name= "affiliation",setting_value= affiliation, locale="en_US",setting_type="string")
                 current_affiliation.save()
         if biography:
-            setting = AuthorSetting.objects.filter(author = current_author, setting_name= "biography")
+            setting = AuthorSetting.objects.filter(author = current_author, setting_name= "biography", locale = 'en_US')
             if setting:
                 current_biography = setting[0]
                 print current_biography.id
@@ -422,7 +422,7 @@ class AuthorPlusViewSet(generics.ListAPIView):
                 current_biography = AuthorSetting(author = current_author,setting_name= "biography",setting_value= biography, locale="en_US",setting_type="string")
                 current_biography.save()
         if orcid:
-            setting = AuthorSetting.objects.filter(author = current_author, setting_name= "orcid")
+            setting = AuthorSetting.objects.filter(author = current_author, setting_name= "orcid", locale = 'en_US')
             if setting:
                 current_orcid = setting[0]
                 print current_orcid.id
@@ -432,7 +432,7 @@ class AuthorPlusViewSet(generics.ListAPIView):
                 current_orcid = AuthorSetting(author = current_author,setting_name= "orcid",setting_value= orcid, locale="en_US",setting_type="string")
                 current_orcid.save()
         if twitter:
-            setting = AuthorSetting.objects.filter(author = current_author, setting_name= "twitter")
+            setting = AuthorSetting.objects.filter(author = current_author, setting_name= "twitter", locale = 'en_US')
             if setting:
                 current_twitter = setting[0]
                 print current_twitter.id
@@ -442,7 +442,7 @@ class AuthorPlusViewSet(generics.ListAPIView):
                 current_twitter = AuthorSetting(author = current_author,setting_name= "twitter",setting_value= twitter, locale="en_US",setting_type="string")
                 current_twitter.save()
         if department:
-            setting = AuthorSetting.objects.filter(author = current_author, setting_name= "department")
+            setting = AuthorSetting.objects.filter(author = current_author, setting_name= "department", locale = 'en_US')
             if setting:
                 current_department = setting[0]
                 print current_department.id
@@ -538,10 +538,10 @@ class IssueSettingOneViewSet(generics.ListAPIView):
         else:
             setting = None
         if setting:
-            issue_setting = get_object_or_404(IssueSetting, issue=issue, setting_name = setting)
-            issue_setting = IssueSetting.objects.filter(issue=issue, setting_name = setting)
+            issue_setting = get_object_or_404(IssueSetting, issue=issue, setting_name = setting, locale = 'en_US')
+            issue_setting = IssueSetting.objects.filter(issue=issue, setting_name = setting, locale = 'en_US')
         else:
-            issue_setting = IssueSetting.objects.filter(issue=issue)
+            issue_setting = IssueSetting.objects.filter(issue=issue, locale = 'en_US')
         if issue:
             return issue_setting
         else:
@@ -563,10 +563,10 @@ class AuthorSettingOneViewSet(generics.ListAPIView):
         else:
             setting = None
         if setting:
-            author_setting = get_object_or_404(AuthorSetting, author=author, setting_name = setting)
-            author_setting = AuthorSetting.objects.filter(author=author, setting_name = setting)
+            author_setting = get_object_or_404(AuthorSetting, author=author, setting_name = setting, locale = 'en_US')
+            author_setting = AuthorSetting.objects.filter(author=author, setting_name = setting, locale = 'en_US')
         else:
-            author_setting = AuthorSetting.objects.filter(author=author)
+            author_setting = AuthorSetting.objects.filter(author=author, locale = 'en_US')
         if author:
             return author_setting
         else:
@@ -688,10 +688,10 @@ class ArticleSettingOneViewSet(generics.ListAPIView):
         else:
             setting = None
         if setting:
-            article_setting = get_object_or_404(ArticleSetting, article=article, setting_name = setting)
-            article_setting = ArticleSetting.objects.filter(article=article, setting_name = setting)
+            article_setting = get_object_or_404(ArticleSetting, article=article, setting_name = setting, locale = 'en_US')
+            article_setting = ArticleSetting.objects.filter(article=article, setting_name = setting, locale = 'en_US')
         else:
-            article_setting = ArticleSetting.objects.filter(article=article)
+            article_setting = ArticleSetting.objects.filter(article=article, locale = 'en_US')
         if article:
             return article_setting
         else:
@@ -710,7 +710,7 @@ class ArticleSettingAppViewSet(APIView):
         list_settings = []
         list_setting_names = ["title","abstract","pub-id::doi","competingInterests","funding"]
         for name in list_setting_names:
-            setting = ArticleSetting.objects.filter(article=article, setting_name = name)
+            setting = ArticleSetting.objects.filter(article=article, setting_name = name, locale = 'en_US')
             if setting:
                 list_settings.append(model_to_dict(setting[0]))
         article_dict = model_to_dict(article)
@@ -750,11 +750,11 @@ class JournalSpecificSettingViewSet(generics.ListAPIView):
         else:
             setting = None
         if setting:
-            journal_setting = get_object_or_404(JournalSetting,journal=journal, setting_name = setting)
-            journal_setting = JournalSetting.objects.filter(journal=journal, setting_name = setting)
+            journal_setting = get_object_or_404(JournalSetting,journal=journal, setting_name = setting, locale = 'en_US')
+            journal_setting = JournalSetting.objects.filter(journal=journal, setting_name = setting, locale = 'en_US')
    
         else:
-            journal_setting = JournalSetting.objects.filter(journal=journal)
+            journal_setting = JournalSetting.objects.filter(journal=journal, locale = 'en_US')
         if journal:
             return journal_setting
         else:
@@ -774,11 +774,11 @@ class SectionSpecificSettingViewSet(generics.ListAPIView):
         else:
             setting = None
         if setting:
-            section_setting = get_object_or_404(SectionSetting,section=section, setting_name = setting)
-            section_setting = SectionSetting.objects.filter(section=section, setting_name = setting)
+            section_setting = get_object_or_404(SectionSetting,section=section, setting_name = setting, locale = 'en_US')
+            section_setting = SectionSetting.objects.filter(section=section, setting_name = setting, locale = 'en_US')
    
         else:
-            section_setting = SectionSetting.objects.filter(section=section)
+            section_setting = SectionSetting.objects.filter(section=section, locale = 'en_US')
         if section:
             return section_setting
         else:
@@ -947,7 +947,7 @@ class SectionsOneViewSet(APIView):
         for section in sections:
             if not section.is_deleted():
                 section_dict = model_to_dict(section)
-                setting = SectionSetting.objects.filter(section = section, setting_name = "title")
+                setting = SectionSetting.objects.filter(section = section, setting_name = "title", locale = 'en_US')
                 if setting:
                     section_dict['title'] = setting[0].setting_value
                 else:
@@ -1055,8 +1055,8 @@ class UnPublishedArticlesOneViewSet(APIView):
         published = ""
         for id,art in enumerate(articles):
             if not art.is_published():
-                title = ArticleSetting.objects.filter(article=art, setting_name = "title")
-                abstract = ArticleSetting.objects.filter(article=art, setting_name = "abstract")
+                title = ArticleSetting.objects.filter(article=art, setting_name = "title", locale = 'en_US')
+                abstract = ArticleSetting.objects.filter(article=art, setting_name = "abstract", locale = 'en_US')
                 if title and abstract and art.date_submitted and art.pages:
                     unpub = UnPublishedArticle.objects.filter(article = art)
                     if not unpub:
@@ -1064,8 +1064,8 @@ class UnPublishedArticlesOneViewSet(APIView):
                         if not id == len(articles)-1:
                            list_articles=list_articles+"," 
             else:
-                title = ArticleSetting.objects.filter(article=art, setting_name = "title")
-                abstract = ArticleSetting.objects.filter(article=art, setting_name = "abstract")
+                title = ArticleSetting.objects.filter(article=art, setting_name = "title", locale = 'en_US')
+                abstract = ArticleSetting.objects.filter(article=art, setting_name = "abstract", locale = 'en_US')
                 if title and abstract and art.date_submitted and art.pages:
                     published=published+str(art.id)
                     if not id == len(articles)-1:
@@ -1214,7 +1214,7 @@ class AuthorsIssueAppViewSet(APIView):
                 list_settings = {}
                 list_setting_names = ["biography","orcid","twitter","department","affiliation"]
                 for name in list_setting_names:
-                   setting = AuthorSetting.objects.filter(author=art, setting_name = name)
+                   setting = AuthorSetting.objects.filter(author=art, setting_name = name, locale = 'en_US')
                    if setting:
                       list_settings[setting[0].setting_name]=model_to_dict(setting[0])
                 art_dict['settings'] = list_settings
@@ -1244,7 +1244,7 @@ class OneAuthorsIssueAppViewSet(APIView):
         list_settings = []
         list_setting_names = ["biography","orcid","twitter","department","affiliation"]
         for name in list_setting_names:
-            setting = AuthorSetting.objects.filter(author=author, setting_name = name)
+            setting = AuthorSetting.objects.filter(author=author, setting_name = name, locale = 'en_US')
             if setting:
                 list_settings.append(model_to_dict(setting[0]))
         author_dict['settings'] = list_settings
