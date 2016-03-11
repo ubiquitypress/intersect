@@ -181,8 +181,8 @@ class DeleteArticleViewSet(DestroyAPIView):
         deleted_article =  DeletedArticle(
             id = article.id,
             locale = article.locale, 
-            user = article.user,
-            journal = article.journal,
+            user = article.user.id,
+            journal = article.journal.id,
             section_id = article.section_id,
             language = article.language,
             comments_to_ed = article.comments_to_ed,
