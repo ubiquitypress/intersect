@@ -15,7 +15,7 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 
 class AuthorSerializer(serializers.HyperlinkedModelSerializer):
     
-    deleted = serializers.BooleanField(source='is_deleted')
+    deleted = serializers.ReadOnlyField(source='is_deleted')
     
     class Meta:
         model = Author
@@ -35,7 +35,7 @@ class JournalSerializer(serializers.HyperlinkedModelSerializer):
 
 class SectionSerializer(serializers.HyperlinkedModelSerializer):
 
-    deleted = serializers.BooleanField(source='is_deleted')
+    deleted = serializers.ReadOnlyField(source='is_deleted')
 
     class Meta:
         model = Section
@@ -64,8 +64,8 @@ class AuthorAllSettingsSerializer(serializers.Serializer):
 
 class ArticleSerializer(serializers.HyperlinkedModelSerializer):
 
-    deleted = serializers.BooleanField(source='is_deleted')
-    published = serializers.BooleanField(source='is_published')
+    deleted = serializers.ReadOnlyField(source='is_deleted')
+    published = serializers.ReadOnlyField(source='is_published')
 
     class Meta:
         model = Article
@@ -95,10 +95,11 @@ class ArticleSettingSerializer(serializers.HyperlinkedModelSerializer):
 
 class IssueSerializer(serializers.HyperlinkedModelSerializer):
 
-    deleted = serializers.BooleanField(source='is_deleted')
+    deleted = serializers.ReadOnlyField(source='is_deleted')
 
     class Meta:
         model = Issue
+        read_only = ('deleted',)
         fields = ('id', 'journal', 'volume','number','year','published', 'show_volume','show_number','show_year', 'show_title',"current","access_status","date_published",'last_modified','deleted')
 
 class DeletedIssueSerializer(serializers.HyperlinkedModelSerializer):
