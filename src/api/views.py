@@ -1391,11 +1391,14 @@ def handle_file(file,article,kind, owner, label=None, specific_id=None):
     print new_file.article_file
     new_file.save()
 
+    type_edit = original_filename[original_filename.rfind('.')+1:]
+    print type_edit
+
     new_article_galley = ArticleGalley(
         locale = article.locale,
         article = article,
         file = new_article_file,
-        label = label,
+        label = type_edit.upper(),
         html_galley = 0,
         seq = 1,
         )
