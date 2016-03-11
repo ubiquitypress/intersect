@@ -258,7 +258,7 @@ class ArticleGalleySetting(models.Model):
 
 
 class ArticleGalley(models.Model):
-    id = models.IntegerField(primary_key = True, db_column = 'galley_id' )
+    id = models.AutoField(primary_key = True, db_column = 'galley_id' )
     locale = models.CharField(max_length=5, blank=True, null=True)
     article = models.ForeignKey('Article', db_column='article_id')
     file = models.ForeignKey('ArticleFile', db_column='file_id')

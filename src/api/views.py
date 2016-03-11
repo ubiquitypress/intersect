@@ -1361,6 +1361,7 @@ def handle_file(file,article,kind, owner, label=None, specific_id=None):
         )
 
     new_article_file.save()
+
     if specific_id:
         new_file = File(
             pk = specific_id,
@@ -1389,6 +1390,16 @@ def handle_file(file,article,kind, owner, label=None, specific_id=None):
     new_file.article_file = new_article_file.id
     print new_file.article_file
     new_file.save()
+
+    new_article_galley = ArticleGalley(
+        locale = article.locale,
+        article = article,
+        file = new_article_file,
+        label = label,
+        html_galley = 0,
+        seq = 1,
+        )
+    new_article_galley.save()
     return new_file
 
 class FileUploadView(APIView):
